@@ -1,40 +1,49 @@
 package patterns.structure.bridge;
 
+import patterns.structure.bridge.abst.FoldedPhone;
+import patterns.structure.bridge.abst.UpRightPhone;
+import patterns.structure.bridge.impl.HuaweiPhone;
+import patterns.structure.bridge.impl.VivoPhone;
+import patterns.structure.bridge.impl.XiaoMiPhone;
+
 public class Client {
 
 	public static void main(String[] args) {
-		
-		//获取折叠式手机 (样式 + 品牌 )
-		
-		Phone phone1 = new FoldedPhone(new XiaoMi());
-		
-		phone1.open();
-		phone1.call();
-		phone1.close();
+
+		// 获取折叠式手机 (样式 + 品牌 )
+
+		FoldedPhone xiaomiFolderPhone = new FoldedPhone(new XiaoMiPhone());
+		xiaomiFolderPhone.open();
+		xiaomiFolderPhone.call();
+		xiaomiFolderPhone.close();
+
+		System.out.println("=======================");
+
+		FoldedPhone vivoFolderPhone = new FoldedPhone(new VivoPhone());
+		vivoFolderPhone.open();
+		vivoFolderPhone.call();
+		vivoFolderPhone.close();
 		
 		System.out.println("=======================");
 		
-		Phone phone2 = new FoldedPhone(new Vivo());
-		
-		phone2.open();
-		phone2.call();
-		phone2.close();
-		
+		FoldedPhone huaweiFolderPhone = new FoldedPhone(new HuaweiPhone());
+		huaweiFolderPhone.open();
+		huaweiFolderPhone.call();
+		huaweiFolderPhone.close();
+
 		System.out.println("==============");
-		
-		UpRightPhone phone3 = new UpRightPhone(new XiaoMi());
-		
-		phone3.open();
-		phone3.call();
-		phone3.close();
-		
+
+		UpRightPhone xiaomiUpRightPhone = new UpRightPhone(new XiaoMiPhone());
+		xiaomiUpRightPhone.open();
+		xiaomiUpRightPhone.call();
+		xiaomiUpRightPhone.close();
+
 		System.out.println("==============");
-		
-		UpRightPhone phone4 = new UpRightPhone(new Vivo());
-		
-		phone4.open();
-		phone4.call();
-		phone4.close();
+
+		UpRightPhone vivoUpRightPhone = new UpRightPhone(new VivoPhone());
+		vivoUpRightPhone.open();
+		vivoUpRightPhone.call();
+		vivoUpRightPhone.close();
 	}
 
 }

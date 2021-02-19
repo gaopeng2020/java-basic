@@ -1,10 +1,11 @@
-package patterns.structure.decorator;
+package patterns.structure.decorator.coffee;
+
+import patterns.structure.decorator.Drink;
 
 public class Coffee  extends Drink {
 
 	@Override
 	public float cost() {
-		// TODO Auto-generated method stub
 		return super.getPrice();
 	}
 

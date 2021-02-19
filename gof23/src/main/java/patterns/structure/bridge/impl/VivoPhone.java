@@ -1,22 +1,27 @@
-package patterns.structure.bridge;
+package patterns.structure.bridge.impl;
 
-public class Vivo implements Brand {
+public class VivoPhone implements Phone {
+	
+
+	/**
+	 * 
+	 */
+	public VivoPhone() {
+		super();
+	}
 
 	@Override
 	public void open() {
-		// TODO Auto-generated method stub
 		System.out.println(" Vivo手机开机 ");
 	}
 
 	@Override
 	public void close() {
-		// TODO Auto-generated method stub
 		System.out.println(" Vivo手机关机 ");
 	}
 
 	@Override
 	public void call() {
-		// TODO Auto-generated method stub
 		System.out.println(" Vivo手机打电话 ");
 	}
 

@@ -1,6 +1,9 @@
-package patterns.structure.bridge;
+package patterns.structure.bridge.impl;
 
-public class XiaoMi implements Brand {
+public class XiaoMiPhone implements Phone {
+	public XiaoMiPhone() {
+		super();
+	}
 
 	@Override
 	public void open() {
