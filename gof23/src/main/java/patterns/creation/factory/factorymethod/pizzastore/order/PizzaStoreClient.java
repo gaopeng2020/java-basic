@@ -1,6 +1,6 @@
 package patterns.creation.factory.factorymethod.pizzastore.order;
 
-public class PizzaStore {
+public class PizzaStoreClient {
 
 	public static void main(String[] args) {
 		String loc = "bj";

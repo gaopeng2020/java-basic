@@ -14,13 +14,13 @@ public class OrderPizza {
 
 	// 构造器
 	public OrderPizza(AbsFactory factory) {
-		setFactory(factory);
+		this.factory = factory;
+		setFactory();
 	}
 
-	private void setFactory(AbsFactory factory) {
+	private void setFactory() {
 		Pizza pizza = null;
 		String orderType = ""; // 用户输入
-		this.factory = factory;
 		do {
 			orderType = getType();
 			// factory 可能是北京的工厂子类，也可能是伦敦的工厂子类

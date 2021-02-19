@@ -5,11 +5,6 @@ import patterns.creation.factory.factorymethod.pizzastore.pizza.Pizza;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-
-
-
-
-
 public abstract class OrderPizza {
 
 	//定义一个抽象方法，createPizza , 让各个工厂子类自己实现

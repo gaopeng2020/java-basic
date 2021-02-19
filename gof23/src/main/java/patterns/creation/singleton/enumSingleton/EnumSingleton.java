@@ -1,6 +1,6 @@
-package patterns.creation.singleton.type8;
+package patterns.creation.singleton.enumSingleton;
 
-public class SingletonTest08 {
+public class EnumSingleton {
 	public static void main(String[] args) {
 		Singleton instance = Singleton.INSTANCE;
 		Singleton instance2 = Singleton.INSTANCE;
