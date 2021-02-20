@@ -16,7 +16,6 @@ public class ConcreteWebSite extends WebSite {
 
 	@Override
 	public void use(User user) {
-		// TODO Auto-generated method stub
 		System.out.println("网站的发布形式为:" + type + " 在使用中 .. 使用者是" + user.getName());
 	}
 	
