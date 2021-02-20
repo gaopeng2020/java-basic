@@ -7,11 +7,11 @@ Eclipse克隆后需要将项目转换为maven工程：选择根目录->右键选
 
 为了加快github的速度，在C:\Windows\System32\drivers\etc路径下，打开host文件，结尾添加一下四行内容：
 
-#可通过https://fastly.net.ipaddress.com/github.global.ssl.fastly.net获取fastly.net的IP地址
+#可通过https://fastly.net.ipaddress.com/github.global.ssl.fastly.net 获取fastly.net的IP地址
 
 199.232.69.194 github.global.ssl.fastly.net
 
-#可通过https://github.com.ipaddress.com/#ipinfo获取github.com的IP地址
+#可通过https://github.com.ipaddress.com/#ipinfo 获取github.com的IP地址
 
 140.82.112.3 github.com
 
