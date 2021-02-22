@@ -1,9 +1,10 @@
 # java
 java projects
+IDE的字符集必须提前设置为UTF-8
 
 IDEA克隆后如果没有自动生成.iml文件，解决办法：打开terminal运行 mvn idea:module
 
-Eclipse克隆后需要将项目转换为maven工程：选择根目录->右键选择Configure-> Convert to Maven Project
+Eclipse克隆是选择General Project，克隆完成后从eclipse中将项目删除，但不要勾选从硬盘删除，然后选择导入->Existing Maven Projects即可。
 
 为了加快github的速度，在C:\Windows\System32\drivers\etc路径下，打开host文件，结尾添加一下四行内容：
 

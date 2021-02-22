@@ -1,5 +1,9 @@
 package principle.singleresponsibility;
 
+/**
+ * 单一职责原则基本介绍:
+ * 对类来说的，即一个类应该只负责一项职责。
+ */
 public class SingleResponsibility1 {
 
 	public static void main(String[] args) {
