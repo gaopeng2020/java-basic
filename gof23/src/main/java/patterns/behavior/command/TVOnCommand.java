@@ -14,14 +14,12 @@ public class TVOnCommand implements Command {
 
 	@Override
 	public void execute() {
-		// TODO Auto-generated method stub
 		// 调用接收者的方法
 		tv.on();
 	}
 
 	@Override
 	public void undo() {
-		// TODO Auto-generated method stub
 		// 调用接收者的方法
 		tv.off();
 	}

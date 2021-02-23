@@ -3,8 +3,6 @@ package patterns.behavior.command;
 public class Client {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		
 		//使用命令设计模式，完成通过遥控器，对电灯的操作
 		
 		//创建电灯的对象(接受者)
@@ -15,7 +13,7 @@ public class Client {
 		LightOffCommand lightOffCommand = new LightOffCommand(lightReceiver);
 		
 		//需要一个遥控器
-		RemoteController remoteController = new RemoteController();
+		RemoteController_Invoker remoteController = new RemoteController_Invoker();
 		
 		//给我们的遥控器设置命令, 比如 no = 0 是电灯的开和关的操作
 		remoteController.setCommand(0, lightOnCommand, lightOffCommand);

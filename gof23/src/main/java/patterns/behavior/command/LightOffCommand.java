@@ -14,14 +14,12 @@ public class LightOffCommand implements Command {
 
 	@Override
 	public void execute() {
-		// TODO Auto-generated method stub
 		// 调用接收者的方法
 		light.off();
 	}
 
 	@Override
 	public void undo() {
-		// TODO Auto-generated method stub
 		// 调用接收者的方法
 		light.on();
 	}

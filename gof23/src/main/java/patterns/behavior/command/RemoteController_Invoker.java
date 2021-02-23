@@ -1,6 +1,6 @@
 package patterns.behavior.command;
 
-public class RemoteController {
+public class RemoteController_Invoker {
 
 	// 开 按钮的命令数组
 	Command[] onCommands;
@@ -11,7 +11,7 @@ public class RemoteController {
 
 	// 构造器，完成对按钮初始化
 
-	public RemoteController() {
+	public RemoteController_Invoker() {
 
 		onCommands = new Command[5];
 		offCommands = new Command[5];
