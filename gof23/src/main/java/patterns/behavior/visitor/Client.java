@@ -10,7 +10,7 @@ public class Client {
 
 	public static void main(String[] args) {
 		// 创建ObjectStructure
-		ObjectStructure objectStructure = new ObjectStructure();
+		ObjectContainer objectStructure = new ObjectContainer();
 
 		objectStructure.add(new Audience("张三"));
 		objectStructure.add(new Expert("李四"));
