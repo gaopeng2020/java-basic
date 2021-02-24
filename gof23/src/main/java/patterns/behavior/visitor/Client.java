@@ -1,6 +1,5 @@
 package patterns.behavior.visitor;
 
-import com.sun.org.apache.xml.internal.security.signature.ObjectContainer;
 import patterns.behavior.visitor.action.Fail;
 import patterns.behavior.visitor.action.Waiver;
 import patterns.behavior.visitor.action.Success;
@@ -13,8 +12,8 @@ public class Client {
 		// 创建ObjectStructure
 		ObjectContainer objectStructure = new ObjectContainer();
 
-		objectStructure.attach(new Audience("张三"));
-		objectStructure.attach(new Expert("李四"));
+		objectStructure.add(new Audience("张三"));
+		objectStructure.add(new Expert("李四"));
 
 		// 成功
 		Success success = new Success();
