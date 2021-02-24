@@ -12,8 +12,8 @@ public class Client {
 		// 创建ObjectStructure
 		ObjectStructure objectStructure = new ObjectStructure();
 
-		objectStructure.add(new Audience("张三"));
-		objectStructure.add(new Expert("李四"));
+		objectStructure.attach(new Audience("张三"));
+		objectStructure.attach(new Expert("李四"));
 
 		// 成功
 		Success success = new Success();
