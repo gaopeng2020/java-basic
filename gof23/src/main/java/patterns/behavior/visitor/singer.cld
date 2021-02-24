@@ -69,8 +69,8 @@
             <constraint>
               <height>-1</height>
               <width>-1</width>
-              <x>141</x>
-              <y>193</y>
+              <x>180</x>
+              <y>207</y>
             </constraint>
             <sourceConnections>
               <net.java.amateras.uml.classdiagram.model.GeneralizationModel>
@@ -111,6 +111,7 @@
                 <params/>
                 <isAbstract>false</isAbstract>
                 <isStatic>false</isStatic>
+                <isFinal>false</isFinal>
               </net.java.amateras.uml.classdiagram.model.OperationModel>
               <net.java.amateras.uml.classdiagram.model.OperationModel>
                 <backgroundColor reference="../../../../../../backgroundColor"/>
@@ -132,6 +133,7 @@
                 <params/>
                 <isAbstract>false</isAbstract>
                 <isStatic>false</isStatic>
+                <isFinal>false</isFinal>
               </net.java.amateras.uml.classdiagram.model.OperationModel>
             </children>
             <filterProperty/>
@@ -193,8 +195,8 @@
             <constraint>
               <height>-1</height>
               <width>-1</width>
-              <x>300</x>
-              <y>195</y>
+              <x>375</x>
+              <y>208</y>
             </constraint>
             <sourceConnections>
               <net.java.amateras.uml.classdiagram.model.GeneralizationModel>
@@ -235,6 +237,7 @@
                 <params/>
                 <isAbstract>false</isAbstract>
                 <isStatic>false</isStatic>
+                <isFinal>false</isFinal>
               </net.java.amateras.uml.classdiagram.model.OperationModel>
               <net.java.amateras.uml.classdiagram.model.OperationModel>
                 <backgroundColor reference="../../../../../../backgroundColor"/>
@@ -256,6 +259,7 @@
                 <params/>
                 <isAbstract>false</isAbstract>
                 <isStatic>false</isStatic>
+                <isFinal>false</isFinal>
               </net.java.amateras.uml.classdiagram.model.OperationModel>
             </children>
             <filterProperty/>
@@ -317,8 +321,8 @@
             <constraint>
               <height>-1</height>
               <width>-1</width>
-              <x>490</x>
-              <y>277</y>
+              <x>488</x>
+              <y>343</y>
             </constraint>
             <sourceConnections>
               <net.java.amateras.uml.classdiagram.model.AggregationModel>
@@ -350,8 +354,8 @@
                   <constraint>
                     <height>-1</height>
                     <width>-1</width>
-                    <x>93</x>
-                    <y>300</y>
+                    <x>58</x>
+                    <y>343</y>
                   </constraint>
                   <sourceConnections/>
                   <targetConnections>
@@ -384,8 +388,8 @@
                         <constraint>
                           <height>-1</height>
                           <width>-1</width>
-                          <x>34</x>
-                          <y>85</y>
+                          <x>96</x>
+                          <y>48</y>
                         </constraint>
                         <sourceConnections>
                           <net.java.amateras.uml.classdiagram.model.DependencyModel>
@@ -474,6 +478,8 @@
                       <name>elements</name>
                       <type>Person</type>
                       <isStatic>false</isStatic>
+                      <isFinal>false</isFinal>
+                      <isEnumCst>false</isEnumCst>
                     </net.java.amateras.uml.classdiagram.model.AttributeModel>
                   </children>
                   <filterProperty/>
@@ -553,8 +559,8 @@
                   <constraint>
                     <height>-1</height>
                     <width>-1</width>
-                    <x>371</x>
-                    <y>372</y>
+                    <x>385</x>
+                    <y>507</y>
                   </constraint>
                   <sourceConnections>
                     <net.java.amateras.uml.classdiagram.model.GeneralizationModel reference="../../.."/>
@@ -586,6 +592,7 @@
                       </params>
                       <isAbstract>false</isAbstract>
                       <isStatic>false</isStatic>
+                      <isFinal>false</isFinal>
                     </net.java.amateras.uml.classdiagram.model.OperationModel>
                   </children>
                   <filterProperty/>
@@ -661,8 +668,8 @@
                   <constraint>
                     <height>-1</height>
                     <width>-1</width>
-                    <x>613</x>
-                    <y>370</y>
+                    <x>658</x>
+                    <y>505</y>
                   </constraint>
                   <sourceConnections>
                     <net.java.amateras.uml.classdiagram.model.GeneralizationModel reference="../../.."/>
@@ -694,6 +701,7 @@
                       </params>
                       <isAbstract>false</isAbstract>
                       <isStatic>false</isStatic>
+                      <isFinal>false</isFinal>
                     </net.java.amateras.uml.classdiagram.model.OperationModel>
                   </children>
                   <filterProperty/>
@@ -786,6 +794,7 @@
                 </params>
                 <isAbstract>false</isAbstract>
                 <isStatic>false</isStatic>
+                <isFinal>false</isFinal>
               </net.java.amateras.uml.classdiagram.model.OperationModel>
             </children>
             <filterProperty/>
@@ -849,8 +858,8 @@
       <constraint>
         <height>-1</height>
         <width>-1</width>
-        <x>240</x>
-        <y>83</y>
+        <x>375</x>
+        <y>27</y>
       </constraint>
       <sourceConnections>
         <net.java.amateras.uml.classdiagram.model.AssociationModel reference="../../parent/children/net.java.amateras.uml.classdiagram.model.ClassModel[4]/targetConnections/net.java.amateras.uml.classdiagram.model.AssociationModel"/>
@@ -887,8 +896,8 @@
             <constraint>
               <height>-1</height>
               <width>-1</width>
-              <x>509</x>
-              <y>184</y>
+              <x>584</x>
+              <y>209</y>
             </constraint>
             <sourceConnections>
               <net.java.amateras.uml.classdiagram.model.GeneralizationModel reference="../../.."/>
@@ -915,6 +924,7 @@
                 <params/>
                 <isAbstract>false</isAbstract>
                 <isStatic>false</isStatic>
+                <isFinal>false</isFinal>
               </net.java.amateras.uml.classdiagram.model.OperationModel>
               <net.java.amateras.uml.classdiagram.model.OperationModel>
                 <backgroundColor reference="../../../../../../../../backgroundColor"/>
@@ -936,6 +946,7 @@
                 <params/>
                 <isAbstract>false</isAbstract>
                 <isStatic>false</isStatic>
+                <isFinal>false</isFinal>
               </net.java.amateras.uml.classdiagram.model.OperationModel>
             </children>
             <filterProperty/>
@@ -1005,6 +1016,7 @@
           <params/>
           <isAbstract>false</isAbstract>
           <isStatic>false</isStatic>
+          <isFinal>false</isFinal>
         </net.java.amateras.uml.classdiagram.model.OperationModel>
         <net.java.amateras.uml.classdiagram.model.OperationModel>
           <backgroundColor reference="../../../backgroundColor"/>
@@ -1026,6 +1038,7 @@
           <params/>
           <isAbstract>false</isAbstract>
           <isStatic>false</isStatic>
+          <isFinal>false</isFinal>
         </net.java.amateras.uml.classdiagram.model.OperationModel>
       </children>
       <filterProperty/>
