@@ -1,5 +1,6 @@
 package patterns.behavior.visitor;
 
+import com.sun.org.apache.xml.internal.security.signature.ObjectContainer;
 import patterns.behavior.visitor.action.Fail;
 import patterns.behavior.visitor.action.Waiver;
 import patterns.behavior.visitor.action.Success;
