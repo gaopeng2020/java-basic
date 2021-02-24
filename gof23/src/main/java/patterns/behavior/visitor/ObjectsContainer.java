@@ -25,7 +25,7 @@ import java.util.List;
  * 3）因此，如果一个系统有比较稳定的数据结构，又有经常变化的功能需求，那么访问者模式就是比较合适的.
  */
 //数据结构，管理很多人（Man , Woman）
-public class ObjectContainer {
+public class ObjectsContainer {
 
 	//维护了一个集合
 	private List<Jury> list = new LinkedList<>();

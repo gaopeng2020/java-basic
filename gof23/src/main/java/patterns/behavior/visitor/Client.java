@@ -10,23 +10,24 @@ public class Client {
 
 	public static void main(String[] args) {
 		// 创建ObjectStructure
-		ObjectContainer objectStructure = new ObjectContainer();
+		ObjectsContainer container = new ObjectsContainer();
 
-		objectStructure.add(new Audience("张三"));
-		objectStructure.add(new Expert("李四"));
+		container.add(new Audience("张三"));
+		container.add(new Audience("王五"));
+		container.add(new Expert("李四"));
 
 		// 成功
 		Success success = new Success();
-		objectStructure.display(success);
+		container.display(success);
 
 		System.out.println("===============");
 		Fail fail = new Fail();
-		objectStructure.display(fail);
+		container.display(fail);
 
 		System.out.println("=======给的是待定的测评========");
 
 		Waiver pending = new Waiver();
-		objectStructure.display(pending);
+		container.display(pending);
 	}
 
 }
