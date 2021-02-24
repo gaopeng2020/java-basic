@@ -28,20 +28,20 @@ import java.util.List;
 public class ObjectStructure {
 
 	//维护了一个集合
-	private List<Jury> list = new LinkedList<>();
+	private List<Jury> persons = new LinkedList<>();
 	
 	//增加到list
-	public void attach(Jury jury) {
-		list.add(jury);
+	public void add(Jury jury) {
+		persons.add(jury);
 	}
 	//移除
-	public void detach(Jury jury) {
-		list.remove(jury);
+	public void remove(Jury jury) {
+		persons.remove(jury);
 	}
 	
 	//显示测评情况
 	public void display(Action action) {
-		for(Jury jury : list) {
+		for(Jury jury : persons) {
 			jury.vote(action);
 		}
 	}
