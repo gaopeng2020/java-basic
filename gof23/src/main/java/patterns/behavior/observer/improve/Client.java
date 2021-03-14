@@ -8,7 +8,7 @@ public class Client {
 		WeatherData weatherData = new WeatherData();
 		
 		//创建观察者
-		CurrentConditions currentConditions = new CurrentConditions();
+		ConcreteObserver currentConditions = new ConcreteObserver();
 		BaiduSite baiduSite = new BaiduSite();
 		
 		//注册到weatherData

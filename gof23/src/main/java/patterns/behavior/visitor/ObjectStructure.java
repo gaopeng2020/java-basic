@@ -1,10 +1,10 @@
 package patterns.behavior.visitor;
 
-import patterns.behavior.visitor.action.Action;
-import patterns.behavior.visitor.jury.Jury;
-
 import java.util.LinkedList;
 import java.util.List;
+
+import patterns.behavior.visitor.action.Visitor;
+import patterns.behavior.visitor.jury.Element;
 
 /**
  * 访问者模式基本介绍
@@ -17,7 +17,8 @@ import java.util.List;
 /**
  * 访问者模式的注意事项和细节
  * >优点
- * 1）访问者模式符合单一职责原则、让程序具有优秀的扩展性、灵活性非常高2）访问者模式可以对功能进行统一，
+ * 1）访问者模式符合单一职责原则、让程序具有优秀的扩展性、灵活性非常高
+ * 2）访问者模式可以对功能进行统一，
  * 可以做报表、U1、拦截器与过滤器，适用于数据结构相对稳定的系统
  * >缺点
  * 1）具体元素对访问者公布细节，也就是说访问者关注了其他类的内部细节，这是迪米特法则所不建议的，这样造成了具体元素变更比较困难
@@ -25,24 +26,24 @@ import java.util.List;
  * 3）因此，如果一个系统有比较稳定的数据结构，又有经常变化的功能需求，那么访问者模式就是比较合适的.
  */
 //数据结构，管理很多人（Man , Woman）
-public class ObjectsContainer {
+public class ObjectStructure {
 
 	//维护了一个集合
-	private List<Jury> list = new LinkedList<>();
+	private List<Element> list = new LinkedList<>();
 	
 	//增加到list
-	public void add(Jury jury) {
+	public void add(Element jury) {
 		list.add(jury);
 	}
 	//移除
-	public void remove(Jury jury) {
+	public void remove(Element jury) {
 		list.remove(jury);
 	}
 	
 	//显示测评情况
-	public void display(Action action) {
-		for(Jury jury : list) {
-			jury.vote(action);
+	public void display(Visitor action) {
+		for(Element element : list) {
+			element.accept(action);
 		}
 	}
 }

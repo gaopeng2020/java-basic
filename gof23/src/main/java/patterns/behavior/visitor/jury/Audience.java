@@ -1,8 +1,8 @@
 package patterns.behavior.visitor.jury;
 
-import patterns.behavior.visitor.action.Action;
+import patterns.behavior.visitor.action.Visitor;
 
-public class Audience extends Jury {
+public class Audience extends Element {
 	private  String name;
 	public Audience(String name) {
 		this.name = name;
@@ -16,8 +16,8 @@ public class Audience extends Jury {
 
 
 	@Override
-	public void vote(Action action) {
-		action.getAudienceResult(this);
+	public void accept(Visitor visitor) {
+		visitor.getAudienceResult(this);
 	}
 
 }
