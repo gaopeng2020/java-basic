@@ -40,9 +40,8 @@ public class OrderPizza {
     private String getType() {
         try {
             BufferedReader strin = new BufferedReader(new InputStreamReader(System.in));
-            System.out.println("input pizza 种类:");
-            String str = strin.readLine();
-            return str;
+            System.out.println("input pizza 种类(greek,cheese,pepper):");
+            return strin.readLine();
         } catch (IOException e) {
             e.printStackTrace();
             return "";
