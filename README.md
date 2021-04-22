@@ -11,7 +11,7 @@ git config --global user.name "GaoPeng"
 git config --global user.email "gaopeng@e-panet.cn"
 
 Create a new repository
-git clone git@localhost:gaopeng/test.git
+git clone http://180.168.184.107:9093/gaopeng/java.git
 cd test
 touch README.md
 git add README.md
@@ -21,7 +21,7 @@ git push -u origin main
 Push an existing folder
 cd existing_folder
 git init
-git remote add origin git@localhost:gaopeng/test.git
+git remote add origin http://180.168.184.107:9093/gaopeng/java.git
 git add .
 git commit -m "Initial commit"
 git push -u origin main
@@ -29,6 +29,6 @@ git push -u origin main
 Push an existing Git repository
 cd existing_repo
 git remote rename origin old-origin
-git remote add origin git@localhost:gaopeng/test.git
+git remote add origin http://180.168.184.107:9093/gaopeng/java.git
 git push -u origin --all
 git push -u origin --tags
