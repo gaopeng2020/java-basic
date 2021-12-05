@@ -1,4 +1,4 @@
-package patterns.behavior.observer.improve;
+package rpc.server.publication;
 
 
 /**
@@ -15,5 +15,5 @@ public interface Observer {
      * @param humidity    humidity
      */
 
-    public void update(float temperature, float pressure, float humidity);
+    public void updateNotify(float temperature, float pressure, float humidity);
 }
