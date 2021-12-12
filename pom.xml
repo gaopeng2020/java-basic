@@ -17,6 +17,14 @@
         <module>poi</module>
     </modules>
 
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+        <!--POI version definition-->
+        <poi.version>4.1.2</poi.version>
+        <eptutil.version>1.0-SNAPSHOT</eptutil.version>
+    </properties>
+
     <dependencyManagement>
         <dependencies>
             <!--子工程继承父工程的junit版本号，方便管理。需要将子工程的依赖中将版本号删除-->
@@ -26,6 +34,25 @@
                 <artifactId>junit</artifactId>
                 <version>4.12</version>
                 <scope>test</scope>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/org.apache.poi/poi -->
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi</artifactId>
+                <version>${poi.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-ooxml</artifactId>
+                <version>${poi.version}</version>
+            </dependency>
+            <!-- 自定义jar-->
+            <dependency>
+                <groupId>cn.ept</groupId>
+                <artifactId>eptutils</artifactId>
+                <version>${eptutil.version}</version>
+                <scope>compile</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>

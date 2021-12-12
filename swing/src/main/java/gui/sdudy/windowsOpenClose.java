@@ -38,10 +38,12 @@ public class windowsOpenClose {
 		String fileName = file.getName();
 		String path = file.getPath();
 		String absolutePath = file.getAbsolutePath();
-		
+		final String parent = file.getParent();
+
 		System.out.println("fileName:"+fileName);
 		System.out.println("path:"+path);
 		System.out.println("absolutePath:"+absolutePath);
+		System.out.println("dir:"+parent);
 	}
 
 }

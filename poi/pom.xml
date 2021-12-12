@@ -16,9 +16,6 @@
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
-
-        <!--POI version definition-->
-        <poi.version>4.1.2</poi.version>
     </properties>
 
     <dependencies>
@@ -34,12 +31,18 @@
             <artifactId>poi</artifactId>
             <version>${poi.version}</version>
         </dependency>
-
         <!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
             <version>${poi.version}</version>
+        </dependency>
+
+        <!-- 自定义jar-->
+        <dependency>
+            <groupId>cn.ept</groupId>
+            <artifactId>eptutils</artifactId>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 
