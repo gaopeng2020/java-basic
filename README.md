@@ -6,13 +6,29 @@ IDEA克隆后如果没有自动生成.iml文件，解决办法：打开terminal�
 
 Eclipse克隆是选择General Project，克隆完成后从eclipse中将项目删除，但不要勾选从硬盘删除，然后选择导入->Existing Maven Projects即可。
 
-为了加快github的速度，在C:\Windows\System32\drivers\etc路径下，打开host文件，结尾添加一下四行内容：
+Git global setup
+git config --global user.name "GaoPeng"
+git config --global user.email "gaopeng@e-panet.cn"
 
-#可通过https://fastly.net.ipaddress.com/github.global.ssl.fastly.net 获取fastly.net的IP地址
+Create a new repository
+git clone http://180.168.184.107:9093/gaopeng/java.git
+cd test
+touch README.md
+git add README.md
+git commit -m "add README"
+git push -u origin main
 
-199.232.69.194 github.global.ssl.fastly.net
+Push an existing folder
+cd existing_folder
+git init
+git remote add origin http://180.168.184.107:9093/gaopeng/java.git
+git add .
+git commit -m "Initial commit"
+git push -u origin main
 
-#可通过https://github.com.ipaddress.com/#ipinfo 获取github.com的IP地址
-
-140.82.112.3 github.com
-
+Push an existing Git repository
+cd existing_repo
+git remote rename origin old-origin
+git remote add origin http://180.168.184.107:9093/gaopeng/java.git
+git push -u origin --all
+git push -u origin --tags

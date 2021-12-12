@@ -3,7 +3,7 @@ package patterns.behavior.visitor.action;
 import patterns.behavior.visitor.jury.Audience;
 import patterns.behavior.visitor.jury.Expert;
 
-public class Fail extends Action {
+public class Fail extends Visitor {
 
 	@Override
 	public void getAudienceResult(Audience audience) {
