@@ -27,14 +27,14 @@ public class orcle_connection {
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 
-//			String url = "jdbc:oracle:thin:@db-preevision:1521:orcl"; // SID based URL
-			String url = "jdbc:oracle:thin:@//db-preevision:1521/service_orcl"; // service based URL
+			String url = "jdbc:oracle:thin:@180.168.184.107:9095:orcl"; // SID based URL
+//			String url = "jdbc:oracle:thin:@//db-preevision:1521/service_orcl"; // service based URL
 			
-			String user = "PREEVISION";
-			String password = "PREEVISION";
+			String user = "PREEVISION95";
+			String password = "PREEVISION95";
 			conn = DriverManager.getConnection(url, user, password);
 			if (conn != null) {
-				System.out.println("数据库链接成功");
+				System.out.println("数据库连接成功");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -50,10 +50,9 @@ public class orcle_connection {
 		try {
 			if (conn != null) {
 				conn.close();
-				System.out.println("���ݿ��ѹرգ�\n");
+				System.out.println("数据库关闭成功");
 			}
 		} catch (Exception e) {
-			System.out.println("���ݿ�ر�ʧ�ܣ�");
 			e.printStackTrace();
 		}
 	}
