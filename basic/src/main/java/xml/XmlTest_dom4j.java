@@ -1,5 +1,4 @@
 package xml;
-
 import ept.commonapi.EPTUtils;
 import org.dom4j.*;
 import org.dom4j.io.OutputFormat;
@@ -26,7 +25,6 @@ public class XmlTest_dom4j {
 
         final FileNameExtensionFilter extensionFilter = new FileNameExtensionFilter("xml(*.arxml,*.xml)", "arxml", "xml");
         final File file = EPTUtils.fileSelector(extensionFilter);
-
 
 //        File file = new File(diretory + "\\" + xmlName);
 //        SAXReader saxReader = new SAXReader();
