@@ -28,6 +28,13 @@
     <dependencyManagement>
         <dependencies>
             <!--子工程继承父工程的junit版本号，方便管理。需要将子工程的依赖中将版本号删除-->
+            <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>1.18.20</version>
+                <scope>provided</scope>
+            </dependency>
             <!-- https://mvnrepository.com/artifact/junit/junit -->
             <dependency>
                 <groupId>junit</groupId>

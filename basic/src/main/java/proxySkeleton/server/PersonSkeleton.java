@@ -13,6 +13,7 @@ public class PersonSkeleton extends Thread {
 		this.myServer = server;
 	}
 
+	@Override
 	public void run() {
 		try {
 			// new socket at port 9000

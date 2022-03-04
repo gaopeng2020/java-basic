@@ -31,6 +31,7 @@ public class RpcClientTest {
         assert weatherSubject != null;
         String xiaomiSubscribeAck = weatherSubject.registerObserver(xiaomiWeatherApp);
         System.out.println("xiaomiSubscribeAck = " + xiaomiSubscribeAck);
+
         String huaweiSubscribeAck = weatherSubject.registerObserver(huaweiWeatherApp);
         System.out.println("huaweiSubscribeAck = " + huaweiSubscribeAck);
 
