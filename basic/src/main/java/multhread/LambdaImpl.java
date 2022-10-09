@@ -80,7 +80,6 @@ public class LambdaImpl implements Lambda {
          */
         lambda = (i, str) -> System.out.println("i = " + i + "\nstr = " + str);
         lambda.lambdaTest(6, "Hello Lambda");
-
     }
 
 }

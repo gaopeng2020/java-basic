@@ -24,7 +24,7 @@ public class RunnableTest implements Runnable {
     }
 
     private synchronized void buyTicket() {
-        if (ticketNum < 0) {
+        if (ticketNum <= 0) {
             flag = false;
             return;
         }
@@ -38,22 +38,46 @@ public class RunnableTest implements Runnable {
 
 
     public static void main(String[] args) {
-        RunnableTest runnableTest = new RunnableTest();
-        Thread student = new Thread(runnableTest, "学生");
-        student.setPriority(3);
-        student.start();
+//        RunnableTest runnableTest = new RunnableTest();
+//        Thread student = new Thread(runnableTest, "学生");
+//        student.setPriority(3);
+//        student.start();
+//
+//        Thread teacher = new Thread(runnableTest, "教师");
+//        teacher.setPriority(5);
+//        teacher.start();
+//
+//        Thread worker = new Thread(runnableTest, "工人");
+//        worker.setPriority(8);
+//        worker.start();
+//
+//        Thread scalper = new Thread(runnableTest, "黄牛");
+//        scalper.setPriority(10);
+//        scalper.start();
 
-        Thread teacher = new Thread(runnableTest, "教师");
-        teacher.setPriority(5);
-        teacher.start();
 
-        Thread worker = new Thread(runnableTest, "工人");
-        worker.setPriority(8);
-        worker.start();
+        long startTime=System.currentTimeMillis();
+        Runnable runnable1 = () -> {
+            Student aaa = new Student("aaa", 11);
+            System.out.println("aaa.toString() = " + aaa.toString());
+        };
+        runnable1.run();
 
-        Thread scalper = new Thread(runnableTest, "黄牛");
-        scalper.setPriority(10);
-        scalper.start();
+        Runnable runnable2 = () -> {
+            Student bbb = new Student("bbb", 12);
+            System.out.println("bbb.toString() = " + bbb.toString());
+        };
+        runnable2.run();
 
+
+        Runnable runnable3 = () -> {
+            Student ccc = new Student("ccc", 13);
+            System.out.println("ccc.toString() = " + ccc.toString());
+        };
+        runnable3.run();
+
+        long endTime=System.currentTimeMillis();
+        System.out.println(endTime - startTime);
     }
+
 }

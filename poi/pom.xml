@@ -42,6 +42,18 @@
             <artifactId>poi-ooxml</artifactId>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/io.qtjambi/qtjambi -->
+        <dependency>
+            <groupId>io.qtjambi</groupId>
+            <artifactId>qtjambi</artifactId>
+            <version>6.3.2</version>
+        </dependency>
+        <dependency>
+            <groupId>io.qtjambi</groupId>
+            <artifactId>qtjambi-native-windows-x64</artifactId>
+            <version>6.3.2</version>
+        </dependency>
+
         <!-- 自定义jar-->
         <dependency>
             <groupId>cn.ept</groupId>

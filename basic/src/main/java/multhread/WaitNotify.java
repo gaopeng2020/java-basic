@@ -14,7 +14,7 @@ import java.util.Queue;
 public class WaitNotify {
     //定义一个读取数据的类
     static class Reader extends Thread {
-        private Buffer buffer;
+        private final Buffer buffer;
 
         public Reader(Buffer buffer) {
             this.buffer = buffer;
@@ -31,7 +31,7 @@ public class WaitNotify {
 
     //定义一个写入数据的类
     static class Writer extends Thread {
-        private Buffer buffer;
+        private final Buffer buffer;
 
         public Writer(Buffer buffer) {
             this.buffer = buffer;
@@ -49,9 +49,9 @@ public class WaitNotify {
 
     //定义一个容器
     static class Buffer {
-        private int bufferSize;
+        private final int bufferSize;
         //用一个队列实现先到的数据先取
-        private Queue<Integer> queue = new LinkedList<>();
+        private final Queue<Integer> queue = new LinkedList<>();
         private int count = 0;
 
         //用户通过构造器决定buffer的大小
@@ -82,8 +82,9 @@ public class WaitNotify {
             count++;
 
             //单buffer>=10个元素时就可以通知了，不用等到buffer满了再让Reader取数据
-            if (count >= 10)
+            if (count >= 10) {
                 this.notifyAll();
+            }
         }
 
         //reader从buffer中取数据
