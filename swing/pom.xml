@@ -25,12 +25,43 @@
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/io.qtjambi/qtjambi -->
         <dependency>
             <groupId>io.qtjambi</groupId>
             <artifactId>qtjambi</artifactId>
-            <version>6.3.4</version>
-            <scope>compile</scope>
+            <version>5.15.5</version>
         </dependency>
+
+        <dependency>
+            <groupId>io.qtjambi</groupId>
+            <artifactId>qtjambi-native-windows-x64</artifactId>
+            <version>5.15.5</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/io.qtjambi/qtjambi-uitools -->
+        <dependency>
+            <groupId>io.qtjambi</groupId>
+            <artifactId>qtjambi-uitools</artifactId>
+            <version>5.15.5</version>
+        </dependency>
+        <dependency>
+            <groupId>io.qtjambi</groupId>
+            <artifactId>qtjambi-uitools-native-windows-x64</artifactId>
+            <version>5.15.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.qtjambi</groupId>
+            <artifactId>qtjambi-uic</artifactId>
+            <version>5.15.5</version>
+        </dependency>
+        <dependency>
+            <groupId>io.qtjambi</groupId>
+            <artifactId>qtjambi-uic-native-windows-x64</artifactId>
+            <version>5.15.5</version>
+        </dependency>
+
     </dependencies>
 
 </project>

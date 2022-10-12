@@ -88,9 +88,7 @@ public class ShapedWindowDemo {
                     while (!(w instanceof Frame)) {
                         w = w.getOwner();
                     }
-                    if (w instanceof Frame) {
-                        ((Frame)w).setIconImage(getIconImage());
-                    }
+                    w.setIconImage(getIconImage());
                 }
             });
             timer.setRepeats(true);
