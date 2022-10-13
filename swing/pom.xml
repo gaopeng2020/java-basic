@@ -16,6 +16,7 @@
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
+        <qtjambi.version>5.15.5</qtjambi.version>
     </properties>
 
     <dependencies>
@@ -30,36 +31,36 @@
         <dependency>
             <groupId>io.qtjambi</groupId>
             <artifactId>qtjambi</artifactId>
-            <version>5.15.5</version>
+            <version>${qtjambi.version}</version>
         </dependency>
 
         <dependency>
             <groupId>io.qtjambi</groupId>
             <artifactId>qtjambi-native-windows-x64</artifactId>
-            <version>5.15.5</version>
+            <version>${qtjambi.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/io.qtjambi/qtjambi-uitools -->
         <dependency>
             <groupId>io.qtjambi</groupId>
             <artifactId>qtjambi-uitools</artifactId>
-            <version>5.15.5</version>
+            <version>${qtjambi.version}</version>
         </dependency>
         <dependency>
             <groupId>io.qtjambi</groupId>
             <artifactId>qtjambi-uitools-native-windows-x64</artifactId>
-            <version>5.15.5</version>
+            <version>${qtjambi.version}</version>
         </dependency>
 
         <dependency>
             <groupId>io.qtjambi</groupId>
             <artifactId>qtjambi-uic</artifactId>
-            <version>5.15.5</version>
+            <version>${qtjambi.version}</version>
         </dependency>
         <dependency>
             <groupId>io.qtjambi</groupId>
             <artifactId>qtjambi-uic-native-windows-x64</artifactId>
-            <version>5.15.5</version>
+            <version>${qtjambi.version}</version>
         </dependency>
 
     </dependencies>

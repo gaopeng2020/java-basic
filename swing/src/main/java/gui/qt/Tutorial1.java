@@ -1,10 +1,8 @@
 package gui.qt;
 
-import io.qt.core.QFile;
-import io.qt.core.QIODevice;
+import io.qt.uic.Main;
 import io.qt.widgets.QApplication;
-import io.qt.widgets.QWidget;
-import io.qt.widgets.tools.QUiLoader;
+import io.qt.widgets.QMessageBox;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -29,14 +27,14 @@ public class Tutorial1 {
 //        QPushButton hello = new QPushButton("Hello World!");
 //        hello.resize(120, 40);
 //        hello.show();
-//        QMessageBox.information(null, "QtJambi", "Hello World!");
+        QMessageBox.information(null, "QtJambi", "Hello World!");
 
-        QUiLoader loader = new QUiLoader();
-        QFile qFile = new QFile("D:\\Users\\lenovo\\Documents\\gitlab\\VisualStudio\\Qt\\TcpMessageTransfer\\tcpserver.ui");
-        qFile.open(QIODevice.OpenModeFlag.ReadOnly);
-        QWidget widget = loader.load(qFile);
-        widget.show();
-        qFile.close();
+//        QUiLoader loader = new QUiLoader();
+//        QFile qFile = new QFile("C:\\Users\\gaopeng\\Documents\\Qt\\qt-solutions-master\\qtwinmigrate\\examples\\qtdll\\form.ui");
+//        qFile.open(QIODevice.OpenModeFlag.ReadOnly);
+//        QWidget widget = loader.load(qFile);
+//        widget.show();
+//        qFile.close();
 
         QApplication.exec();
         QApplication.shutdown();
