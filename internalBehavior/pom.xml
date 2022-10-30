@@ -12,6 +12,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.8.2</junit.version>
+        <openfx.version>17.0.2</openfx.version>
     </properties>
 
     <dependencies>
@@ -24,12 +25,12 @@
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
-            <version>17.0.2</version>
+            <version>${openfx.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
-            <version>17.0.2</version>
+            <version>${openfx.version}</version>
         </dependency>
 
         <dependency>
@@ -67,7 +68,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>
-                                ept.gui.internalbehavior/ept.gui.internalbehavior.HelloApplication
+                                ept.gui.internalbehavior/ept.gui.others.HelloApplication
                             </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>

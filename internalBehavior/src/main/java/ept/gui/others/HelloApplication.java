@@ -1,4 +1,4 @@
-package ept.gui.internalbehavior;
+package ept.gui.others;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

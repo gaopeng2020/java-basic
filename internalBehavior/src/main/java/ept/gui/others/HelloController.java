@@ -1,4 +1,4 @@
-package ept.gui.internalbehavior;
+package ept.gui.others;
 
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;

@@ -16,7 +16,6 @@
         <module>gof23</module>
         <module>poi</module>
         <module>jna</module>
-        <module>javaFx</module>
     </modules>
 
     <properties>

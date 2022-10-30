@@ -14,16 +14,16 @@ public class InternalBehaviorApplication extends Application {
      */
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("internal-behavior.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(InternalBehaviorApplication.class.getResource("internal-behavior.fxml"));
         System.out.println("fxmlLoader.getLocation() = " + fxmlLoader.getLocation());
         Scene scene = new Scene(fxmlLoader.load(), 1500, 800);
         stage.setTitle("Internal Behavior Definition");
         stage.getIcons().add(new Image("file:/icons/appnet.png",48,48,true,true));
-        stage.setIconified(true);
+//        stage.setIconified(true);
         stage.setScene(scene);
         stage.setMinWidth(600.0);
         stage.setMinHeight(400.0);
-        stage.initStyle(StageStyle.DECORATED);
+        stage.initStyle(StageStyle.UNIFIED);
 //        stage.initModality(Modality.NONE);
         stage.setOpacity(0.98);
         stage.show();
