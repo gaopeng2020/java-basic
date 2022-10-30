@@ -30,155 +30,6 @@
    <children>
       <StackPane fx:id="stackPane" prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <SplitPane fx:id="runnableSplitPane" dividerPositions="0.29797979797979796" prefHeight="160.0" prefWidth="200.0">
-              <items>
-                <AnchorPane maxWidth="500.0" minWidth="200.0" prefWidth="300.0">
-                     <children>
-                        <ListView fx:id="runnableListView" layoutX="43.0" layoutY="14.0" prefHeight="752.0" prefWidth="300.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0" />
-                        <ComboBox prefHeight="25.0" prefWidth="100.0" promptText="New" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="2.0">
-                            <items>
-                                <FXCollections fx:factory="observableArrayList">
-                                    <String fx:value="Runnable" />
-                                    <String fx:value="Server Runnable" />
-                                    <String fx:value="Init Runnable" />
-                                </FXCollections>
-                            </items>
-                        </ComboBox>
-                        <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="70.0" text="Delete" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="120.0" />
-                     </children>
-                  </AnchorPane>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-                     <children>
-                        <TabPane layoutX="14.0" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                          <tabs>
-                            <Tab text="Triggers">
-                              <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="789.0" prefWidth="1049.0">
-                                       <children>
-                                          <TableView prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="0.0">
-                                            <columns>
-                                              <TableColumn maxWidth="-1.0" minWidth="200.0" prefWidth="200.0" text="Triggers" />
-                                              <TableColumn maxWidth="-1.0" minWidth="150.0" prefWidth="200.0" text="Disabled in Models" />
-                                                <TableColumn maxWidth="-1.0" minWidth="120.0" prefWidth="120.0" text="Activation Reason" />
-                                                <TableColumn maxWidth="-1.0" minWidth="200.0" prefWidth="200.0" text="Name" />
-                                            </columns>
-                                          </TableView>
-                                          <ComboBox fx:id="newTriggerChoiceBox" prefHeight="25.0" prefWidth="80.0" promptText="New" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="120.0" />
-                                          <Button fx:id="deleteTriggerBtn" mnemonicParsing="false" onMouseClicked="#onDeleteTriggerBtnClicked" prefHeight="0.0" prefWidth="70.0" text="Delete" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="20.0" />
-                                       </children>
-                                    </AnchorPane>
-                              </content>
-                            </Tab>
-                            <Tab text="Access Points">
-                              <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                       <children>
-                                          <TableView prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                            <columns>
-                                              <TableColumn maxWidth="60.0" minWidth="40.0" prefWidth="-1.0" />
-                                              <TableColumn maxWidth="500.0" minWidth="250.0" prefWidth="-1.0" text="DEP/Operation/Trigger" />
-                                                <TableColumn maxWidth="500.0" minWidth="250.0" prefWidth="-1.0" text="Access" />
-                                                <TableColumn maxWidth="600.0" minWidth="250.0" prefWidth="-1.0" text="Name" />
-                                            </columns>
-                                          </TableView>
-                                          <ComboBox fx:id="newAccessPointChoiceBox" prefHeight="25.0" prefWidth="80.0" promptText="New" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="120.0" />
-                                          <Button fx:id="deleteAccessPointBtn" mnemonicParsing="false" onMouseClicked="#onDeleteAccessPointBtnClicked" prefHeight="0.0" prefWidth="70.0" text="Delete" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="20.0" />
-                                       </children>
-                                    </AnchorPane>
-                              </content>
-                            </Tab>
-                              <Tab text="Properties">
-                                <content>
-                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                       <children>
-                                          <Label layoutX="22.0" layoutY="26.0" prefHeight="25.0" prefWidth="60.0" text="Name:" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0">
-                                             <font>
-                                                <Font name="Arial" size="14.0" />
-                                             </font>
-                                          </Label>
-                                          <TextField layoutX="86.0" layoutY="22.0" prefHeight="30.0" prefWidth="733.0" AnchorPane.leftAnchor="85.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0" />
-                                          <Label layoutX="21.0" layoutY="65.0" prefHeight="25.0" prefWidth="60.0" text="Symbol:" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="65.0">
-                                             <font>
-                                                <Font name="Arial" size="14.0" />
-                                             </font>
-                                          </Label>
-                                          <TextField layoutX="85.0" layoutY="61.0" prefHeight="30.0" prefWidth="733.0" AnchorPane.leftAnchor="85.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="65.0" />
-                                          <CheckBox layoutX="12.0" layoutY="123.0" mnemonicParsing="false" text="Can be invoked concurrently" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="115.0">
-                                             <font>
-                                                <Font name="Arial" size="14.0" />
-                                             </font>
-                                          </CheckBox>
-                                          <Label layoutX="21.0" layoutY="163.0" prefHeight="25.0" prefWidth="161.0" text="Minimum Start Interval:" AnchorPane.topAnchor="160.0">
-                                             <font>
-                                                <Font name="Arial" size="14.0" />
-                                             </font>
-                                          </Label>
-                                          <TextField layoutX="195.0" layoutY="159.0" prefHeight="30.0" prefWidth="134.0" AnchorPane.leftAnchor="200.0" AnchorPane.topAnchor="160.0" />
-                                          <ChoiceBox layoutX="344.0" layoutY="163.0" prefHeight="30.0" prefWidth="80.0" AnchorPane.leftAnchor="350.0" AnchorPane.topAnchor="160.0" />
-                                          <TitledPane collapsible="false" graphicTextGap="5.0" layoutX="14.0" layoutY="277.0" prefHeight="441.0" prefWidth="810.0" text="Activation Reason" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="220.0">
-                                            <content>
-                                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                                   <children>
-                                                      <Button fx:id="newActiveReasonBtn" layoutX="741.0" layoutY="131.0" mnemonicParsing="false" onMouseClicked="#onNewActiveReasonBtnClicked" prefHeight="45.0" prefWidth="35.0" AnchorPane.bottomAnchor="330.0" AnchorPane.rightAnchor="1.0">
-                                                         <graphic>
-                                                            <ImageView fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                                                               <image>
-                                                                  <Image url="@icons/New.png" />
-                                                               </image>
-                                                            </ImageView>
-                                                         </graphic>
-                                                      </Button>
-                                                      <Button fx:id="deleteActiveReasonBtn" layoutX="742.0" layoutY="189.0" mnemonicParsing="false" onMouseClicked="#onDeleteActiveReasonBtnClicked" prefHeight="45.0" prefWidth="35.0" AnchorPane.bottomAnchor="270.0" AnchorPane.rightAnchor="1.0">
-                                                         <graphic>
-                                                            <ImageView fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                                                               <image>
-                                                                  <Image url="@icons/delete.png" />
-                                                               </image>
-                                                            </ImageView>
-                                                         </graphic>
-                                                      </Button>
-                                                      <Button fx:id="activeReasonPropertyBtn" layoutX="743.0" layoutY="260.0" mnemonicParsing="false" onMouseClicked="#onActiveReasonPropertyBtnClicked" prefHeight="45.0" prefWidth="35.0" AnchorPane.bottomAnchor="210.0" AnchorPane.rightAnchor="1.0">
-                                                         <graphic>
-                                                            <ImageView fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                                                               <image>
-                                                                  <Image url="@icons/Property.png" />
-                                                               </image>
-                                                            </ImageView>
-                                                         </graphic>
-                                                      </Button>
-                                                      <TableView layoutX="14.0" layoutY="14.0" prefHeight="436.0" prefWidth="723.0" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="2.0">
-                                                        <columns>
-                                                          <TableColumn maxWidth="100.0" minWidth="50.0" prefWidth="-1.0" text="Bit" />
-                                                          <TableColumn minWidth="250.0" prefWidth="-1.0" text="Name" />
-                                                            <TableColumn minWidth="250.0" prefWidth="-1.0" text="Symbol" />
-                                                        </columns>
-                                                      </TableView>
-                                                   </children>
-                                                </AnchorPane>
-                                            </content>
-                                             <font>
-                                                <Font size="14.0" />
-                                             </font>
-                                          </TitledPane>
-                                       </children>
-                                    </AnchorPane>
-                                </content>
-                              </Tab>
-                              <Tab text="Description">
-                                 <content>
-                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                       <children>
-                                          <TextArea layoutX="14.0" layoutY="14.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
-                                       </children>
-                                    </AnchorPane>
-                                 </content>
-                              </Tab>
-                          </tabs>
-                        </TabPane>
-                     </children>
-                  </AnchorPane>
-              </items>
-            </SplitPane>
             <SplitPane fx:id="exclusiveAreaSplitPane" dividerPositions="0.5" prefHeight="160.0" prefWidth="200.0">
                <items>
                   <AnchorPane maxWidth="500.0" minWidth="200.0" prefWidth="300.0">
@@ -382,6 +233,182 @@
                      </children>
                   </AnchorPane>
                </items>
+            </SplitPane>
+            <SplitPane fx:id="runnableSplitPane" dividerPositions="0.29797979797979796" prefHeight="160.0" prefWidth="200.0">
+              <items>
+                <AnchorPane maxWidth="500.0" minWidth="200.0" prefWidth="300.0">
+                     <children>
+                        <ListView fx:id="runnableListView" layoutX="43.0" layoutY="14.0" prefHeight="752.0" prefWidth="300.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0" />
+                        <ComboBox fx:id="newRunnableBtn" prefHeight="25.0" prefWidth="100.0" promptText="New" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="2.0">
+                            <items>
+                                <FXCollections fx:factory="observableArrayList">
+                                    <String fx:value="Runnable" />
+                                    <String fx:value="Server Runnable" />
+                                    <String fx:value="Init Runnable" />
+                                </FXCollections>
+                            </items>
+                        </ComboBox>
+                        <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="70.0" text="Delete" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="120.0" />
+                     </children>
+                  </AnchorPane>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                     <children>
+                        <TabPane layoutX="14.0" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                          <tabs>
+                            <Tab text="Triggers">
+                              <content>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="789.0" prefWidth="1049.0">
+                                       <children>
+                                          <TableView prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="0.0">
+                                            <columns>
+                                              <TableColumn maxWidth="-1.0" minWidth="200.0" prefWidth="200.0" text="Triggers" />
+                                              <TableColumn maxWidth="-1.0" minWidth="150.0" prefWidth="200.0" text="Disabled in Models" />
+                                                <TableColumn maxWidth="-1.0" minWidth="120.0" prefWidth="120.0" text="Activation Reason" />
+                                                <TableColumn maxWidth="-1.0" minWidth="200.0" prefWidth="200.0" text="Name" />
+                                            </columns>
+                                          </TableView>
+                                          <ComboBox fx:id="newTriggerChoiceBox" prefHeight="25.0" prefWidth="80.0" promptText="New" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="120.0">
+                                              <items>
+                                                  <FXCollections fx:factory="observableArrayList">
+                                                      <String fx:value="Init" />
+                                                      <String fx:value="Background" />
+                                                      <String fx:value="Periodic" />
+                                                      <String fx:value="On Data Reception" />
+                                                      <String fx:value="On Data Reception Error" />
+                                                      <String fx:value="On Send Completion" />
+                                                      <String fx:value="On Operation Invocation" />
+                                                      <String fx:value="On Operation Call Return" />
+                                                      <String fx:value="On Internal Trigger Occurred" />
+                                                      <String fx:value="On External Trigger Occurred" />
+                                                  </FXCollections>
+                                              </items>
+                                          </ComboBox>
+                                           <Button fx:id="deleteTriggerBtn" mnemonicParsing="false" onMouseClicked="#onDeleteTriggerBtnClicked" prefHeight="0.0" prefWidth="70.0" text="Delete" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="20.0" />
+                                       </children>
+                                    </AnchorPane>
+                              </content>
+                            </Tab>
+                            <Tab text="Access Points">
+                              <content>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <TableView prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                            <columns>
+                                              <TableColumn maxWidth="60.0" minWidth="40.0" prefWidth="-1.0" />
+                                              <TableColumn maxWidth="500.0" minWidth="250.0" prefWidth="-1.0" text="DEP/Operation/Trigger" />
+                                                <TableColumn maxWidth="500.0" minWidth="250.0" prefWidth="-1.0" text="Access" />
+                                                <TableColumn maxWidth="600.0" minWidth="250.0" prefWidth="-1.0" text="Name" />
+                                            </columns>
+                                          </TableView>
+                                          <ComboBox fx:id="newAccessPointChoiceBox" prefHeight="25.0" prefWidth="80.0" promptText="New" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="120.0">
+                                              <items>
+                                                  <FXCollections fx:factory="observableArrayList">
+                                                      <String fx:value="Received Data(Queued)" />
+                                                      <String fx:value="Read Data(None Queued)" />
+                                                      <String fx:value="Send Data(Queued)" />
+                                                      <String fx:value="Write Data(None Queued)" />
+                                                      <String fx:value="Invoke Operation" />
+                                                      <String fx:value="Raise External Trigger" />
+                                                      <String fx:value="Internal Trigger Point" />
+                                                  </FXCollections>
+                                              </items>
+                                          </ComboBox>
+                                          <Button fx:id="deleteAccessPointBtn" mnemonicParsing="false" onMouseClicked="#onDeleteAccessPointBtnClicked" prefHeight="0.0" prefWidth="70.0" text="Delete" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="20.0" />
+                                       </children>
+                                    </AnchorPane>
+                              </content>
+                            </Tab>
+                              <Tab text="Properties">
+                                <content>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <Label layoutX="22.0" layoutY="26.0" prefHeight="25.0" prefWidth="60.0" text="Name:" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0">
+                                             <font>
+                                                <Font name="Arial" size="14.0" />
+                                             </font>
+                                          </Label>
+                                          <TextField layoutX="86.0" layoutY="22.0" prefHeight="30.0" prefWidth="733.0" AnchorPane.leftAnchor="85.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0" />
+                                          <Label layoutX="21.0" layoutY="65.0" prefHeight="25.0" prefWidth="60.0" text="Symbol:" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="65.0">
+                                             <font>
+                                                <Font name="Arial" size="14.0" />
+                                             </font>
+                                          </Label>
+                                          <TextField layoutX="85.0" layoutY="61.0" prefHeight="30.0" prefWidth="733.0" AnchorPane.leftAnchor="85.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="65.0" />
+                                          <CheckBox layoutX="12.0" layoutY="123.0" mnemonicParsing="false" text="Can be invoked concurrently" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="115.0">
+                                             <font>
+                                                <Font name="Arial" size="14.0" />
+                                             </font>
+                                          </CheckBox>
+                                          <Label layoutX="21.0" layoutY="163.0" prefHeight="25.0" prefWidth="161.0" text="Minimum Start Interval:" AnchorPane.topAnchor="160.0">
+                                             <font>
+                                                <Font name="Arial" size="14.0" />
+                                             </font>
+                                          </Label>
+                                          <TextField layoutX="195.0" layoutY="159.0" prefHeight="30.0" prefWidth="134.0" AnchorPane.leftAnchor="200.0" AnchorPane.topAnchor="160.0" />
+                                          <ChoiceBox layoutX="344.0" layoutY="163.0" prefHeight="30.0" prefWidth="80.0" AnchorPane.leftAnchor="350.0" AnchorPane.topAnchor="160.0" />
+                                          <TitledPane collapsible="false" graphicTextGap="5.0" layoutX="14.0" layoutY="277.0" prefHeight="441.0" prefWidth="810.0" text="Activation Reason" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="220.0">
+                                            <content>
+                                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                   <children>
+                                                      <Button fx:id="newActiveReasonBtn" layoutX="741.0" layoutY="131.0" mnemonicParsing="false" onMouseClicked="#onNewActiveReasonBtnClicked" prefHeight="45.0" prefWidth="35.0" AnchorPane.bottomAnchor="330.0" AnchorPane.rightAnchor="1.0">
+                                                         <graphic>
+                                                            <ImageView fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@icons/New.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </graphic>
+                                                      </Button>
+                                                      <Button fx:id="deleteActiveReasonBtn" layoutX="742.0" layoutY="189.0" mnemonicParsing="false" onMouseClicked="#onDeleteActiveReasonBtnClicked" prefHeight="45.0" prefWidth="35.0" AnchorPane.bottomAnchor="270.0" AnchorPane.rightAnchor="1.0">
+                                                         <graphic>
+                                                            <ImageView fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@icons/delete.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </graphic>
+                                                      </Button>
+                                                      <Button fx:id="activeReasonPropertyBtn" layoutX="743.0" layoutY="260.0" mnemonicParsing="false" onMouseClicked="#onActiveReasonPropertyBtnClicked" prefHeight="45.0" prefWidth="35.0" AnchorPane.bottomAnchor="210.0" AnchorPane.rightAnchor="1.0">
+                                                         <graphic>
+                                                            <ImageView fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@icons/Property.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </graphic>
+                                                      </Button>
+                                                      <TableView layoutX="14.0" layoutY="14.0" prefHeight="436.0" prefWidth="723.0" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="2.0">
+                                                        <columns>
+                                                          <TableColumn maxWidth="100.0" minWidth="50.0" prefWidth="-1.0" text="Bit" />
+                                                          <TableColumn minWidth="250.0" prefWidth="-1.0" text="Name" />
+                                                            <TableColumn minWidth="250.0" prefWidth="-1.0" text="Symbol" />
+                                                        </columns>
+                                                      </TableView>
+                                                   </children>
+                                                </AnchorPane>
+                                            </content>
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </TitledPane>
+                                       </children>
+                                    </AnchorPane>
+                                </content>
+                              </Tab>
+                              <Tab text="Description">
+                                 <content>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <TextArea layoutX="14.0" layoutY="14.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
+                                       </children>
+                                    </AnchorPane>
+                                 </content>
+                              </Tab>
+                          </tabs>
+                        </TabPane>
+                     </children>
+                  </AnchorPane>
+              </items>
             </SplitPane>
          </children>
       </StackPane>

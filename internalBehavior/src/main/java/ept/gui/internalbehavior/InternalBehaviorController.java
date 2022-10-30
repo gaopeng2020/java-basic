@@ -14,6 +14,8 @@ import java.util.ResourceBundle;
 
 public class InternalBehaviorController implements Initializable {
 
+    public ComboBox<String> newTriggerChoiceBox;
+    public ComboBox<String> newAccessPointChoiceBox;
     @FXML // fx:id="rootPane"
     private AnchorPane rootPane; // Value injected by FXMLLoader
     @FXML // fx:id="stackPane"
