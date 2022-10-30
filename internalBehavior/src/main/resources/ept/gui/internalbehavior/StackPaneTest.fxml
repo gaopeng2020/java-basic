@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+
+<AnchorPane fx:id="rootAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ept.gui.internalbehavior.HelloController">
+   <children>
+      <StackPane fx:id="stackPane" prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <AnchorPane fx:id="redAnchorPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #DC143C;" />
+            <AnchorPane fx:id="purpleAnchorPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #4B0082;" />
+            <AnchorPane fx:id="blueAnchorPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #008B8B;" />
+         </children>
+      </StackPane>
+      <Button fx:id="redBtn" layoutY="60.0" mnemonicParsing="false" onAction="#onrRdBtnAction" text="Red" />
+      <Button fx:id="purpleBtn" layoutY="100.0" mnemonicParsing="false" onAction="#onPurpleBtnAction" prefHeight="23.0" prefWidth="41.0" text="Purple" />
+      <Button fx:id="blueBtn" layoutY="152.0" mnemonicParsing="false" onAction="#onBlueBtnAction" text="Blue" />
+   </children>
+</AnchorPane>
