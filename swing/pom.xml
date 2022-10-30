@@ -62,6 +62,27 @@
             <artifactId>qtjambi-uic-native-windows-x64</artifactId>
             <version>${qtjambi.version}</version>
         </dependency>
+        
+        <dependency>
+            <groupId>io.qtjambi</groupId>
+            <artifactId>qtjambi-test</artifactId>
+            <version>${qtjambi.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.qtjambi</groupId>
+            <artifactId>qtjambi-test-native-windows-x64</artifactId>
+            <version>${qtjambi.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.qtjambi</groupId>
+            <artifactId>qtjambi-help</artifactId>
+            <version>${qtjambi.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.qtjambi</groupId>
+            <artifactId>qtjambi-help-native-windows-x64</artifactId>
+            <version>${qtjambi.version}</version>
+        </dependency>
 
     </dependencies>
 

@@ -183,7 +183,7 @@ public class WordHandler {
         // style defines a heading of the given level
         CTPPr ppr = CTPPr.Factory.newInstance();
         ppr.setOutlineLvl(indentNumber);
-        ctStyle.setPPr(ppr);
+        ctStyle.setPPr((CTPPrGeneral) ppr);
 
         XWPFStyle style = new XWPFStyle(ctStyle);
 

@@ -1,14 +1,12 @@
 package dbutils;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-
-import javax.sql.DataSource;
-
+import jdbc.JDBCUnilsConfig;
 import org.apache.commons.dbutils.DbUtils;
 import org.apache.commons.dbutils.QueryRunner;
 
-import jdbc.JDBCUnilsConfig;
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.SQLException;
 /*
  * 对数据库操作的两种方法：
  * 1. PreparedStatement pst = con.prepareStatement(sql),
@@ -30,7 +28,7 @@ public static void main(String[] args) throws SQLException {
 	 //采用DBCPUtil连接池的方法连接数据库，
 	DataSource dbc = DBCPUtils.getconnection();
 	fQueryRunnerUpdate1(dbc);
-	
+
 }
 
 private static void fQueryRunnerUpdate1(DataSource dbc) {

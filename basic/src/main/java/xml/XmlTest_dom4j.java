@@ -1,25 +1,21 @@
 package xml;
+
 import ept.commonapi.EPTUtils;
 import org.dom4j.*;
 import org.dom4j.io.OutputFormat;
-import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 
 import javax.swing.*;
-import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.filechooser.FileSystemView;
-import java.awt.*;
 import java.io.*;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.prefs.Preferences;
 
 public class XmlTest_dom4j {
     private static File lastChooserDir = null;
 
-    public static void main(String[] args) throws DocumentException, IOException {
+    public static void main(String[] args) throws DocumentException, IOException, UnsupportedLookAndFeelException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         String diretory = "D:\\Users\\Lenovo\\Documents\\DaVinci\\SAIC\\MPD_MCU\\PPV";
         String xmlName = "MPD_1.3 - 副本.arxml";
 
