@@ -36,11 +36,16 @@ public class InternalBehaviorApplication extends Application {
         stage.setOnCloseRequest(event -> latch.countDown());
     }
 
+    /**
+     * @throws Exception
+     */
+    @Override
+    public void stop() throws Exception {
+        super.stop();
+    }
+
     public static void main(String[] args) {
         launch();
         System.out.println(currentThread.getName()+"========="+currentThread.isAlive());
     }
-
-
-
 }

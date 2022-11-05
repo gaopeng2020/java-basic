@@ -1,4 +1,4 @@
-package peng.gao.fxdemo1;
+package ept.gui.javafx1;
 
 import javafx.application.Application;
 import javafx.application.HostServices;

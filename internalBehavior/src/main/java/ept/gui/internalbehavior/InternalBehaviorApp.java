@@ -14,7 +14,7 @@ public class InternalBehaviorApp {
     static CountDownLatch latch = new CountDownLatch(1);
     public static Thread currentThread;
 
-    public static void start(Stage stage) {
+    public void start(Stage stage) {
         FXMLLoader fxmlLoader = new FXMLLoader(InternalBehaviorApplication.class.getResource("internal-behavior.fxml"));
         Scene scene;
         try {
@@ -36,25 +36,27 @@ public class InternalBehaviorApp {
         stage.show();
     }
 
-    public static void main(String[] args) throws Exception {
-//        Platform.startup(()->{});
-////        Platform.setImplicitExit(false);
-//        appStart();
-//        try {
-//            latch.await();
-//        } catch (InterruptedException e) {
-//            Thread.currentThread().interrupt();
-//        }
-//        System.out.println(currentThread.getName() + "=========" + currentThread.isAlive());
-        InternalBehaviorApplication.main(args);
-
+    public static void main(String[] args) {
+        Platform.startup(() -> {
+        });
+        //        Platform.setImplicitExit(false);
+        InternalBehaviorApp app = new InternalBehaviorApp();
+        app.appStart(app);
+        try {
+            latch.await();
+            Platform.exit();
+            System.gc();
+            Thread.sleep(10);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        System.out.println(currentThread.getName() + "=========" + currentThread.isAlive());
     }
 
-    private static void appStart() {
+    public void appStart(InternalBehaviorApp app) {
         Platform.runLater(() -> {
             Stage stage = new Stage();
-            InternalBehaviorApp app = new InternalBehaviorApp();
-            start(stage);
+            app.start(stage);
             stage.setOnCloseRequest(e -> latch.countDown());
         });
     }

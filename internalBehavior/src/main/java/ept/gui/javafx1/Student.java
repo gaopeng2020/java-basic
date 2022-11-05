@@ -1,4 +1,4 @@
-package peng.gao.fxdemo1;
+package ept.gui.javafx1;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
