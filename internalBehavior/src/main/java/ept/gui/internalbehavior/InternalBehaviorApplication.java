@@ -7,7 +7,12 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import java.util.concurrent.CountDownLatch;
+
 public class InternalBehaviorApplication extends Application {
+    public static Thread currentThread;
+    CountDownLatch latch = new CountDownLatch(1);
+
     /**
      * @param stage stage
      * @throws Exception fxmlLoader.load Exception
@@ -18,7 +23,7 @@ public class InternalBehaviorApplication extends Application {
         System.out.println("fxmlLoader.getLocation() = " + fxmlLoader.getLocation());
         Scene scene = new Scene(fxmlLoader.load(), 1500, 800);
         stage.setTitle("Internal Behavior Definition");
-        stage.getIcons().add(new Image("file:/icons/appnet.png",48,48,true,true));
+        stage.getIcons().add(new Image("file:/icons/appnet.png", 48, 48, true, true));
 //        stage.setIconified(true);
         stage.setScene(scene);
         stage.setMinWidth(600.0);
@@ -27,9 +32,15 @@ public class InternalBehaviorApplication extends Application {
 //        stage.initModality(Modality.NONE);
         stage.setOpacity(0.98);
         stage.show();
+        currentThread = Thread.currentThread();
+        stage.setOnCloseRequest(event -> latch.countDown());
     }
 
     public static void main(String[] args) {
         launch();
+        System.out.println(currentThread.getName()+"========="+currentThread.isAlive());
     }
+
+
+
 }

@@ -26,7 +26,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="rootPane" minHeight="400.0" minWidth="600.0" prefHeight="800.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ept.gui.internalbehavior.InternalBehaviorController">
+<AnchorPane fx:id="rootPane" minHeight="400.0" minWidth="600.0" prefHeight="800.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ept.gui.internalbehavior.InternalBehaviorController">
    <children>
       <StackPane fx:id="stackPane" prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
