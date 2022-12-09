@@ -13,13 +13,14 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.8.2</junit.version>
         <openfx.version>11.0.2</openfx.version>
+        <lombok.version>1.18.22</lombok.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.22</version>
+            <version>${lombok.version}</version>
         </dependency>
 
         <dependency>
@@ -30,6 +31,11 @@
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
+            <version>${openfx.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-swing</artifactId>
             <version>${openfx.version}</version>
         </dependency>
 
@@ -56,6 +62,14 @@
                 <configuration>
                     <source>11</source>
                     <target>11</target>
+                    <encoding>UTF-8</encoding>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
                 </configuration>
             </plugin>
             <plugin>
@@ -80,6 +94,93 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <!--                        &lt;!&ndash;反编译Lombok注解的源码，并将反编译的源码放在target/generated-sources/delombok&ndash;&gt;-->
+            <!--                        <plugin>-->
+            <!--                            <groupId>org.projectlombok</groupId>-->
+            <!--                            <artifactId>lombok-maven-plugin</artifactId>-->
+            <!--                            <version>1.18.20.0</version>-->
+            <!--                            <configuration>-->
+            <!--                                <encoding>UTF-8</encoding>-->
+            <!--                                <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>-->
+            <!--                                <outputDirectory>target/generated-sources/delombok</outputDirectory>-->
+            <!--                                <addOutputDirectory>false</addOutputDirectory>-->
+            <!--                            </configuration>-->
+            <!--                            <executions>-->
+            <!--                                <execution>-->
+            <!--                                    <phase>generate-sources</phase>-->
+            <!--                                    <goals>-->
+            <!--                                        <goal>delombok</goal>-->
+            <!--                                    </goals>-->
+            <!--                                </execution>-->
+            <!--                            </executions>-->
+            <!--                        </plugin>-->
+
+            <!--                        &lt;!&ndash;根据从target/generated-sources/delombok处的源码生成javadoc&ndash;&gt;-->
+            <!--                        <plugin>-->
+            <!--                            <groupId>org.apache.maven.plugins</groupId>-->
+            <!--                            <artifactId>maven-javadoc-plugin</artifactId>-->
+            <!--                            <version>3.3.2</version>-->
+            <!--                            <configuration>-->
+            <!--                                <sourcepath>target/generated-sources/delombok</sourcepath>-->
+            <!--                            </configuration>-->
+            <!--                            <executions>-->
+            <!--                                <execution>-->
+            <!--                                    <id>attach-javadocs</id>-->
+            <!--                                    <goals>-->
+            <!--                                        <goal>jar</goal>-->
+            <!--                                    </goals>-->
+            <!--                                </execution>-->
+            <!--                            </executions>-->
+            <!--                        </plugin>-->
+
+<!--            &lt;!&ndash; 这里相当于打包的时候将第三方jar包放到了target下指定的lib文件夹里，但是没有打到jar包内。&ndash;&gt;-->
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-dependency-plugin</artifactId>-->
+<!--                <version>3.2.0</version>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>copy-dependencies</id>-->
+<!--                        <phase>package</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>copy-dependencies</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <outputDirectory>${project.build.directory}/lib</outputDirectory>-->
+<!--                            <overWriteReleases>false</overWriteReleases>-->
+<!--                            <overWriteSnapshots>false</overWriteSnapshots>-->
+<!--                            <overWriteIfNewer>true</overWriteIfNewer>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
+<!--            &lt;!&ndash;这里相当于将第三方jar包一起并入到项目jar包中去了。&ndash;&gt;-->
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-assembly-plugin</artifactId>-->
+<!--                <version>3.3.0</version>-->
+<!--                <configuration>-->
+<!--                    <archive>-->
+<!--                        <manifest>-->
+<!--                            <mainClass/>-->
+<!--                        </manifest>-->
+<!--                    </archive>-->
+<!--                    <descriptorRefs>-->
+<!--                        <descriptorRef>jar-with-dependencies</descriptorRef>-->
+<!--                    </descriptorRefs>-->
+<!--                </configuration>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>make-assembly</id> &lt;!&ndash; this is used for inheritance merges &ndash;&gt;-->
+<!--                        <phase>package</phase> &lt;!&ndash; 指定在打包节点执行jar包合并操作 &ndash;&gt;-->
+<!--                        <goals>-->
+<!--                            <goal>single</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
+
         </plugins>
     </build>
 </project>

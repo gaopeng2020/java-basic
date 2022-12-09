@@ -1,4 +1,4 @@
-package ept.gui.javafx1;
+package ept.gui.javaFxDemo1;
 
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.SimpleIntegerProperty;

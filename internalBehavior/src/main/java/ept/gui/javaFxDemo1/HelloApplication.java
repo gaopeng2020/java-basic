@@ -1,4 +1,4 @@
-package ept.gui.javafx1;
+package ept.gui.javaFxDemo1;
 
 import javafx.application.Application;
 import javafx.application.HostServices;
@@ -26,7 +26,6 @@ public class HelloApplication extends Application {
 //        stage.setAlwaysOnTop(true);
 //        stage.xProperty().addListener((observableValue, number, t1) -> System.out.println("X Index =  = " + t1));
 //        stage.yProperty().addListener((observableValue, number, t1) -> System.out.println("Y Index = " + t1));
-
 
         HostServices hostServices = getHostServices();
 

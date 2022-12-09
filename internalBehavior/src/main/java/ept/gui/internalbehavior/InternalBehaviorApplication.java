@@ -1,17 +1,23 @@
 package ept.gui.internalbehavior;
 
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import lombok.Getter;
 
+import javax.swing.*;
 import java.util.concurrent.CountDownLatch;
 
 public class InternalBehaviorApplication extends Application {
-    public static Thread currentThread;
-    CountDownLatch latch = new CountDownLatch(1);
+    @Getter
+    private Thread currentThread;
+    @Getter
+    private final CountDownLatch latch = new CountDownLatch(1);
 
     /**
      * @param stage stage
@@ -20,7 +26,6 @@ public class InternalBehaviorApplication extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         FXMLLoader fxmlLoader = new FXMLLoader(InternalBehaviorApplication.class.getResource("internal-behavior.fxml"));
-        System.out.println("fxmlLoader.getLocation() = " + fxmlLoader.getLocation());
         Scene scene = new Scene(fxmlLoader.load(), 1500, 800);
         stage.setTitle("Internal Behavior Definition");
         stage.getIcons().add(new Image("file:/icons/appnet.png", 48, 48, true, true));
@@ -33,19 +38,34 @@ public class InternalBehaviorApplication extends Application {
         stage.setOpacity(0.98);
         stage.show();
         currentThread = Thread.currentThread();
-        stage.setOnCloseRequest(event -> latch.countDown());
+        stage.setOnCloseRequest(event -> {
+            latch.countDown();
+            stage.close();
+        });
     }
 
-    /**
-     * @throws Exception
-     */
-    @Override
-    public void stop() throws Exception {
-        super.stop();
+    public void launchAppBySwing() throws InterruptedException {
+        SwingUtilities.invokeLater(() -> {
+            new JFXPanel();
+            Platform.runLater(() -> {
+                try {
+                    new InternalBehaviorApplication().start(new Stage());
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        });
+
+        try {
+            latch.await();
+            JFXPanel.getDefaultLocale();
+            Platform.exit();
+            System.gc();
+            Thread.sleep(10);
+        } catch (InterruptedException e) {
+            currentThread.interrupt();
+            throw new InterruptedException();
+        }
     }
 
-    public static void main(String[] args) {
-        launch();
-        System.out.println(currentThread.getName()+"========="+currentThread.isAlive());
-    }
 }
