@@ -49,8 +49,8 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>peng.gao</groupId>
-            <artifactId>fxDemo1</artifactId>
+            <groupId>ept.gui</groupId>
+            <artifactId>internalBehavior</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
