@@ -16,6 +16,7 @@
         <module>gof23</module>
         <module>poi</module>
         <module>jna</module>
+        <module>spring</module>
     </modules>
 
     <properties>
