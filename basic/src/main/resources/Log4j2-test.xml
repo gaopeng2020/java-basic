@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <!--全局参数-->
+    <Properties>
+        <Property name="pattern">%d\t[%p]\t%c{1}:%L : %msg%n%throwable</Property>
+        <Property name="logDir">logs/</Property>
+        <Property name="projectName">LogTest</Property>
+    </Properties>
+
+    <Appenders>
+        <!--输出到控制台的配置-->
+        <Console name="console" target="SYSTEM_OUT">
+<!--            <PatternLayout pattern="%highlight{[%-5level] %d %c{1}:%L : %msg%n%throwable}"/>-->
+            <PatternLayout pattern="%highlight{[%-5level] %d %c{1}:%L : %msg%n%throwable}{FATAL=#DC143C, ERROR=#FF4500, WARN=#FFD700, INFO=#00FFFF, DEBUG=bright_green, TRACE=white}"/>
+        </Console>
+
+        <!-- 同一来源的输出器可以定义多个RollingFile，定义按天存储日志 -->
+        <RollingFile name="rolling_file" fileName="${logDir}/${projectName}.log" filePattern="${logDir}/${projectName}_%d{yyyy-MM-dd}-%i.log">
+            <PatternLayout pattern="${pattern}"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="100 MB"/>
+            </Policies>
+            <!-- DefaultRolloverStrategy属性如不设置，则默认为最多同一文件夹下7个文件，这里设置了20 -->
+            <DefaultRolloverStrategy max="20"/>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <!--日志级别以及优先级排序: OFF > FATAL > ERROR > WARN > INFO > DEBUG > TRACE > ALL -->
+        <Root level="ALL">
+            <AppenderRef ref="console"/>
+            <AppenderRef ref="rolling_file"/>
+        </Root>
+    </Loggers>
+</Configuration>
