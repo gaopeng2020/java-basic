@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="cat" class="peng.gao.autowired.Cat" scope="singleton"/>
+    <bean id="dog" class="peng.gao.autowired.Dog" scope="prototype"/>
+    <!--    手工装配-->
+<!--    <bean id="person" class="peng.gao.autowired.People">-->
+<!--        <property name="name" value="haha"/>-->
+<!--        <property name="dog" ref="dog"/>-->
+<!--        <property name="cat" ref="cat"/>-->
+<!--    </bean>-->
+
+    <!--    自动装配
+    byName:自动在上下文中找和该对象set方法后面的名称对应的 beanid,这种模式要求 bean id与成员变量set方法后的名称保持一致
+    byType:自动在上下文中找和该对象成员变量类型相同的beanid,这种模式要求相同类型的对象只能全局唯一
+    -->
+    <bean id="people" class="peng.gao.autowired.People" autowire="byType">
+        <property name="name" value="haha"/>
+    </bean>
+
+</beans>
