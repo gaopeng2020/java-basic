@@ -27,8 +27,8 @@ public class orcle_connection {
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 
-			String url = "jdbc:oracle:thin:@180.168.184.107:9095:orcl"; // SID based URL
-//			String url = "jdbc:oracle:thin:@//db-preevision:1521/service_orcl"; // service based URL
+//			String url = "jdbc:oracle:thin:@180.168.184.107:8088:orcl"; // SID based URL
+			String url = "jdbc:oracle:thin:@//180.168.184.107:8088/preevision"; // service based URL
 			
 			String user = "PREEVISION95";
 			String password = "PREEVISION95";

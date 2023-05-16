@@ -48,12 +48,6 @@
             <artifactId>eptutils</artifactId>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>peng.gao</groupId>
-            <artifactId>fxDemo1</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-
     </dependencies>
 
 </project>
