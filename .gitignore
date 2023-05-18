@@ -39,3 +39,5 @@ target
 .idea
 *.iml
 /poi/main/resources/~$EEvision二次开发评审表.docx
+/key.pri
+/key.pub
