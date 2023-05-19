@@ -17,6 +17,7 @@
         <module>poi</module>
         <module>jna</module>
         <module>spring</module>
+        <module>javafx</module>
     </modules>
 
     <properties>
