@@ -1,8 +1,14 @@
 package crypto;
 
+import javax.crypto.KeyGenerator;
+import javax.crypto.Mac;
+import javax.crypto.SecretKey;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
+import java.security.InvalidKeyException;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 
 public class MessageDigestDemo {
     public static void main(String[] args) throws Exception {
@@ -20,12 +26,14 @@ public class MessageDigestDemo {
         String sha512 = getDigest(input, "SHA-512");
         System.out.println("SHA-512:"+sha512);
 
+        messageAuthenticationCodeTest();
+
         //获取文件字摘要对象
-        String path = "C:\\Users\\lenovo\\Documents\\gitlab\\java\\basic\\src\\main\\resources\\log4j2.xml";
+        String path = "basic/src/main/resources/log4j2.xml";
         String fileSha1 = getDigestFile(path, "MD5");
         System.out.println("MD5:"+fileSha1);
 
-        path = "F:\\Software\\WPS\\setup_CN_2052_11.1.0.12353_WPSPlus_VBA_XGD51.271.exe";
+        path = "C:\\Users\\gaopeng\\Desktop\\INCOSE-OMGSysML-Tutorial-Final-090901.pdf";
         String fileSha512 = getDigestFile(path, "SHA-256");
         System.out.println("SHA-256:"+fileSha512);
     }
@@ -35,6 +43,25 @@ public class MessageDigestDemo {
         byte[] digest = messageDigest.digest(input.getBytes());
         System.out.println("密文的字节长度:" + digest.length);
         return toHex(digest);
+    }
+
+    private static void messageAuthenticationCodeTest() throws NoSuchAlgorithmException, InvalidKeyException {
+        byte[] input = "Message Authentication Code Test".getBytes();
+//        HmacMD5、HmacSHA1、HmacSHA224、HmacSHA256、HmacSHA384、HmacSHA512
+        KeyGenerator kg = KeyGenerator.getInstance("HmacSHA256");
+        SecretKey secretKey = kg.generateKey();
+        System.err.println("secretKey: "+Base64.getEncoder().encodeToString(secretKey.getEncoded()));
+
+        Mac senderMac = Mac.getInstance(kg.getAlgorithm());
+        senderMac.init(secretKey);
+        senderMac.update(input);
+        byte[] bytes1 = senderMac.doFinal();
+        System.err.println("SenderMac: "+Base64.getEncoder().encodeToString(bytes1));
+
+        Mac receiverMac = Mac.getInstance(kg.getAlgorithm());
+        receiverMac.init(secretKey);
+        byte[] bytes2 = receiverMac.doFinal(input);
+        System.err.println("ReceiverMac: "+Base64.getEncoder().encodeToString(bytes2));
     }
 
     private static String getDigestFile(String filePath, String algorithm) throws Exception{

@@ -1,8 +1,7 @@
 package crypto;
 
-import com.sun.org.apache.xml.internal.security.utils.Base64;
 import org.apache.commons.io.FileUtils;
-
+import org.apache.commons.codec.binary.Base64;
 import javax.crypto.Cipher;
 import java.io.File;
 import java.nio.charset.Charset;
@@ -11,33 +10,38 @@ import java.security.*;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 
+/**
+ * @author gaopeng
+ */
 public class RsaDemo {
     public static void main(String[] args) throws Exception {
         String input = "RSA非对称加密测试";
         // 加密算法
         String algorithm = "RSA";
 
+        String pubKeyPath = "src/main/resources/key.pub";
+        String priKeyPath = "src/main/resources/key.pri";
         //生成密钥对并保存在本地文件中
-        generateKeyToFile(algorithm, "key.pub", "key.pri");
+        generateKeyToFile(algorithm, pubKeyPath, priKeyPath);
 
         //用私钥加密
-        PrivateKey privateKey = getPrivateKey("key.pri", algorithm);
+        PrivateKey privateKey = getPrivateKey(priKeyPath, algorithm);
         String s = encryptRSA(algorithm, privateKey, input);
         System.out.println("密文："+s);
 
         //用公钥解密
-        PublicKey publicKey = getPublicKey("key.pub", algorithm);
+        PublicKey publicKey = getPublicKey(pubKeyPath, algorithm);
         String s1 = decryptRSA(algorithm, publicKey, s);
         System.out.println("明文："+s1);
 
         //获取签名
-        PrivateKey priKey = loadPrivateKeyFromFile("RSA", "key.pri");
-        String signatureData = getSignature(input, "sha256withrsa", priKey);
+        PrivateKey priKey = loadPrivateKeyFromFile("RSA", priKeyPath);
+        String signatureData = getSignature(input, "SHA256withRSA", priKey);
         System.out.println("签名数据："+signatureData);
 
         //认证签名
-        PublicKey pubKey =loadPublicKeyFromFile("RSA", "key.pub");
-        boolean b = verifySignature(input, "sha256withrsa", pubKey, signatureData);
+        PublicKey pubKey =loadPublicKeyFromFile("RSA", pubKeyPath);
+        boolean b = verifySignature(input, "SHA256withRSA", pubKey, signatureData);
         System.out.println("签名验证是否成功："+b);
     }
 
@@ -47,7 +51,7 @@ public class RsaDemo {
         // 获取密钥工厂
         KeyFactory keyFactory = KeyFactory.getInstance(algorithm);
         // 构建密钥规范 进行Base64解码
-        X509EncodedKeySpec spec = new X509EncodedKeySpec(Base64.decode(publicKeyString));
+        X509EncodedKeySpec spec = new X509EncodedKeySpec(Base64.decodeBase64(publicKeyString));
         // 生成公钥
         return keyFactory.generatePublic(spec);
     }
@@ -58,7 +62,7 @@ public class RsaDemo {
         // 获取密钥工厂
         KeyFactory keyFactory = KeyFactory.getInstance(algorithm);
         // 构建密钥规范 进行Base64解码
-        PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(Base64.decode(privateKeyString));
+        PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(Base64.decodeBase64(privateKeyString));
         // 生成私钥
         return keyFactory.generatePrivate(spec);
     }
@@ -73,6 +77,7 @@ public class RsaDemo {
     public static void generateKeyToFile(String algorithm, String pubPath, String priPath) throws Exception {
         // 获取密钥对生成器
         KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(algorithm);
+        keyPairGenerator.initialize(2048);
         // 获取密钥对
         KeyPair keyPair = keyPairGenerator.generateKeyPair();
         // 获取公钥
@@ -83,8 +88,8 @@ public class RsaDemo {
         byte[] publicKeyEncoded = publicKey.getEncoded();
         byte[] privateKeyEncoded = privateKey.getEncoded();
         // 进行Base64编码
-        String publicKeyString = Base64.encode(publicKeyEncoded);
-        String privateKeyString = Base64.encode(privateKeyEncoded);
+        String publicKeyString = Base64.encodeBase64String(publicKeyEncoded);
+        String privateKeyString = Base64.encodeBase64String(privateKeyEncoded);
         // 保存文件
         FileUtils.writeStringToFile(new File(pubPath), publicKeyString, StandardCharsets.UTF_8);
         FileUtils.writeStringToFile(new File(priPath), privateKeyString, StandardCharsets.UTF_8);
@@ -105,11 +110,10 @@ public class RsaDemo {
         // 私钥进行解密
         cipher.init(Cipher.DECRYPT_MODE,key);
         // 由于密文进行了Base64编码, 在这里需要进行解码
-        byte[] decode = Base64.decode(encrypted);
+        byte[] decode = Base64.decodeBase64(encrypted);
         // 对密文进行解密，不需要使用base64，因为原文不会乱码
         byte[] bytes1 = cipher.doFinal(decode);
         return new String(bytes1);
-
     }
     /**
      * 使用密钥加密数据
@@ -130,7 +134,7 @@ public class RsaDemo {
         // 私钥加密
         byte[] bytes = cipher.doFinal(input.getBytes());
         // 对密文进行Base64编码
-        return Base64.encode(bytes);
+        return Base64.encodeBase64String(bytes);
     }
 
     /**
@@ -142,27 +146,15 @@ public class RsaDemo {
      */
     public static PublicKey loadPublicKeyFromFile(String algorithm, String filePath) throws Exception {
         // 将文件内容转为字符串
-        String keyString = FileUtils.readFileToString(new File(filePath), Charset.forName("UTF-8"));
-        return loadPublicKeyFromString(algorithm, keyString);
-    }
-
-    /**
-     * 从字符串中加载公钥
-     *
-     * @param algorithm : 算法
-     * @param keyString : 公钥字符串
-     * @return : 公钥
-     */
-    public static PublicKey loadPublicKeyFromString(String algorithm, String keyString) throws Exception {
+        String keyString = FileUtils.readFileToString(new File(filePath), StandardCharsets.UTF_8);
         // 进行Base64解码
-        byte[] decode = Base64.decode(keyString);
+        byte[] decode = Base64.decodeBase64(keyString);
         // 获取密钥工厂
         KeyFactory keyFactory = KeyFactory.getInstance(algorithm);
         // 构建密钥规范
-        X509EncodedKeySpec keyspec = new X509EncodedKeySpec(decode);
+        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(decode);
         // 获取公钥
-        return keyFactory.generatePublic(keyspec);
-
+        return keyFactory.generatePublic(keySpec);
     }
 
     /**
@@ -175,26 +167,16 @@ public class RsaDemo {
     public static PrivateKey loadPrivateKeyFromFile(String algorithm, String filePath) throws Exception {
         // 将文件内容转为字符串
         String keyString = FileUtils.readFileToString(new File(filePath), StandardCharsets.UTF_8);
-        return loadPrivateKeyFromString(algorithm, keyString);
-    }
-
-    /**
-     * 从字符串中加载私钥
-     *
-     * @param algorithm : 算法
-     * @param keyString : 私钥字符串
-     * @return : 私钥
-     */
-    public static PrivateKey loadPrivateKeyFromString(String algorithm, String keyString) throws Exception {
         // 进行Base64解码
-        byte[] decode = Base64.decode(keyString);
+        byte[] decode = Base64.decodeBase64(keyString);
         // 获取密钥工厂
         KeyFactory keyFactory = KeyFactory.getInstance(algorithm);
         // 构建密钥规范
-        PKCS8EncodedKeySpec keyspec = new PKCS8EncodedKeySpec(decode);
+        PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(decode);
         // 生成私钥
-        return keyFactory.generatePrivate(keyspec);
+        return keyFactory.generatePrivate(keySpec);
     }
+
     /**
      * 生成签名
      *
@@ -213,7 +195,7 @@ public class RsaDemo {
         // 开始签名
         byte[] sign = signature.sign();
         // 对签名数据进行Base64编码
-        return Base64.encode(sign);
+        return Base64.encodeBase64String(sign);
     }
 
     /**
@@ -233,7 +215,6 @@ public class RsaDemo {
         // 传入原文
         signature.update(input.getBytes());
         // 校验数据
-        return signature.verify(Base64.decode(signaturedData));
-
+        return signature.verify(Base64.decodeBase64(signaturedData));
     }
 }
