@@ -3,8 +3,9 @@
     <!--全局参数-->
     <Properties>
         <Property name="pattern">%d\t[%p]\t%c{1}:%L : %msg%n%throwable</Property>
-        <Property name="logDir">logs/</Property>
-        <Property name="projectName">LogTest</Property>
+<!--        <Property name="logDir">logs/</Property>-->
+        <property name="logDir" value="C:\Users\Public\Documents\Vector\PREEvision_v9513\ws\logs" />
+        <Property name="projectName">Log4jTest</Property>
     </Properties>
 
     <Appenders>
