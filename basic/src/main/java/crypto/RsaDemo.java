@@ -35,12 +35,12 @@ public class RsaDemo {
         System.out.println("明文："+s1);
 
         //获取签名
-        PrivateKey priKey = loadPrivateKeyFromFile("RSA", priKeyPath);
+        PrivateKey priKey = loadPrivateKeyFromFile(algorithm, priKeyPath);
         String signatureData = getSignature(input, "SHA256withRSA", priKey);
         System.out.println("签名数据："+signatureData);
 
         //认证签名
-        PublicKey pubKey =loadPublicKeyFromFile("RSA", pubKeyPath);
+        PublicKey pubKey =loadPublicKeyFromFile(algorithm, pubKeyPath);
         boolean b = verifySignature(input, "SHA256withRSA", pubKey, signatureData);
         System.out.println("签名验证是否成功："+b);
     }
