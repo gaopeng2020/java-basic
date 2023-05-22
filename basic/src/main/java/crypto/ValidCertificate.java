@@ -20,13 +20,15 @@ public class ValidCertificate {
     public static void main(String[] args) throws Exception {
         String storePath = Objects.requireNonNull(ValidCertificate.class.getClassLoader().getResource("server.keystore")).getFile();
 
+        String alias = "server_rsa";
         String password = "123456";
         KeyStore ks = getKeyStore(storePath, password);
-//        boolean verify = certificateVerify(ks.getCertificate("server_rsa"));
-//        System.out.println("证书验证是否通过："+verify);
 
-        PrivateKey privKey = getPrivateKey(ks, "server_rsa", password);
-        PublicKey pubKey = getPublicKey(ks, "server_rsa");
+        boolean verify = certificateVerify(ks, alias);
+        System.out.println("证书验证是否通过："+verify);
+
+        PrivateKey privKey = getPrivateKey(ks, alias, password);
+        PublicKey pubKey = getPublicKey(ks, alias);
 
         String strData = "加密前的数据";
         System.out.println("加密前数据：" + strData);
@@ -49,13 +51,15 @@ public class ValidCertificate {
         }
     }
 
-    private static boolean certificateVerify(Certificate certificate) {
-        PublicKey publicKey = certificate.getPublicKey();
+    private static boolean certificateVerify(KeyStore ks,String alias) {
         try {
-            certificate.verify(publicKey);
+            Certificate subjectCer = ks.getCertificate(alias);
+            Certificate[] certificateChain = ks.getCertificateChain(alias);
+            Certificate issueCer = certificateChain[certificateChain.length - 1];
+            subjectCer.verify(issueCer.getPublicKey());
             return true;
         } catch (CertificateException | NoSuchAlgorithmException | InvalidKeyException | NoSuchProviderException |
-                 SignatureException e) {
+                 SignatureException | KeyStoreException e) {
             throw new RuntimeException(e);
         }
     }
@@ -81,15 +85,6 @@ public class ValidCertificate {
         //返回私钥字符串
         String privateKey = Base64.encodeBase64String(privKey.getEncoded());
         System.out.println("私钥字符串：" + privateKey);
-       X509Certificate issueCer = null;
-        Certificate subjectCer = keyStore.getCertificate(alias);
-        Certificate[] certificateChain = keyStore.getCertificateChain(alias);
-        for (Certificate certificate : certificateChain) {
-            if (!certificate.equals(subjectCer)){
-                issueCer = (X509Certificate) certificate;
-            }
-        }
-        subjectCer.verify(issueCer.getPublicKey());
         return privKey;
     }
 
