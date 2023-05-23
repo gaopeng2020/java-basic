@@ -2,7 +2,10 @@ package crypto;
 
 import org.apache.commons.codec.binary.Base64;
 
+import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import java.io.FileInputStream;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
@@ -24,44 +27,58 @@ public class ValidCertificate {
         String password = "123456";
         KeyStore ks = getKeyStore(storePath, password);
 
-        boolean verify = certificateVerify(ks, alias);
-        System.out.println("证书验证是否通过："+verify);
+        System.out.println("证书验证是否通过：" + verifyCertificate(ks.getCertificateChain(alias)));
+        System.out.println("签名验证是否通过 = " + verifySignature(ks, alias));
 
-        PrivateKey privKey = getPrivateKey(ks, alias, password);
-        PublicKey pubKey = getPublicKey(ks, alias);
+        PrivateKey privateKey = getPrivateKey(ks, alias, password);
+        PublicKey publicKey = getPublicKey(ks, alias);
 
         String strData = "加密前的数据";
         System.out.println("加密前数据：" + strData);
-
-        byte[] encryptedData = encrypt(strData, pubKey);
+        byte[] encryptedData = encrypt(strData, publicKey);
         System.out.println("加密后的数据：" + Base64.encodeBase64String(encryptedData));
 
-        byte[] decryptedData = decrypt(encryptedData, privKey);
+        byte[] decryptedData = decrypt(encryptedData, privateKey);
         assert decryptedData != null;
         System.out.println("解密后的数据：" + new String(decryptedData));
 
         String strSignData = "签名前的数据";
         byte[] toSignData = strSignData.getBytes(StandardCharsets.UTF_8);
-        byte[] signedData = sign(toSignData, privKey);
-//        System.out.println("签名后的摘要信息：" + Arrays.toString(signedData));
-        if (verify(toSignData, signedData, pubKey)) {
+        byte[] signedData = sign(toSignData, privateKey);
+        if (verify(toSignData, signedData, publicKey)) {
             System.out.println("验签通过");
         } else {
             System.out.println("验签错误");
         }
+
     }
 
-    private static boolean certificateVerify(KeyStore ks,String alias) {
+    private static boolean verifySignature(KeyStore ks, String alias) {
         try {
-            Certificate subjectCer = ks.getCertificate(alias);
+            X509Certificate subjectCer = (X509Certificate) ks.getCertificate(alias);
             Certificate[] certificateChain = ks.getCertificateChain(alias);
-            Certificate issueCer = certificateChain[certificateChain.length - 1];
-            subjectCer.verify(issueCer.getPublicKey());
-            return true;
-        } catch (CertificateException | NoSuchAlgorithmException | InvalidKeyException | NoSuchProviderException |
-                 SignatureException | KeyStoreException e) {
+            Certificate issueCer = certificateChain[1];
+            byte[] tbsData = subjectCer.getTBSCertificate();
+            byte[] signedData = subjectCer.getSignature();
+
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] digested = digest.digest(tbsData);
+
+            String algorithm = subjectCer.getPublicKey().getAlgorithm();
+            Cipher cipher = Cipher.getInstance(algorithm);
+            cipher.init(Cipher.DECRYPT_MODE, issueCer.getPublicKey());
+            byte[] decryptSignedData = cipher.doFinal(signedData);
+
+            System.out.println("digested = " + Base64.encodeBase64String(digested));
+            System.out.println("decryptSignedData = " + Base64.encodeBase64String(decryptSignedData));
+            if (Base64.encodeBase64String(digested).equals(Base64.encodeBase64String(decryptSignedData))) {
+                return true;
+            }
+        } catch (KeyStoreException | CertificateEncodingException | NoSuchAlgorithmException |
+                 InvalidKeyException | NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException e) {
             throw new RuntimeException(e);
         }
+        return false;
     }
 
     /**
@@ -75,7 +92,6 @@ public class ValidCertificate {
         is.close();
         return ks;
     }
-
 
     /**
      * 通过路径获取私钥
@@ -151,13 +167,14 @@ public class ValidCertificate {
     /**
      * 签名
      */
-    private static byte[] sign(byte[] data, PrivateKey privKey) throws Exception {
+    private static byte[] sign(byte[] data, PrivateKey privateKey) throws Exception {
         MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
         messageDigest.update(data);
-        byte[] digest = messageDigest.digest();
+        byte[] digestValue = messageDigest.digest();
+
         Signature signature = Signature.getInstance("SHA256withRSA");
-        signature.initSign(privKey);
-        signature.update(digest);
+        signature.initSign(privateKey);
+        signature.update(digestValue);
         byte[] sign = signature.sign();
         return Base64.encodeBase64(sign);
     }
@@ -165,62 +182,74 @@ public class ValidCertificate {
     /**
      * 验签
      */
-    private static boolean verify(byte[] data, byte[] sign, PublicKey pubKey) throws Exception {
+    private static boolean verify(byte[] plainData, byte[] signedData, PublicKey pubKey) throws Exception {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        digest.update(data);
-        byte[] digested = digest.digest();
+        byte[] digestValue = digest.digest(plainData);
+
         Signature signature = Signature.getInstance("SHA256withRSA");
         signature.initVerify(pubKey);
-        signature.update(digested);
-        return signature.verify(Base64.decodeBase64(sign));
+        signature.update(digestValue);
+        return signature.verify(Base64.decodeBase64(signedData));
     }
 
-    public static boolean verify(X509Certificate x509CertificateRoot,
-                                 Certificate[] certificateChain,
-                                 X509CRL X509crl, String stringTarget) {
+    /**
+     *
+     * @param certificateChain certificateChain
+     * @return true if passed
+     */
+    public static boolean verifyCertificate(Certificate[] certificateChain) {
         //获取证书链长度
-        int nSize = certificateChain.length;
-        //将证书链转化为数组
-        X509Certificate[] arX509certificate = new X509Certificate[nSize];
-        for (int i = 0; i < certificateChain.length; i++) {
+        int length = certificateChain.length;
+
+        //验证证书链里每个证书是否在有效期里
+        Date date = new Date();
+        X509Certificate[] x509Certificates = new X509Certificate[length];
+        for (int i = 0; i < length; i++) {
             Certificate certificate = certificateChain[i];
-            if (certificate instanceof X509Certificate)
-                arX509certificate[i] = (X509Certificate) certificate;
+            if (certificate instanceof X509Certificate) {
+                x509Certificates[i] = (X509Certificate) certificate;
+                try {
+                    x509Certificates[i].checkValidity(date);
+                } catch (CertificateExpiredException | CertificateNotYetValidException e) {
+                    throw new RuntimeException(e);
+                }
+            }
         }
         //声明list，存储证书链中证书主体信息
         ArrayList<BigInteger> list = new ArrayList<>();
-        //沿证书链自上而下，验证证书的所有者是下一个证书的颁布者
-        Principal principalLast = null;
-        for (int i = 0; i < nSize; i++) {//遍历arX509certificate
-            X509Certificate x509Certificate = arX509certificate[i];
-            //获取发布者标识
-            Principal principalIssuer = x509Certificate.getIssuerX500Principal();
-            //获取证书的主体标识
-            Principal principalSubject = x509Certificate.getSubjectX500Principal();
+
+        //沿证书链自上而下(用户证书->中间商CA证书->CA根证书)，验证证书的颁布者是下一个证书的持有者
+        for (int i = 0; i < length - 1; i++) {
+            X509Certificate currentCertificate = x509Certificates[i];
+            X509Certificate nextCertificate = x509Certificates[i + 1];
+            //获取当前证书颁布者标识
+            Principal issuerPrincipal = currentCertificate.getIssuerX500Principal();
+            //获取下一个证书的使用者标识
+            Principal subjectPrincipal = nextCertificate.getSubjectX500Principal();
             //保存证书的序列号
-            list.add(x509Certificate.getSerialNumber());
+            list.add(currentCertificate.getSerialNumber());
 
-            if (principalLast != null) {
-                //验证证书的颁布者是上一个证书的所有者
-                if (principalIssuer.equals(principalLast)) {
-                    try {
-                        //获取上个证书的公钥
-                        PublicKey publickey = arX509certificate[i - 1].getPublicKey();
-                        //验证是否已使用与指定公钥相应的私钥签署了此证书
-                        arX509certificate[i].verify(publickey);
-                    } catch (Exception e) {
-                        return false;
-                    }
-                } else {
-                    return false;
+            //验证证书的颁布者是上一个证书的持有者
+            if (issuerPrincipal.equals(subjectPrincipal)) {
+                try {
+                    //获取下个证书的公钥
+                    PublicKey publickey = nextCertificate.getPublicKey();
+                    //验证是否已使用与指定公钥相应的私钥签署了此证书
+                    currentCertificate.verify(publickey);
+                } catch (CertificateException | NoSuchAlgorithmException | SignatureException |
+                         InvalidKeyException | NoSuchProviderException e) {
+                    throw new RuntimeException(e);
                 }
+            } else {
+                return false;
             }
-            principalLast = principalSubject;
-
         }
-        //验证根证书是否在撤销列表中
+
+/*        //验证根证书是否在撤销列表中
         try {
-            if (!X509crl.getIssuerX500Principal().equals(x509CertificateRoot.getSubjectX500Principal())) return false;
+            if (!X509crl.getIssuerX500Principal().equals(x509CertificateRoot.getSubjectX500Principal())) {
+                return false;
+            }
             X509crl.verify(x509CertificateRoot.getPublicKey());
         } catch (Exception e) {
             return false;
@@ -231,31 +260,20 @@ public class ValidCertificate {
             Set<? extends X509CRLEntry> setEntries = X509crl.getRevokedCertificates();
             if (!setEntries.isEmpty()) {
                 for (X509CRLEntry X509crlentry : setEntries) {
-                    if (list.contains(X509crlentry.getSerialNumber())) return false;
+                    if (list.contains(X509crlentry.getSerialNumber())) {
+                        return false;
+                    }
                 }
             }
         } catch (Exception e) {
             return false;
         }
-        //证明证书链中的第一个证书由用户所信任的CA颁布
-        try {
-            PublicKey publickey = x509CertificateRoot.getPublicKey();
-            arX509certificate[0].verify(publickey);
-        } catch (Exception e) {
-            return false;
-        }
         //证明证书链中的最后一个证书的所有者正是现在通信对象
-        Principal principalSubject = arX509certificate[nSize - 1].getSubjectX500Principal();
-        if (!stringTarget.equals(principalSubject.getName())) return false;
-        //验证证书链里每个证书是否在有效期里
-        Date date = new Date();
-        for (int i = 0; i < nSize; i++) {
-            try {
-                arX509certificate[i].checkValidity(date);
-            } catch (Exception e) {
-                return false;
-            }
-        }
+        Principal principalSubject = x509Certificates[length - 1].getSubjectX500Principal();
+        if (!stringTarget.equals(principalSubject.getName())) {
+            return false;
+        }*/
+
         return true;
     }
 }
