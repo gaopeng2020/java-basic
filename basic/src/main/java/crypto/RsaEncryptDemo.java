@@ -13,7 +13,7 @@ import java.security.spec.X509EncodedKeySpec;
 /**
  * @author gaopeng
  */
-public class RsaDemo {
+public class RsaEncryptDemo {
     public static void main(String[] args) throws Exception {
         String input = "RSA非对称加密测试";
         // 加密算法

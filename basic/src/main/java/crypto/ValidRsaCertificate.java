@@ -19,9 +19,9 @@ import java.util.*;
 /**
  * @author gaopeng
  */
-public class ValidCertificate {
+public class ValidRsaCertificate {
     public static void main(String[] args) throws Exception {
-        String storePath = Objects.requireNonNull(ValidCertificate.class.getClassLoader().getResource("server.keystore")).getFile();
+        String storePath = Objects.requireNonNull(ValidRsaCertificate.class.getClassLoader().getResource("server.keystore")).getFile();
 
         String alias = "server_rsa";
         String password = "123456";
@@ -41,15 +41,6 @@ public class ValidCertificate {
         byte[] decryptedData = decrypt(encryptedData, privateKey);
         assert decryptedData != null;
         System.out.println("解密后的数据：" + new String(decryptedData));
-
-        String strSignData = "签名前的数据";
-        byte[] toSignData = strSignData.getBytes(StandardCharsets.UTF_8);
-        byte[] signedData = sign(toSignData, privateKey);
-        if (verify(toSignData, signedData, publicKey)) {
-            System.out.println("验签通过");
-        } else {
-            System.out.println("验签错误");
-        }
 
     }
 
@@ -94,26 +85,29 @@ public class ValidCertificate {
     }
 
     /**
-     * 通过路径获取私钥
+     * 通过keystore径获取私钥
      */
-    private static PrivateKey getPrivateKey(KeyStore keyStore, String alias, String keyPass) throws Exception {
+    public static PrivateKey getPrivateKey(KeyStore keyStore, String alias, String keyPass) throws Exception {
         PrivateKey privKey = (PrivateKey) keyStore.getKey(alias, keyPass.toCharArray());
-        //返回私钥字符串
+        //获取私钥字符串
         String privateKey = Base64.encodeBase64String(privKey.getEncoded());
         System.out.println("私钥字符串：" + privateKey);
         return privKey;
     }
 
     /**
-     * 通过路径获取公钥
+     * 通过keystore获取公钥
      */
-    private static PublicKey getPublicKey(KeyStore keyStore, String alias) throws Exception {
+    public static PublicKey getPublicKey(KeyStore keyStore, String alias) throws Exception {
         Certificate certificate = keyStore.getCertificate(alias);
         PublicKey pubKey = certificate.getPublicKey();
+
+        //获取证书ID
         BigInteger serialNumber = ((X509Certificate) certificate).getSerialNumber();
         String keyId = serialNumber.toString();
         System.out.println("证书ID:" + keyId);
-        //返回公钥字符串
+
+        //获取公钥字符串
         String strPubKey = Base64.encodeBase64String(pubKey.getEncoded());
         System.out.println("公钥字符串：" + strPubKey);
         return pubKey;
@@ -162,34 +156,6 @@ public class ValidCertificate {
             e.printStackTrace();
         }
         return null;
-    }
-
-    /**
-     * 签名
-     */
-    private static byte[] sign(byte[] data, PrivateKey privateKey) throws Exception {
-        MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
-        messageDigest.update(data);
-        byte[] digestValue = messageDigest.digest();
-
-        Signature signature = Signature.getInstance("SHA256withRSA");
-        signature.initSign(privateKey);
-        signature.update(digestValue);
-        byte[] sign = signature.sign();
-        return Base64.encodeBase64(sign);
-    }
-
-    /**
-     * 验签
-     */
-    private static boolean verify(byte[] plainData, byte[] signedData, PublicKey pubKey) throws Exception {
-        MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        byte[] digestValue = digest.digest(plainData);
-
-        Signature signature = Signature.getInstance("SHA256withRSA");
-        signature.initVerify(pubKey);
-        signature.update(digestValue);
-        return signature.verify(Base64.decodeBase64(signedData));
     }
 
     /**
