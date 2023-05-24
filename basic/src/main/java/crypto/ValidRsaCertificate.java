@@ -7,6 +7,7 @@ import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.*;
@@ -14,7 +15,9 @@ import java.security.cert.Certificate;
 import java.security.cert.*;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Objects;
 
 /**
  * @author gaopeng
@@ -75,13 +78,17 @@ public class ValidRsaCertificate {
     /**
      * 通过路径获取keystore
      */
-    public static KeyStore getKeyStore(String keyStorePath, String password) throws Exception {
-        FileInputStream is = new FileInputStream(keyStorePath);
-        //这里 目前一般是PKCS12, 之前默认是jks
-        KeyStore ks = KeyStore.getInstance("PKCS12");
-        ks.load(is, password.toCharArray());
-        is.close();
-        return ks;
+    public static KeyStore getKeyStore(String keyStorePath, String password)  {
+        try {
+            FileInputStream is = new FileInputStream(keyStorePath);
+            //这里 目前一般是PKCS12, 之前默认是jks
+            KeyStore ks = KeyStore.getInstance("PKCS12");
+            ks.load(is, password.toCharArray());
+            is.close();
+            return ks;
+        } catch (KeyStoreException | CertificateException | IOException | NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
