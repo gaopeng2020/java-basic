@@ -1,23 +1,25 @@
 package crypto.tls;
 
+import crypto.ValidRsaCertificate;
+
 import javax.net.ssl.*;
 import java.io.*;
 import java.security.*;
 import java.security.cert.CertificateException;
+import java.util.Objects;
 
 /**
  * @author garden
- * @create 8/11/18
  */
 public class SSLServer {
     public static void main(String[] args) {
+        String storePath = Objects.requireNonNull(ValidRsaCertificate.class.getClassLoader().getResource("server.keystore")).getFile();
+        String alias = "server_ecc";
+        String password = "123456";
         try {
             // Get the keystore
             System.setProperty("javax.net.debug", "all");
-            KeyStore keyStore = KeyStore.getInstance("PKCS12");
-            String password = "abcdefg";
-            InputStream inputStream = ClassLoader.getSystemClassLoader().getResourceAsStream("server/certificate-server.p12");
-            keyStore.load(inputStream, password.toCharArray());
+            KeyStore keyStore = ValidRsaCertificate.getKeyStore(storePath, password);
 
             // KeyManagerFactory ()
             KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance("SunX509", "SunJSSE");
@@ -29,35 +31,20 @@ public class SSLServer {
                     break;
                 }
             }
-            if (x509KeyManager == null) throw new NullPointerException();
-
-            // TrustManagerFactory
-            String password2 = "aabbcc";
-            KeyStore trustStore = KeyStore.getInstance("PKCS12");
-            InputStream inputStream1 = ClassLoader.getSystemClassLoader().getResourceAsStream("client/certificate-client.p12");
-            trustStore.load(inputStream1, password2.toCharArray());
-
-            TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance("PKIX", "SunJSSE");
-            trustManagerFactory.init(trustStore);
-            X509TrustManager x509TrustManager = null;
-            for (TrustManager trustManager : trustManagerFactory.getTrustManagers()) {
-                if (trustManager instanceof X509TrustManager) {
-                    x509TrustManager = (X509TrustManager) trustManager;
-                    break;
-                }
+            if (x509KeyManager == null) {
+                throw new NullPointerException();
             }
-            if (x509TrustManager == null) throw new NullPointerException();
 
             // set up the SSL Context
             SSLContext sslContext = SSLContext.getInstance("TLS");
-            sslContext.init(new KeyManager[]{x509KeyManager}, new TrustManager[]{x509TrustManager}, null);
+            //由于客户端没有证书，因此服务端不需要TrustManagerFactory，设为null
+            sslContext.init(new KeyManager[]{x509KeyManager}, null, null);
 
             SSLServerSocketFactory serverSocketFactory = sslContext.getServerSocketFactory();
             SSLServerSocket serverSocket = (SSLServerSocket) serverSocketFactory.createServerSocket(8333);
-            serverSocket.setNeedClientAuth(true);
+            serverSocket.setNeedClientAuth(false);
             serverSocket.setEnabledProtocols(new String[]{"TLSv1.2"});
             SSLSocket socket = (SSLSocket) serverSocket.accept();
-
 
             // InputStream and OutputStream Stuff
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
@@ -73,10 +60,11 @@ public class SSLServer {
             while ((inputLine = in.readLine()) != null) {
                 outputLine = kkp.processInput(inputLine);
                 out.println(outputLine);
-                if (outputLine.equals("Bye."))
+                if (outputLine.equals("Bye.")) {
                     break;
+                }
             }
-        } catch (IOException | CertificateException | NoSuchAlgorithmException | UnrecoverableKeyException |
+        } catch (IOException | NoSuchAlgorithmException | UnrecoverableKeyException |
                  NoSuchProviderException | KeyStoreException | KeyManagementException e) {
             e.printStackTrace();
         }

@@ -1,4 +1,6 @@
-package crypto.tls;
+package socket;
+
+import crypto.tls.KnockKnockProtocol;
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package crypto.tls;
+package socket;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -22,8 +22,9 @@ public class SimpleClient {
 
             while ((fromServer = socketIn.readLine()) != null) {
                 System.out.println("Server: " + fromServer);
-                if (fromServer.equals("Bye."))
+                if (fromServer.equals("Bye.")) {
                     break;
+                }
 
                 fromUser = stdIn.readLine();
                 if (fromUser != null) {

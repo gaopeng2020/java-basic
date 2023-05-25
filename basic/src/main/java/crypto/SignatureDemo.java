@@ -51,7 +51,7 @@ public class SignatureDemo {
 
             //获取SubjectCertificate的颁发者证书
             Certificate[] certificateChain = ks.getCertificateChain(alias);
-            Certificate issueCer = certificateChain[1];
+            Certificate issueCer = certificateChain[2];
 
             //验签
             return verify(tbsData, signedData, issueCer.getPublicKey(), SIGNATURE_ALGORITHM, DIGEST_ALGORITHM);
