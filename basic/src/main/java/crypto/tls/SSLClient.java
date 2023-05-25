@@ -44,7 +44,7 @@ public class SSLClient {
             sslContext.init(null, new TrustManager[]{x509TrustManager}, null);
 
             SSLSocketFactory socketFactory = sslContext.getSocketFactory();
-            SSLSocket kkSocket = (SSLSocket) socketFactory.createSocket("192.168.88.8", 8333);
+            SSLSocket kkSocket = (SSLSocket) socketFactory.createSocket("192.168.10.28", 8333);
             kkSocket.setEnabledProtocols(new String[]{"TLSv1.2"});
 
             PrintWriter socketOut = new PrintWriter(kkSocket.getOutputStream(), true);
