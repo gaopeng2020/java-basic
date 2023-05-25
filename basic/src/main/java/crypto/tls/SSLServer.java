@@ -13,7 +13,7 @@ import java.util.Objects;
  */
 public class SSLServer {
     public static void main(String[] args) {
-        String storePath = Objects.requireNonNull(ValidRsaCertificate.class.getClassLoader().getResource("server.keystore")).getFile();
+        String storePath = Objects.requireNonNull(SSLServer.class.getClassLoader().getResource("server.keystore")).getFile();
         String alias = "server_ecc";
         String password = "123456";
         try {
