@@ -3,9 +3,11 @@ package crypto.tls;
 import crypto.ValidRsaCertificate;
 
 import javax.net.ssl.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.security.*;
-import java.security.cert.CertificateException;
 import java.util.Objects;
 
 /**

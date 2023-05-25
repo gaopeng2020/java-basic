@@ -42,41 +42,41 @@ public class KnockKnockProtocol {
     private int state = WAITING;
     private int currentJoke = 0;
 
-    private String[] clues = { "Turnip", "Little Old Lady", "Atch", "Who", "Who" };
-    private String[] answers = { "Turnip the heat, it's cold in here!",
-            "I didn't know you could yodel!",
-            "Bless you!",
-            "Is there an owl in here?",
-            "Is there an echo in here?" };
+    private final String[] clues = { "狗蛋","鸭鸭", "彪子", "二虎", "毛驴"};
+    private final String[] answers = { "《断章》现代 .卞之琳",
+            "你站在桥上看风景",
+            "看风景的人在楼上看你",
+            "明月装饰了你的窗子",
+            "你装饰了别人的梦" };
 
     public String processInput(String theInput) {
         String theOutput = null;
 
         if (state == WAITING) {
-            theOutput = "Knock! Knock!";
+            theOutput = "Knock! Knock!,to continue please input 你是谁？";
             state = SENTKNOCKKNOCK;
         } else if (state == SENTKNOCKKNOCK) {
-            if (theInput.equalsIgnoreCase("Who's there?")) {
+            if (theInput.equalsIgnoreCase("你是谁？")) {
                 theOutput = clues[currentJoke];
                 state = SENTCLUE;
             } else {
-                theOutput = "You're supposed to say \"Who's there?\"! " +
+                theOutput = "You're supposed to say \"你是谁？\"! " +
                         "Try again. Knock! Knock!";
             }
         } else if (state == SENTCLUE) {
-            if (theInput.equalsIgnoreCase(clues[currentJoke] + " who?")) {
+            if (theInput.equalsIgnoreCase(clues[currentJoke] + "是谁？")) {
                 theOutput = answers[currentJoke] + " Want another? (y/n)";
                 state = ANOTHER;
             } else {
                 theOutput = "You're supposed to say \"" +
                         clues[currentJoke] +
-                        " who?\"" +
+                        "是谁？\"" +
                         "! Try again. Knock! Knock!";
                 state = SENTKNOCKKNOCK;
             }
         } else if (state == ANOTHER) {
             if (theInput.equalsIgnoreCase("y")) {
-                theOutput = "Knock! Knock!";
+                theOutput = "Knock! Knock! to continue please input 你是谁？";
                 if (currentJoke == (NUMJOKES - 1))
                     currentJoke = 0;
                 else

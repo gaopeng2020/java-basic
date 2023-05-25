@@ -3,9 +3,11 @@ package crypto.tls;
 import crypto.ValidRsaCertificate;
 
 import javax.net.ssl.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.security.*;
-import java.security.cert.CertificateException;
 import java.util.Objects;
 
 /**
@@ -18,7 +20,7 @@ public class SSLClient {
         String password = "123456";
 
         try {
-            System.setProperty("javax.net.debug", "all");
+//            System.setProperty("javax.net.debug", "all");
 
             // TrustManagerFactory ()
             KeyStore trustStore =ValidRsaCertificate.getKeyStore(storePath,password);
@@ -42,7 +44,7 @@ public class SSLClient {
             sslContext.init(null, new TrustManager[]{x509TrustManager}, null);
 
             SSLSocketFactory socketFactory = sslContext.getSocketFactory();
-            SSLSocket kkSocket = (SSLSocket) socketFactory.createSocket("127.0.0.1", 8333);
+            SSLSocket kkSocket = (SSLSocket) socketFactory.createSocket("192.168.88.8", 8333);
             kkSocket.setEnabledProtocols(new String[]{"TLSv1.2"});
 
             PrintWriter socketOut = new PrintWriter(kkSocket.getOutputStream(), true);
