@@ -14,6 +14,11 @@ import java.util.Objects;
  * @author garden
  */
 public class SSLServer {
+    private static final String[] TLS_VERSIONS = new String[]{"TLSv1.2"};
+   private static final String[] CIPHER_SUITES = new String[]{
+   "TLS_ECDHE-ECDSA-AES256-GCM-SHA384","TLS_ECDHE-RSA-AES256-GCM-SHA384",
+   "TLS_ECDHE-ECDSA-AES128-SHA256","TLS_ECDHE-RSA-AES128-SHA256"};
+
     public static void main(String[] args) {
         String storePath = Objects.requireNonNull(SSLServer.class.getClassLoader().getResource("server.keystore")).getFile();
         String alias = "server_ecc";
@@ -45,7 +50,8 @@ public class SSLServer {
             SSLServerSocketFactory serverSocketFactory = sslContext.getServerSocketFactory();
             SSLServerSocket serverSocket = (SSLServerSocket) serverSocketFactory.createServerSocket(8333);
             serverSocket.setNeedClientAuth(false);
-            serverSocket.setEnabledProtocols(new String[]{"TLSv1.2"});
+            serverSocket.setEnabledProtocols(TLS_VERSIONS);
+            serverSocket.setEnabledCipherSuites(CIPHER_SUITES);
             SSLSocket socket = (SSLSocket) serverSocket.accept();
 
             // InputStream and OutputStream Stuff
