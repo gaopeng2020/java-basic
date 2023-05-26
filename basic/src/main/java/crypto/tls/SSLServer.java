@@ -16,16 +16,20 @@ import java.util.Objects;
 public class SSLServer {
     private static final String[] TLS_VERSIONS = new String[]{"TLSv1.2"};
    private static final String[] CIPHER_SUITES = new String[]{
-   "TLS_ECDHE-ECDSA-AES256-GCM-SHA384","TLS_ECDHE-RSA-AES256-GCM-SHA384",
-   "TLS_ECDHE-ECDSA-AES128-SHA256","TLS_ECDHE-RSA-AES128-SHA256"};
+           "TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384", "TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384",
+           "TLS_ECDH_ECDSA_WITH_AES_256_GCM_SHA384", "TLS_ECDH_ECDSA_WITH_AES_128_CBC_SHA256",
+           "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384", "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256",
+           "TLS_ECDH_RSA_WITH_AES_256_GCM_SHA384", "TLS_ECDH_RSA_WITH_AES_128_CBC_SHA256",
+           "TLS_RSA_WITH_AES_128_GCM_SHA256","TLS_RSA_WITH_AES_128_CBC_SHA"
+
+   };
 
     public static void main(String[] args) {
         String storePath = Objects.requireNonNull(SSLServer.class.getClassLoader().getResource("server.keystore")).getFile();
-        String alias = "server_ecc";
         String password = "123456";
         try {
             // Get the keystore
-            System.setProperty("javax.net.debug", "all");
+//            System.setProperty("javax.net.debug", "all");
             KeyStore keyStore = ValidRsaCertificate.getKeyStore(storePath, password);
 
             // KeyManagerFactory ()
@@ -52,6 +56,9 @@ public class SSLServer {
             serverSocket.setNeedClientAuth(false);
             serverSocket.setEnabledProtocols(TLS_VERSIONS);
             serverSocket.setEnabledCipherSuites(CIPHER_SUITES);
+            for (String cipherSuite : serverSocket.getEnabledCipherSuites()) {
+                System.out.println("cipherSuite = " + cipherSuite);
+            }
             SSLSocket socket = (SSLSocket) serverSocket.accept();
 
             // InputStream and OutputStream Stuff
