@@ -1,4 +1,4 @@
-package socket;
+package socket.tcpdemo;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,9 +13,9 @@ import java.net.Socket;
 public class SimpleClient {
     public static void main(String[] args) {
         try {
-            Socket kkSocket = new Socket("127.0.0.1", 8444);
-            PrintWriter socketOut = new PrintWriter(kkSocket.getOutputStream(), true);
-            BufferedReader socketIn = new BufferedReader(new InputStreamReader(kkSocket.getInputStream()));
+            Socket socket = new Socket("127.0.0.1", 8444);
+            PrintWriter socketOut = new PrintWriter(socket.getOutputStream(), true);
+            BufferedReader socketIn = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
             BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
             String fromServer, fromUser;
@@ -28,7 +28,6 @@ public class SimpleClient {
 
                 fromUser = stdIn.readLine();
                 if (fromUser != null) {
-                    System.out.println("Client: " + fromUser);
                     socketOut.println(fromUser);
                 }
             }

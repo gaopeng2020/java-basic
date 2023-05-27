@@ -14,9 +14,9 @@ import java.util.Objects;
  * @author garden
  */
 public class SSLClient {
+    private static final String[] TLS_VERSIONS = new String[]{"TLSv1.3"};
     public static void main(String[] args) {
-        String storePath = Objects.requireNonNull(ValidRsaCertificate.class.getClassLoader().getResource("server.keystore")).getFile();
-        String alias = "server_rsa";
+        String storePath = Objects.requireNonNull(SSLClient.class.getClassLoader().getResource("server.keystore")).getFile();
         String password = "123456";
 
         try {
@@ -45,7 +45,7 @@ public class SSLClient {
 
             SSLSocketFactory socketFactory = sslContext.getSocketFactory();
             SSLSocket kkSocket = (SSLSocket) socketFactory.createSocket("192.168.10.28", 8333);
-            kkSocket.setEnabledProtocols(new String[]{"TLSv1.2"});
+            kkSocket.setEnabledProtocols(TLS_VERSIONS);
 
             PrintWriter socketOut = new PrintWriter(kkSocket.getOutputStream(), true);
             BufferedReader socketIn = new BufferedReader(new InputStreamReader(kkSocket.getInputStream()));
