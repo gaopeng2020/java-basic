@@ -9,6 +9,6 @@
 
     <context:annotation-config/>
     <!--    指定要扫描的包的位置-->
-    <context:component-scan base-package="peng.gao.annotation"/>
+    <context:component-scan base-package="demos.gao.annotation"/>
 
 </beans>

@@ -1,4 +1,4 @@
-module ept.gui {
+module javafxdemos {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.graphics;
@@ -8,8 +8,10 @@ module ept.gui {
     requires java.desktop;
 
 
-    opens ept.gui.internalbehavior to javafx.fxml;
-    exports ept.gui.internalbehavior;
-    opens ept.gui.javaFxDemo1 to javafx.fxml;
-    exports ept.gui.javaFxDemo1;
+    opens projects.internalbehavior to javafx.fxml;
+    exports projects.internalbehavior;
+
+    opens demos.javaFxDemo1 to javafx.fxml;
+    exports demos.javaFxDemo1;
+
 }

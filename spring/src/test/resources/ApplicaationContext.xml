@@ -7,14 +7,14 @@
         http://www.springframework.org/schema/aop
         https://www.springframework.org/schema/aop/spring-aop.xsd">
 
-    <bean id="userService" class="peng.gao.aopxml.service.UserServiceImpl"/>
-    <bean id="beforeLog" class="peng.gao.aopxml.log.BeforeLog"/>
-    <bean id="afterLog" class="peng.gao.aopxml.log.AfterLog"/>
+    <bean id="userService" class="demos.gao.aopxml.service.UserServiceImpl"/>
+    <bean id="beforeLog" class="demos.gao.aopxml.log.BeforeLog"/>
+    <bean id="afterLog" class="demos.gao.aopxml.log.AfterLog"/>
 
     <!-- 方式一： 使用spring 实现原生API接口实现新增方法的切入   -->
     <!--    <aop:config>-->
     <!--    切入点pointcut-->
-    <!--        <aop:pointcut id="pointcut" expression="execution(* peng.gao.aopxml.service.UserServiceImpl.*(..))"/>-->
+    <!--        <aop:pointcut id="pointcut" expression="execution(* demos.gao.aopxml.service.UserServiceImpl.*(..))"/>-->
 
     <!--        &lt;!&ndash;   将beforeLog和afterLog通知（advisor）到切入点（pointcut被通知对象）中     &ndash;&gt;-->
     <!--        <aop:advisor advice-ref="beforeLog" pointcut-ref="pointcut"/>-->
@@ -22,18 +22,18 @@
     <!--    </aop:config>-->
 
     <!--方式二： 使用自定义类,通过切面（Aspect）实现新增方法的切入  -->
-    <!--    <bean id="aspectLog" class="peng.gao.aopxml.log.AspectLog"/>-->
+    <!--    <bean id="aspectLog" class="demos.gao.aopxml.log.AspectLog"/>-->
     <!--    <aop:config>-->
     <!--        &lt;!&ndash;        切面aspect&ndash;&gt;-->
     <!--        <aop:aspect ref="aspectLog">-->
-    <!--            <aop:pointcut id="pointcut" expression="execution(* peng.gao.aopxml.service.UserServiceImpl.*(..))"/>-->
+    <!--            <aop:pointcut id="pointcut" expression="execution(* demos.gao.aopxml.service.UserServiceImpl.*(..))"/>-->
     <!--            <aop:before method="beforeLog" pointcut-ref="pointcut"/>-->
     <!--            <aop:after method="afterLog" pointcut-ref="pointcut"/>-->
     <!--        </aop:aspect>-->
     <!--    </aop:config>-->
 
     <!--方式三：通过注解实现AOP    -->
-    <bean id="aspectLog" class="peng.gao.aopAspect.AopAnnotation"/>
+    <bean id="aspectLog" class="demos.gao.aopAspect.AopAnnotation"/>
     <!--开启注解支持    -->
     <aop:aspectj-autoproxy/>
 </beans>

@@ -1,6 +1,6 @@
 import javafx.application.Application;
 import org.junit.Test;
-import peng.gao.fxdemo1.HelloApplication;
+import demos.gao.fxdemo1.HelloApplication;
 
 public class JavaFxTest {
     @Test
