@@ -1,7 +1,7 @@
 module basic { //在模块前使用open关键字可开放真个模块的反射权限
     requires java.base;
     requires java.desktop;
-    requires lombok;
+    requires static lombok;
     requires org.apache.logging.log4j;
     requires org.apache.logging.log4j.core;
     requires transitive com.fasterxml.jackson.databind; //传递依赖，如果模块x依赖当前模块，则模块x不需要再次导入该需求模块即可直接使用
