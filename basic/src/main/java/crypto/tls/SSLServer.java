@@ -8,20 +8,21 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.security.*;
+import java.util.Arrays;
 import java.util.Objects;
 
 /**
  * @author garden
  */
 public class SSLServer {
-    private static final String[] TLS_VERSIONS = new String[]{"TLSv1.2"};
+    private static final String[] TLS_VERSIONS = new String[]{"TLSv1.3"};
    private static final String[] CIPHER_SUITES = new String[]{
-           "TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384", "TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384",
+           "TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384", "TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256",
            "TLS_ECDH_ECDSA_WITH_AES_256_GCM_SHA384", "TLS_ECDH_ECDSA_WITH_AES_128_CBC_SHA256",
            "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384", "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256",
            "TLS_ECDH_RSA_WITH_AES_256_GCM_SHA384", "TLS_ECDH_RSA_WITH_AES_128_CBC_SHA256",
-           "TLS_RSA_WITH_AES_128_GCM_SHA256","TLS_RSA_WITH_AES_128_CBC_SHA"
-
+           "TLS_RSA_WITH_AES_256_GCM_SHA384","TLS_RSA_WITH_AES_128_CBC_SHA",
+           "TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256" //TLSv1.3
    };
 
     public static void main(String[] args) {
@@ -56,13 +57,12 @@ public class SSLServer {
             serverSocket.setNeedClientAuth(false);
             serverSocket.setEnabledProtocols(TLS_VERSIONS);
             serverSocket.setEnabledCipherSuites(CIPHER_SUITES);
-            for (String cipherSuite : serverSocket.getEnabledCipherSuites()) {
-                System.out.println("cipherSuite = " + cipherSuite);
-            }
+            Arrays.stream(serverSocket.getEnabledCipherSuites()).sequential().forEach(System.out::println);
             SSLSocket socket = (SSLSocket) serverSocket.accept();
 
             // InputStream and OutputStream Stuff
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+            //get input stream
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
             String inputLine, outputLine;
