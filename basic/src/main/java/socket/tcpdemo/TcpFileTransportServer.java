@@ -59,8 +59,8 @@ public class TcpFileTransportServer {
 
     public static void main(String[] args) {
         String downloadPath = Objects.requireNonNull(TcpFileTransportServer.class.getClassLoader()
-                .getResource("SocketTest/lx-music.7z")).getFile();
-        String uploadPath = "C:\\Users\\lenovo\\Documents\\gitlab\\java\\basic\\src\\main\\resources\\SocketTest\\upload.zip";
+                .getResource("crypto/lx-music.7z")).getFile();
+        String uploadPath = "C:\\Users\\lenovo\\Documents\\gitlab\\java\\basic\\src\\main\\resources\\crypto\\upload.zip";
         try {
             serverSocket = new ServerSocket(8899);
             socket = serverSocket.accept();

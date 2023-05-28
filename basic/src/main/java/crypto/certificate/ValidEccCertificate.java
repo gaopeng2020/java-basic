@@ -1,29 +1,25 @@
-package crypto;
+package crypto.certificate;
 
+import crypto.keyagreement.DhKeyAgreementDemo;
 import org.apache.commons.codec.binary.Base64;
 
-import javax.crypto.*;
-import java.io.FileInputStream;
-import java.math.BigInteger;
+import javax.crypto.SecretKey;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.security.*;
-import java.security.cert.Certificate;
-import java.security.cert.*;
-import java.security.spec.PKCS8EncodedKeySpec;
-import java.security.spec.X509EncodedKeySpec;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Objects;
+import java.security.KeyPair;
+import java.security.KeyStore;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 
 /**
  * @author gaopeng
  */
 public class ValidEccCertificate {
     public static void main(String[] args) throws Exception {
-        String storePath = Objects.requireNonNull(ValidEccCertificate.class.getClassLoader().getResource("server.keystore")).getFile();
+        InputStream storeStream = ValidEccCertificate.class.getResourceAsStream("/crypto/server.keystore");
         String alias = "server_ecc";
         String ksPassword = "123456";
-        KeyStore ks = ValidRsaCertificate.getKeyStore(storePath, ksPassword);
+        KeyStore ks = ValidRsaCertificate.getKeyStore(storeStream, ksPassword);
         System.out.println("证书验证是否通过：" + ValidRsaCertificate.verifyCertificate(ks.getCertificateChain(alias)));
 
         PrivateKey serverPrivateKey = ValidRsaCertificate.getPrivateKey(ks, alias, ksPassword);

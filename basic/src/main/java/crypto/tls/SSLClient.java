@@ -1,14 +1,11 @@
 package crypto.tls;
 
-import crypto.ValidRsaCertificate;
+import crypto.certificate.ValidEccCertificate;
+import crypto.certificate.ValidRsaCertificate;
 
 import javax.net.ssl.*;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.security.*;
-import java.util.Objects;
 
 /**
  * @author garden
@@ -16,14 +13,14 @@ import java.util.Objects;
 public class SSLClient {
     private static final String[] TLS_VERSIONS = new String[]{"TLSv1.3"};
     public static void main(String[] args) {
-        String storePath = Objects.requireNonNull(SSLClient.class.getClassLoader().getResource("server.keystore")).getFile();
+        InputStream storeStream = SSLClient.class.getResourceAsStream("/crypto/server.keystore");
         String password = "123456";
 
         try {
 //            System.setProperty("javax.net.debug", "all");
 
             // TrustManagerFactory ()
-            KeyStore trustStore =ValidRsaCertificate.getKeyStore(storePath,password);
+            KeyStore trustStore =ValidRsaCertificate.getKeyStore(storeStream,password);
             TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance("PKIX", "SunJSSE");
             trustManagerFactory.init(trustStore);
             X509TrustManager x509TrustManager = null;

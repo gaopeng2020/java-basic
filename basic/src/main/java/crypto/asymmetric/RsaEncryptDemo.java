@@ -1,4 +1,4 @@
-package crypto;
+package crypto.asymmetric;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.codec.binary.Base64;

@@ -1,4 +1,4 @@
-package crypto;
+package crypto.degest;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.Mac;

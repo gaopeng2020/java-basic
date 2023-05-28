@@ -1,13 +1,14 @@
-package crypto;
+package crypto.signature;
 
+import crypto.certificate.ValidRsaCertificate;
 import org.apache.commons.codec.binary.Base64;
 
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
-import java.util.Objects;
 
 /**
  * @author gaopeng
@@ -17,10 +18,10 @@ public class SignatureDemo {
     private static final String DIGEST_ALGORITHM = "SHA-256";
 
     public static void main(String[] args) throws Exception {
-        String storePath = Objects.requireNonNull(ValidEccCertificate.class.getClassLoader().getResource("server.keystore")).getFile();
+        InputStream storeStream = SignatureDemo.class.getResourceAsStream("/crypto/server.keystore");
         String alias = "server_ecc";
         String ksPassword = "123456";
-        KeyStore ks = ValidRsaCertificate.getKeyStore(storePath, ksPassword);
+        KeyStore ks = ValidRsaCertificate.getKeyStore(storeStream, ksPassword);
 
         //验证证书签名
         System.out.println("证书签名验证是否通过：" + verifyCertificateSignature(ks, alias));

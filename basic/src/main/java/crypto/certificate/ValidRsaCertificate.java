@@ -1,4 +1,4 @@
-package crypto;
+package crypto.certificate;
 
 import org.apache.commons.codec.binary.Base64;
 
@@ -6,8 +6,8 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.*;
@@ -17,18 +17,17 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Objects;
 
 /**
  * @author gaopeng
  */
 public class ValidRsaCertificate {
     public static void main(String[] args) throws Exception {
-        String storePath = Objects.requireNonNull(ValidRsaCertificate.class.getClassLoader().getResource("server.keystore")).getFile();
-
+        InputStream storeStream = ValidRsaCertificate.class.getResourceAsStream("/crypto/server.keystore");
+//        String storePath = "crypto/server.keystore";
         String alias = "server_rsa";
         String password = "123456";
-        KeyStore ks = getKeyStore(storePath, password);
+        KeyStore ks = getKeyStore(storeStream, password);
 
         System.out.println("证书验证是否通过：" + verifyCertificate(ks.getCertificateChain(alias)));
         System.out.println("签名验证是否通过 = " + verifySignature(ks, alias));
@@ -78,9 +77,8 @@ public class ValidRsaCertificate {
     /**
      * 通过路径获取keystore
      */
-    public static KeyStore getKeyStore(String keyStorePath, String password)  {
+    public static KeyStore getKeyStore(InputStream is, String password)  {
         try {
-            FileInputStream is = new FileInputStream(keyStorePath);
             //这里 目前一般是PKCS12, 之前默认是jks
             KeyStore ks = KeyStore.getInstance("PKCS12");
             ks.load(is, password.toCharArray());

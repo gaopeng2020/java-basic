@@ -11,6 +11,7 @@ module basic { //在模块前使用open关键字可开放真个模块的反射�
     requires commons.dbutils;
     requires org.apache.commons.codec;
     requires org.apache.commons.io;
+    requires eptutils;
 
     exports basic.collection to javafxdemos; //只把这个包暴露给javafxdemos模块
     exports basic.grammer;

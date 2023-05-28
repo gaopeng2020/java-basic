@@ -1,15 +1,12 @@
 package crypto.tls;
 
-import crypto.ValidRsaCertificate;
+import crypto.certificate.ValidEccCertificate;
+import crypto.certificate.ValidRsaCertificate;
 
 import javax.net.ssl.*;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.security.*;
 import java.util.Arrays;
-import java.util.Objects;
 
 /**
  * @author garden
@@ -26,12 +23,12 @@ public class SSLServer {
    };
 
     public static void main(String[] args) {
-        String storePath = Objects.requireNonNull(SSLServer.class.getClassLoader().getResource("server.keystore")).getFile();
+        InputStream storeStream = SSLServer.class.getResourceAsStream("/crypto/server.keystore");
         String password = "123456";
         try {
             // Get the keystore
 //            System.setProperty("javax.net.debug", "all");
-            KeyStore keyStore = ValidRsaCertificate.getKeyStore(storePath, password);
+            KeyStore keyStore = ValidRsaCertificate.getKeyStore(storeStream, password);
 
             // KeyManagerFactory ()
             KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance("SunX509", "SunJSSE");
