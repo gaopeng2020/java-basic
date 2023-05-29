@@ -2,10 +2,7 @@ package crypto.certificate;
 
 import org.apache.commons.codec.binary.Base64;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
+import javax.crypto.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
@@ -101,6 +98,17 @@ public class ValidRsaCertificate {
     }
 
     /**
+     * 通过keystore径获取私钥
+     */
+    public static SecretKey getSecretKey(KeyStore keyStore, String alias, String keyPass) throws Exception {
+        SecretKey privKey = (SecretKey) keyStore.getKey(alias, keyPass.toCharArray());
+        //获取私钥字符串
+        String privateKey = Base64.encodeBase64String(privKey.getEncoded());
+        System.out.println("密钥字符串：" + privateKey);
+        return privKey;
+    }
+
+    /**
      * 通过keystore获取公钥
      */
     public static PublicKey getPublicKey(KeyStore keyStore, String alias) throws Exception {
@@ -121,18 +129,19 @@ public class ValidRsaCertificate {
     /**
      * 从str中获取公私钥
      */
-    private static PublicKey getPublicKeyFromStr(String pubKey) throws Exception {
-        byte[] pk = Base64.decodeBase64(pubKey);
-        X509EncodedKeySpec spec = new X509EncodedKeySpec(pk);
-        KeyFactory kf = KeyFactory.getInstance("RSA");
-        return kf.generatePublic(spec);
+    public static PublicKey getPublicKey(InputStream keyStoreIs, String alias) throws Exception {
+        KeyStore keyStore = getKeyStore(keyStoreIs, alias);
+       return getPublicKey(keyStore,alias);
     }
 
-    private static PrivateKey getPrivateKeyFromStr(String strPrivateKey) throws Exception {
-        byte[] pk = Base64.decodeBase64(strPrivateKey);
-        PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(pk);
-        KeyFactory kf = KeyFactory.getInstance("RSA");
-        return kf.generatePrivate(spec);
+    public static SecretKey getSecretKey(InputStream keyStoreIs, String alias, String keyPass) throws Exception {
+        KeyStore keyStore = getKeyStore(keyStoreIs, keyPass);
+        return getSecretKey(keyStore,alias,keyPass);
+    }
+
+    public static PrivateKey getPrivateKey(InputStream keyStoreIs, String alias, String keyPass) throws Exception {
+        KeyStore keyStore = getKeyStore(keyStoreIs, keyPass);
+        return getPrivateKey(keyStore,alias,keyPass);
     }
 
     /**

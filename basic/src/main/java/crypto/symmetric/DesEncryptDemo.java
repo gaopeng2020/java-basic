@@ -16,14 +16,13 @@ public class DesEncryptDemo {
         String input ="DES加密算法测试";
         // DES加密算法，key的大小必须是8个字节
         String key = "12345678";
-        String transformation = "DES";
         // 指定获取密钥的算法
         String algorithm = "DES";
 
-        String encryptDES = encryptDES(input, key, transformation, algorithm);
+        String encryptDES = encryptDES(input, key,  algorithm);
         System.out.println("加密:" + encryptDES);
 
-        String s = decryptDES(encryptDES, key, transformation, algorithm);
+        String s = decryptDES(encryptDES, key, algorithm);
         System.out.println("解密:" + s);
     }
 
@@ -32,13 +31,12 @@ public class DesEncryptDemo {
      *
      * @param input          : 原文
      * @param key            : 密钥(DES,密钥的长度必须是8个字节)
-     * @param transformation : 获取Cipher对象的算法
      * @param algorithm      : 获取密钥的算法
      * @return : 密文
      */
-    private static String encryptDES(String input, String key, String transformation, String algorithm) throws Exception {
+    private static String encryptDES(String input, String key,String algorithm) throws Exception {
         // 获取加密对象
-        Cipher cipher = Cipher.getInstance(transformation);
+        Cipher cipher = Cipher.getInstance(algorithm);
         // 创建加密规则
         // 第一个参数key的字节
         // 第二个参数表示加密算法
@@ -59,13 +57,12 @@ public class DesEncryptDemo {
      *
      * @param input          : 密文
      * @param key            : 密钥
-     * @param transformation : 获取Cipher对象的算法
      * @param algorithm      : 获取密钥的算法
      * @return: 原文
      */
-    private static String decryptDES(String input, String key, String transformation, String algorithm) throws Exception {
+    private static String decryptDES(String input, String key, String algorithm) throws Exception {
         // 1,获取Cipher对象
-        Cipher cipher = Cipher.getInstance(transformation);
+        Cipher cipher = Cipher.getInstance(algorithm);
         // 指定密钥规则
         SecretKeySpec sks = new SecretKeySpec(key.getBytes(), algorithm);
         cipher.init(Cipher.DECRYPT_MODE, sks);
