@@ -3,6 +3,9 @@ package socket.tcpdemo;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 public class TcpFileTransportServer {
@@ -82,5 +85,16 @@ public class TcpFileTransportServer {
             }
         }
 
+    }
+    private static final Charset CHARSET = StandardCharsets.UTF_8;
+    private static boolean isFileName(ByteBuffer byteBuffer) {
+        String flag = "[FileName]";
+        int len = 10;
+        if (byteBuffer.position() < len || byteBuffer.position()>512) {
+            return false;
+        }
+        String decode = new String(CHARSET.decode(ByteBuffer.wrap( byteBuffer.array(),0,len)).array());
+
+        return decode.equals(flag);
     }
 }
