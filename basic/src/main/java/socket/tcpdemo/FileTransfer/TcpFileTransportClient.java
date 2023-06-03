@@ -1,4 +1,4 @@
-package socket.tcpdemo;
+package socket.tcpdemo.FileTransfer;
 
 import java.io.*;
 import java.net.Socket;
@@ -31,15 +31,21 @@ public class TcpFileTransportClient {
     }
 
     public static void uploadFile(String path) {
-        try (FileInputStream fis = new FileInputStream(path)) {
+        File file = new File(path);
+        try (FileInputStream fis = new FileInputStream(file)) {
             OutputStream os = socket.getOutputStream();
-            PrintWriter bos = new PrintWriter(os);
+
+            //transfer file name
+            DataOutputStream out = new DataOutputStream(os);
+            System.out.println("file.getName() = " + file.getName());
+            out.writeUTF(file.getName());
+
+            //transfer file
             byte[] buffer = new byte[65536];
             int len;
             while ((len = fis.read(buffer)) != -1) {
                 os.write(buffer, 0, len);
             }
-            bos.println(""); //没有用
             socket.shutdownOutput();//取消socket输出阻塞
 
             //receive result of uploading
@@ -72,12 +78,13 @@ public class TcpFileTransportClient {
 
     public static void main(String[] args) {
         //uploadFile 和 downloadFile方法每次只能运行一个
-        connect2Server("127.0.0.1", 8899);
+        connect2Server("127.0.0.1", 8085);
         String uploadPath = "C:\\Users\\lenovo\\Desktop\\Test\\晶能-招标材料.zip";
         uploadFile(uploadPath);
 
-        String downloadPath = "C:\\Users\\lenovo\\Desktop\\Test\\lx-music.7z";
-        downloadFile(downloadPath);
+//        String downloadPath = "C:\\Users\\lenovo\\Desktop\\Test\\lx-music.7z";
+//        downloadFile(downloadPath);
         disConnect2Server();
     }
+
 }

@@ -6,9 +6,8 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
 import java.io.InputStream;
-import java.security.*;
+import java.security.MessageDigest;
 import java.util.Base64;
 
 /**
@@ -49,8 +48,8 @@ public class MessageDigestDemo {
         MessageDigest messageDigest = MessageDigest.getInstance(algorithm);
         // 消息数字摘要
         byte[] digest = messageDigest.digest(input.getBytes());
-        System.out.println("密文的字节长度:" + digest.length);
-        return toHex(digest);
+        System.out.println(algorithm+"算法消息摘要字节长度：" + digest.length);
+        return org.apache.commons.codec.binary.Base64.encodeBase64String(digest);
     }
 
     private static void macTest(byte[] input, String algorithm) throws Exception {
@@ -101,8 +100,8 @@ public class MessageDigestDemo {
         MessageDigest messageDigest = MessageDigest.getInstance(algorithm);
         // 获取消息摘要
         byte[] digest = messageDigest.digest(os.toByteArray());
-        System.out.println("密文的字节长度：" + digest.length);
-        return toHex(digest);
+        System.out.println(algorithm+"算法消息摘要字节长度：" + digest.length);
+        return org.apache.commons.codec.binary.Base64.encodeBase64String(digest);
     }
 
     private static String toHex(byte[] digest) {
