@@ -18,7 +18,7 @@
         <junit.version>5.8.2</junit.version>
 <!--        <openfx.version>11.0.2</openfx.version>-->
         <openfx.version>17.0.7</openfx.version>
-        <lombok.version>1.18.22</lombok.version>
+        <lombok.version>1.18.28</lombok.version>
     </properties>
 
     <dependencies>
@@ -87,7 +87,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>
-                                demos.javaFxDemo1.HelloApplication
+                                demos.javaFxDemo2.HelloApplication
                             </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
@@ -98,7 +98,15 @@
                         </configuration>
                     </execution>
                 </executions>
-
+            </plugin>
+            <plugin>
+                <groupId>com.zenjava</groupId>
+                <artifactId>javafx-maven-plugin</artifactId>
+                <version>8.8.3</version>
+                <configuration>
+                    <vendor>Shanghai E-Planet Technologies Co.,Ltd</vendor>
+                    <mainClass>demos.javaFxDemo2.HelloApplication</mainClass>
+                </configuration>
             </plugin>
         </plugins>
     </build>
