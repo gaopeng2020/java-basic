@@ -68,7 +68,7 @@ public class HelloApplication extends Application {
         popup.add(exitItem);
 
         //监听事件
-        systemTrayActionListener(stage,trayIcon,aboutItem,openItem,exitItem);
+        systemTrayActionListener(stage, trayIcon, aboutItem, openItem, exitItem);
 
         final SystemTray systemTray = SystemTray.getSystemTray();
         try {
@@ -83,23 +83,26 @@ public class HelloApplication extends Application {
             @Override
             public void mouseReleased(MouseEvent e) {
                 super.mouseReleased(e);
-                Platform.runLater(() -> {
-                    if (!stage.isShowing()) {
-                        stage.show();
-                    }
-                    stage.toFront();
-                });
+                if (e.getButton() == 1) {
+                    Platform.runLater(() -> {
+                        if (!stage.isShowing()) {
+                            stage.show();
+                        }
+                        stage.toFront();
+                    });
+                }
             }
         });
-        aboutItem.addActionListener(e ->Platform.runLater(()-> {
+
+        aboutItem.addActionListener(e -> Platform.runLater(() -> {
             javafx.scene.control.Dialog<String> dialog = new javafx.scene.control.Dialog<>();
             dialog.setTitle("关于SOME/IP矩阵一致性检查工具");
             String msg = """
-                    
+                                        
                     SOME/IP矩阵一致性检查工具 2023.1.2 (v1.0.0)
                     适配怿星SOME/IP服务矩阵v2.1.0版本
-                    
-                    
+                                        
+                                        
                     Java Runtime version: 17.0.6+10-b829.9 amd64
                     Copyright © 2014–2023 上海怿星电子科技有限公司
                     """;
