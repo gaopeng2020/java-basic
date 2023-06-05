@@ -16,9 +16,24 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.8.2</junit.version>
-<!--        <openfx.version>11.0.2</openfx.version>-->
+        <!--        <openfx.version>11.0.2</openfx.version>-->
         <openfx.version>17.0.7</openfx.version>
         <lombok.version>1.18.28</lombok.version>
+
+        <app.name>JavaFXDemo2</app.name>
+        <app.version>1.0.0</app.version>
+        <app.icon>demos/javaFxDemo2/logo.ico</app.icon>
+        <!--        must include module name-->
+        <main.path>javafxdemos/demos.javaFxDemo2.HelloApplication</main.path>
+        <!--        app-image", "exe", "msi"-->
+        <image.type>app-image</image.type>
+        <!--        javaFx应用程序打包步骤：-->
+        <!--        1. 更改以上参数，其中app.name、app.icon、main.path三个参数必须填写-->
+        <!--        2. 运行命令生成可执行程序-->
+        <!--            mvn clean   -->
+        <!--            mvn javafx:jlink -f pom.xml -->
+        <!--            mvn exec:exec@image -f pom.xml  -->
+        <!--            mvn exec:exec@installer -f pom.xml  -->
     </properties>
 
     <dependencies>
@@ -86,12 +101,10 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>
-                                demos.javaFxDemo2.HelloApplication
-                            </mainClass>
-                            <launcher>app</launcher>
-                            <jlinkZipName>app</jlinkZipName>
-                            <jlinkImageName>app</jlinkImageName>
+                            <mainClass>${main.path}</mainClass>
+                            <launcher>${app.name}</launcher>
+                            <jlinkZipName>${app.name}</jlinkZipName>
+                            <jlinkImageName>build-link</jlinkImageName>
                             <noManPages>true</noManPages>
                             <stripDebug>true</stripDebug>
                             <noHeaderFiles>true</noHeaderFiles>
@@ -99,15 +112,75 @@
                     </execution>
                 </executions>
             </plugin>
+
             <plugin>
-                <groupId>com.zenjava</groupId>
-                <artifactId>javafx-maven-plugin</artifactId>
-                <version>8.8.3</version>
-                <configuration>
-                    <vendor>Shanghai E-Planet Technologies Co.,Ltd</vendor>
-                    <mainClass>demos.javaFxDemo2.HelloApplication</mainClass>
-                </configuration>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>image</id>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>jpackage</executable>
+                            <workingDirectory>${project.basedir}</workingDirectory>
+                            <arguments>
+                                <!-- Application Name-->
+                                <argument>-n</argument>
+                                <argument>${app.name}</argument>
+                                <argument>--type</argument>
+                                <argument>${image.type}</argument>
+                                <argument>--java-options</argument>
+                                <argument>
+                                    --add-exports=javafx.controls/com.sun.javafx.scene.control.behavior=com.jfoenix
+                                </argument>
+                                <argument>-m</argument>
+                                <argument>${main.path}</argument>
+                                <argument>--icon</argument>
+                                <argument>${project.basedir}/src/main/resources/${app.icon}</argument>
+                                <argument>--runtime-image</argument>
+                                <argument>${project.basedir}/target/build-link</argument>
+                                <argument>--dest</argument>
+                                <argument>${project.basedir}/target/build-package</argument>
+                                <argument>--verbose</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>installer</id>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>jpackage</executable>
+                            <workingDirectory>${project.basedir}</workingDirectory>
+                            <arguments>
+                                <argument>-n</argument>
+                                <argument>${app.name}</argument>
+                                <argument>--app-image</argument>
+                                <argument>${project.basedir}/target/build-package/${app.name}</argument>
+                                <argument>--app-version</argument>
+                                <argument>${app.version}</argument>
+                                <argument>--dest</argument>
+                                <argument>${project.basedir}/target/build-link-package</argument>
+                                <argument>--temp</argument>
+                                <argument>${project.basedir}/target/build-link-package/temp</argument>
+                                <argument>--win-dir-chooser</argument>
+                                <argument>--win-menu</argument>
+                                <argument>--win-menu-group</argument>
+                                <argument>${app.name}</argument>
+                                <argument>--win-shortcut</argument>
+                                <argument>--verbose</argument>
+                                <argument>--vendor</argument>
+                                <argument>Shanghai E-Planet Technologies Co.,Ltd</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
+
         </plugins>
     </build>
 </project>
