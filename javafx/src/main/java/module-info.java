@@ -5,7 +5,10 @@ module javafxdemos {
     requires javafx.swing;
     requires java.base;
     requires static lombok;
+    requires static eptutils;
+    requires excelhandler;
     requires java.desktop;
+    requires org.apache.poi.poi;
 
 
     opens projects.internalbehavior to javafx.fxml;

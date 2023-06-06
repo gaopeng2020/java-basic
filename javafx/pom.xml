@@ -71,6 +71,17 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
+        <!-- 自定义jar-->
+        <dependency>
+            <groupId>cn.ept</groupId>
+            <artifactId>eptutils</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>cn.ept</groupId>
+            <artifactId>excelhandler</artifactId>
+            <version>2.2.0</version>
+        </dependency>
     </dependencies>
 
     <build>

@@ -44,8 +44,9 @@
                               <TableView fx:id="tableView" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="0.0">
                                 <columns>
                                   <TableColumn fx:id="tc_ErrorType" maxWidth="200.0" minWidth="100.0" prefWidth="100.0" text="错误类型" />
-                                  <TableColumn fx:id="tc_SheetName" maxWidth="500.0" minWidth="200.0" prefWidth="200.0" text="Sheet名称" />
-                                    <TableColumn fx:id="tc_ErrorDescription" maxWidth="1.7976931348623157E308" minWidth="500.0" prefWidth="500.0" text="错误描述" />
+                                  <TableColumn fx:id="tc_SheetName" maxWidth="500.0" minWidth="110.0" prefWidth="110.0" text="Sheet名称" />
+                                    <TableColumn fx:id="tc_ErrorCategory" maxWidth="1.7976931348623157E308" minWidth="200.0" prefWidth="300.0" text="错误分类" />
+                                    <TableColumn fx:id="tc_ErrorDescription1" maxWidth="1.7976931348623157E308" minWidth="200.0" prefWidth="500.0" text="错误描述" />
                                 </columns>
                                  <padding>
                                     <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />

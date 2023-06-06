@@ -107,10 +107,11 @@ public class HelloApplication extends Application {
                     Copyright © 2014–2023 上海怿星电子科技有限公司
                     """;
             dialog.setHeaderText(msg);
-            Image image = new Image(Objects.requireNonNull(this.getClass().getResourceAsStream("/com/peng/demo/Runnable.png")));
+            Image image = new Image(Objects.requireNonNull(this.getClass().getResourceAsStream("/demos/javaFxDemo2/EPT_Logo.png")));
             ImageView imageView = new ImageView(image);
-            imageView.setFitHeight(100);
-            imageView.setFitWidth(100);
+            imageView.setPreserveRatio(true);
+            imageView.setFitHeight(69.8);
+//            imageView.setFitWidth(329.8);
             dialog.setGraphic(imageView);
             dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
             dialog.getDialogPane().lookupButton(ButtonType.CLOSE);
