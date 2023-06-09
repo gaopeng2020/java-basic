@@ -14,6 +14,9 @@ module javafxdemos {
     opens projects.internalbehavior to javafx.fxml;
     exports projects.internalbehavior;
 
+    opens projects.smIpCmxCheck to javafx.fxml;
+    exports projects.smIpCmxCheck;
+
     opens demos.javaFxDemo1 to javafx.fxml;
     exports demos.javaFxDemo1;
 
