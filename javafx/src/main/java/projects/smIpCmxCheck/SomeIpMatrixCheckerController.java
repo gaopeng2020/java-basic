@@ -88,7 +88,13 @@ public class SomeIpMatrixCheckerController {
 
         String name = "/projects/smIpCmxCheck/MatrixInitDirectory.txt";
 //        String name = "MatrixInitDirectory.txt";
-//        String path = Objects.requireNonNull(getClass().getClassLoader().getResource(name)).getPath();
+        if ("jar".equals(SomeIpMatrixCheckerController.class.getResource("").getProtocol())) {
+
+        } else {
+            String path = Objects.requireNonNull(getClass().getResource(name)).getPath();
+            System.out.println("path = " + path);
+        }
+
 
         setInitialDirectory(fileChooser, name);
 
