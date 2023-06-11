@@ -20,7 +20,7 @@ public class CompleteRibbonFXMLApplication extends Application {
         Scene scene = new Scene(fxmlLoader.load(), 800, 600);
 
 //        ScenicView.show(scene);
-        new JMetro(Style.DARK).setScene(scene);
+        new JMetro(Style.LIGHT).setScene(scene);
         scene.getStylesheets().add(Objects.requireNonNull(CompleteRibbonFXMLApplication.class.getResource(CSS_FILE)).toExternalForm());
 
         primaryStage.setMaximized(true);

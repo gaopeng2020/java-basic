@@ -24,6 +24,9 @@ module javafxdemos {
     opens demos.javaFxDemo2 to javafx.fxml;
     exports demos.javaFxDemo2;
 
+    opens demos.javaFxDemo3 to javafx.fxml;
+    exports demos.javaFxDemo3;
+
     opens demos.RibbonDemos to javafx.fxml;
     exports demos.RibbonDemos;
 }

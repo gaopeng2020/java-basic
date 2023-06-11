@@ -8,6 +8,8 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import jfxtras.styles.jmetro.JMetro;
+import jfxtras.styles.jmetro.Style;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -18,19 +20,19 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Objects;
 
-public class HelloApplication extends Application {
+public class HelloApplication2 extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 800, 600);
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication2.class.getResource("hello-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 1000, 562.5);
         stage.setScene(scene);
-//        stage.setResizable(false);
-        InputStream inputStream = Objects.requireNonNull(getClass().getResourceAsStream("/demos/javaFxDemo2/logo.png"));
+
+        new JMetro(scene, Style.DARK);
+
+        InputStream inputStream = Objects.requireNonNull(getClass().getResourceAsStream("/demos/javaFxDemo2/icons8_blur_16.png"));
         Image image = new Image(inputStream);
         stage.getIcons().add(image);
-        stage.setTitle("SOME/IP矩阵一致性检查工具");
-
-        Platform.setImplicitExit(false);
+        stage.setTitle("毛玻璃效果演示");
 
         displaySystemTrayIcon(stage);
 
@@ -40,14 +42,11 @@ public class HelloApplication extends Application {
 
     private void displaySystemTrayIcon(Stage stage) throws MalformedURLException {
         if (!SystemTray.isSupported()) {
-            System.out.println("SystemTray is not supported");
+            System.err.println("SystemTray is not supported");
             return;
         }
-        //执行stage.close()方法,窗口不直接退出
-        Platform.setImplicitExit(false);
 
-        URL url = getClass().getResource("/demos/javaFxDemo2/logo.png");
-        System.out.println("url = " + url);
+        URL url = getClass().getResource("/demos/javaFxDemo2/icons8_blur.ico");
         java.awt.Image image = Toolkit.getDefaultToolkit().getImage(url);
         final TrayIcon trayIcon = new TrayIcon(image);
         trayIcon.setImageAutoSize(true);
