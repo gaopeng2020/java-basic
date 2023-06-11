@@ -6,7 +6,6 @@
 #define MyAppPublisher "My Company, Inc."
 #define MyAppURL "http://www.example.com/"
 #define MyAppExeName "SomIpMatrixCheck.exe"
-#define MyLibName "lib"
 #define MyJreName "jre"
 
 [Setup]
@@ -40,9 +39,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 Source: "C:\Users\lenovo\Documents\gitlab\java\javafx\target\SomIpMatrixCheck.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\lenovo\Documents\gitlab\java\javafx\target\lib\*"; DestDir: "{app}\{#MyLibName}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "C:\Users\lenovo\Documents\gitlab\java\javafx\target\jre\*"; DestDir: "{app}\{#MyJreName}"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "C:\Users\lenovo\Documents\gitlab\java\javafx\target\temp\"; DestDir: "{app}\temp"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

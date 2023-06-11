@@ -24,7 +24,10 @@ public class SomeIpMatrixCheckerApplication extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(SomeIpMatrixCheckerApplication.class.getResource("SomeIpMatrixChecker.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 800, 600);
         stage.setScene(scene);
-//        stage.setResizable(false);
+        stage.setHeight(800);
+        stage.setMinHeight(300);
+        stage.setWidth(1200);
+        stage.setMinWidth(400);
         InputStream inputStream = Objects.requireNonNull(getClass().getResourceAsStream("/projects/smIpCmxCheck/logo.png"));
         Image image = new Image(inputStream);
         stage.getIcons().add(image);

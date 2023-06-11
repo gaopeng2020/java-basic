@@ -33,11 +33,10 @@ import javafx.scene.paint.Paint;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import lombok.NonNull;
 import org.apache.poi.ss.usermodel.Workbook;
 
 import java.io.*;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -66,11 +65,47 @@ public class SomeIpMatrixCheckerController {
 
     private String fileName;
     private List<String> checkReports;
+    private File cmxLastDir;
+    private File reportLastDir;
 
     @FXML
     private void initialize() {
+        //create or get MatrixInitDirectory.txt
+        String cmxFileName = "MatrixInitDirectory.txt";
+        cmxLastDir = getOrCreateFile(cmxFileName);
+        //create or get LogInitDirectory.txt
+        String logFileName = "LogInitDirectory.txt";
+        reportLastDir = getOrCreateFile(logFileName);
+
         resultStatues.setText("一致性检查通过！");
         resultStatues.setTextFill(Color.GREEN);
+    }
+
+    private File getOrCreateFile(String fileName){
+        File directory = new File("./temp");
+        if (!directory.exists()) {
+            directory.mkdir();
+        }
+        String canonicalPath = null;
+        try {
+            canonicalPath = directory.getCanonicalPath();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        String finalCanonicalPath = canonicalPath;
+        return Arrays.stream(Objects.requireNonNull(directory.listFiles()))
+                .filter(file -> file.getName().equals(fileName))
+                .findAny().orElseGet(() -> {
+                    String s = finalCanonicalPath + EPTUtils.SLASH + fileName;
+                    File file;
+                    try {
+                        file = new File(s);
+                        file.createNewFile();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    return file;
+                });
     }
 
     /**
@@ -86,27 +121,13 @@ public class SomeIpMatrixCheckerController {
                 new FileChooser.ExtensionFilter("Text Files", "*.xlsx"),
                 new FileChooser.ExtensionFilter("All Files", "*.*"));
 
-        String name = "/projects/smIpCmxCheck/MatrixInitDirectory.txt";
-//        String name = "MatrixInitDirectory.txt";
-        if ("jar".equals(SomeIpMatrixCheckerController.class.getResource("").getProtocol())) {
-
-        } else {
-            String path = Objects.requireNonNull(getClass().getResource(name)).getPath();
-            System.out.println("path = " + path);
-        }
-
-
-        setInitialDirectory(fileChooser, name);
+        setInitialDirectory(fileChooser, cmxLastDir);
 
         File file = fileChooser.showOpenDialog(new Stage());
         fileName = file.getName();
         fileName = fileName.substring(0, fileName.lastIndexOf(".") - 1);
         filePath.setText(file.getAbsolutePath());
-        try {
-            saveCurrentDirectory(file, name);
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
+        saveCurrentDirectory(file, cmxLastDir);
     }
 
     /**
@@ -265,17 +286,11 @@ public class SomeIpMatrixCheckerController {
                 new FileChooser.ExtensionFilter("All Files", "*.*"));
 
         //get Log InitDirectory and setInitialDirectory for fileChooser
-        String path = Objects.requireNonNull(SomeIpMatrixCheckerController.class.getResource("LogInitDirectory.txt")).getPath();
-        setInitialDirectory(fileChooser, path);
+        setInitialDirectory(fileChooser, reportLastDir);
 
-        //save current selected directory to LogInitDirectory.txt
         File file = fileChooser.showSaveDialog(new Stage());
-        try {
-            saveCurrentDirectory(file, path);
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-
+        //save current selected directory to LogInitDirectory.txt
+        saveCurrentDirectory(file, reportLastDir);
         //save check reports to log
         try (FileWriter fw = new FileWriter(file)) {
             checkReports.forEach(report -> {
@@ -295,15 +310,13 @@ public class SomeIpMatrixCheckerController {
      * set Initial Directory for file chooser
      *
      * @param fileChooser file chooser
-     * @param path        Initial Directory path
+     * @param file        Initial Directory file
      */
-    private void setInitialDirectory(FileChooser fileChooser, String path) {
-        String path1 = SomeIpMatrixCheckerController.class.getClassLoader().getResource(path).getPath();
-        System.out.println("path1 = " + path1);
-        try (InputStream is = SomeIpMatrixCheckerController.class.getClassLoader().getResourceAsStream(path)) {
+    private void setInitialDirectory(@NonNull FileChooser fileChooser, @NonNull File file) {
+        try (FileInputStream fis = new FileInputStream(file)) {
             byte[] bytes = new byte[104];
             int len;
-            while ((len = is.read(bytes)) != -1) {
+            while ((len = fis.read(bytes)) != -1) {
                 String lastDir = new String(bytes, 0, len);
                 fileChooser.setInitialDirectory(new File(lastDir));
             }
@@ -316,12 +329,9 @@ public class SomeIpMatrixCheckerController {
      * save th directory of current selected file to Initial directory
      *
      * @param file current selected file
-     * @param path Initial directory path
+     * @param cashFile Initial directory file
      */
-    private void saveCurrentDirectory(File file, String path) throws URISyntaxException {
-        String filePath = System.getProperty("user.dir").replace("\\", "/");
-        System.out.println("filePath = " + filePath);
-        File cashFile = new File(Objects.requireNonNull(SomeIpMatrixCheckerController.class.getResource(path)).toURI());
+    private void saveCurrentDirectory(File file, File cashFile) {
         try (FileOutputStream fos = new FileOutputStream(cashFile)) {
             byte[] bytes = file.getParent().getBytes();
             fos.write(bytes);

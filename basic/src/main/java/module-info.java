@@ -15,7 +15,7 @@ module basic { //在模块前使用open关键字可开放真个模块的反射�
 
     exports basic.collection to javafxdemos; //只把这个包暴露给javafxdemos模块
     exports basic.grammer;
-    opens basic.grammer; //使用open关键字可开发这个包的反射权限
+    opens basic.grammer; //使用open关键字可开放这个包的反射权限
 //    exports basic.oop.constructor;
 //    exports basic.oop.grammer;
 //    exports basic.reflect;

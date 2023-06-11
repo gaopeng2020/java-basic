@@ -14,7 +14,6 @@
         <module>basic</module>
         <module>swing</module>
         <module>gof23</module>
-        <module>poi</module>
         <module>jna</module>
         <module>spring</module>
         <module>javafx</module>

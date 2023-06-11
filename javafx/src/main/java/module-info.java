@@ -1,14 +1,15 @@
 module javafxdemos {
+    requires java.base;
     requires javafx.controls;
     requires javafx.fxml;
-    requires javafx.graphics;
     requires javafx.swing;
-    requires java.base;
     requires static lombok;
     requires static eptutils;
     requires excelhandler;
     requires java.desktop;
     requires org.apache.poi.poi;
+    requires org.jfxtras.styles.jmetro;
+    requires fxribbon;
 
 
     opens projects.internalbehavior to javafx.fxml;
@@ -22,4 +23,7 @@ module javafxdemos {
 
     opens demos.javaFxDemo2 to javafx.fxml;
     exports demos.javaFxDemo2;
+
+    opens demos.RibbonDemos to javafx.fxml;
+    exports demos.RibbonDemos;
 }
