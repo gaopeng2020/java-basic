@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.pixelduke.control.Ribbon?>
+<?import com.pixelduke.control.ribbon.QuickAccessBar?>
+<?import com.pixelduke.control.ribbon.RibbonGroup?>
+<?import com.pixelduke.control.ribbon.RibbonTab?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="demos.javaFxDemo3.CaptureController">
+    <top>
+        <Ribbon fx:id="ribbon" prefHeight="185.0" prefWidth="1000.0" style="-fx-background-color: #00000050;" BorderPane.alignment="CENTER">
+            <quickAccessBar>
+                <QuickAccessBar>
+                    <buttons>
+                        <Button>
+                            <graphic>
+                                <ImageView fx:id="quickAccessSave">
+                                    <Image url="@icons8_Save_16px.png" />
+                                </ImageView>
+                            </graphic>
+                        </Button>
+                        <Button>
+                            <graphic>
+                                <ImageView>
+                                    <Image url="@icons8_Undo_16px.png" />
+                                </ImageView>
+                            </graphic>
+                        </Button>
+                        <Button>
+                            <graphic>
+                                <ImageView>
+                                    <Image url="@icons8_Redo_16px.png" />
+                                </ImageView>
+                            </graphic>
+                        </Button>
+                        <Button>
+                            <graphic>
+                                <ImageView>
+                                    <Image url="@icons8_windows_snipping_tool_16.png" />
+                                </ImageView>
+                            </graphic>
+                        </Button>
+                        <Button alignment="CENTER_RIGHT" contentDisplay="TOP" layoutX="100">
+                            <graphic>
+                                <ImageView nodeOrientation="RIGHT_TO_LEFT">
+                                    <Image url="@icons8_double_up_16.png" />
+                                </ImageView>
+                            </graphic>
+                            <tooltip>
+                                <Tooltip text="显示或隐藏Ribbon" />
+                            </tooltip>
+                        </Button>
+                    </buttons>
+                </QuickAccessBar>
+            </quickAccessBar>
+            <tabs>
+                <RibbonTab fx:id="homeTab" text="Home">
+                    <ribbonGroups>
+                        <RibbonGroup graphicTextGap="2.0" prefHeight="125.0" prefWidth="215.0" title="File">
+                            <nodes>
+                                <Button fx:id="fileOpen" contentDisplay="TOP" onMouseReleased="#onOpenButtonReleased" styleClass="big" text="Open" wrapText="true">
+                                    <graphic>
+                                        <ImageView>
+                                            <Image url="@icons8_Open_32px_3.png" />
+                                        </ImageView>
+                                    </graphic>
+                                </Button>
+                                <Button fx:id="fileNew" contentDisplay="TOP" styleClass="big" text="New" wrapText="true">
+                                    <graphic>
+                                        <ImageView>
+                                            <Image url="@icons8_File_32px_1.png" />
+                                        </ImageView>
+                                    </graphic>
+                                </Button>
+                                <Button fx:id="fileSave" contentDisplay="TOP" onMousePressed="#onSaveButtonReleased" styleClass="big" text="Save" wrapText="true">
+                                    <graphic>
+                                        <ImageView>
+                                            <Image url="@icons8_Save_32px.png" />
+                                        </ImageView>
+                                    </graphic>
+                                </Button>
+                                <Button fx:id="fileSaveAs" contentDisplay="TOP" maxWidth="70.0" minWidth="70.0" prefHeight="100.0" prefWidth="70.0" styleClass="big" text="Save as">
+                                    <graphic>
+                                        <ImageView>
+                                            <Image url="@icons8_Save_as_32px.png" />
+                                        </ImageView>
+                                    </graphic>
+                                </Button>
+                            </nodes>
+                        </RibbonGroup>
+                        <RibbonGroup graphicTextGap="2.0" prefHeight="125.0" prefWidth="200.0" textOverrun="CLIP" title="palette">
+                            <nodes>
+                                <Button fx:id="colorPalette" contentDisplay="TOP" onMouseReleased="#onPaletteButtonReleased" styleClass="big" text="Palette">
+                                    <graphic>
+                                        <ImageView>
+                                            <Image url="@icons8_microsoft_paint_32.png" />
+                                        </ImageView>
+                                    </graphic>
+                                </Button>
+                                <Button fx:id="capture" contentDisplay="TOP" onMouseReleased="#onPaletteButtonReleased" styleClass="big" text="capture" textOverrun="CLIP">
+                                    <graphic>
+                                        <ImageView>
+                                            <Image url="@icons8_windows_snipping_tool_32.png" />
+                                        </ImageView>
+                                    </graphic>
+                                </Button>
+                                <ColorPicker editable="true" prefHeight="35.0" prefWidth="85.0" />
+                            </nodes>
+                        </RibbonGroup>
+                    </ribbonGroups>
+                </RibbonTab>
+            </tabs>
+        </Ribbon>
+
+    </top>
+    <center>
+        <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER" />
+    </center>
+    <bottom>
+        <VBox prefHeight="27.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
+         <children>
+            <ColorPicker />
+         </children></VBox>
+    </bottom>
+</BorderPane>

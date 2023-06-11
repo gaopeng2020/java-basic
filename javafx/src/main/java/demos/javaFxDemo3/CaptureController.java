@@ -1,5 +1,7 @@
 package demos.javaFxDemo3;
 
+import com.pixelduke.control.Ribbon;
+import com.pixelduke.control.ribbon.RibbonTab;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -33,6 +35,12 @@ public class CaptureController implements Initializable {
     private ImageView quickAccessSave;
 
     @FXML
+    private RibbonTab homeTab;
+
+    @FXML
+    private Ribbon ribbon;
+
+    @FXML
     void onOpenButtonReleased(MouseEvent event) {
 
     }
@@ -50,6 +58,9 @@ public class CaptureController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         System.out.println("location.getPath() = " + location.getPath());
+//        ribbon.setVisible(false);
+        ribbon.setPrefHeight(0);
 
     }
+
 }
