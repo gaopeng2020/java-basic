@@ -1,0 +1,45 @@
+/* ----------------------类型选择器----------------------- */
+/*root类选择器给所有的元素设置样式*/
+.root {
+    -fx-font-family: "fa-regular-400", "JetBrains Mono", "微软雅黑";
+    -fx-font-size: 16px;
+    -fx-background-color: #96dcdf;
+    /* -fx-background-image: url(bg.jpg); */
+    -fx-background-size: stretch stretch;
+    -fx-background-position: center center;
+}
+
+.tool-bar {
+    -fx-background-color: rgb(96, 121, 126);
+
+}
+
+/*button类型选择器设置所有Button的背景色*/
+.button {
+    -fx-background-color: rgb(31, 24, 63);
+    -fx-border-radius: 16px;
+    -fx-border-width: 300px;
+}
+
+/*hover伪类选择器设置鼠标移过Button时的背景色*/
+.button:hover {
+    -fx-background-color: lightskyblue;
+}
+
+/* ----------------------类选择器----------------------- */
+
+
+/* ----------------------ID选择器----------------------- */
+/*id选择器设置Label标题的样式*/
+#lblTitle {
+    -fx-font-size: 20px;
+    -fx-font-weight: bolder;
+    -fx-text-fill: darkslategray;
+}
+
+@font-face {
+    font-family: 'fa-regular-400.ttf';
+    font-style: normal;
+    font-weight: normal;
+    src: local('sample'), url('fa-regular-400.ttf') format('truetype');
+}

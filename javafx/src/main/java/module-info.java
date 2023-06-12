@@ -10,6 +10,7 @@ module javafxdemos {
     requires org.apache.poi.poi;
     requires org.jfxtras.styles.jmetro;
     requires fxribbon;
+    requires org.kordamp.bootstrapfx.core;
 
 
     opens projects.internalbehavior to javafx.fxml;
@@ -26,6 +27,9 @@ module javafxdemos {
 
     opens demos.javaFxDemo3 to javafx.fxml;
     exports demos.javaFxDemo3;
+
+    opens demos.javaFxDemo4 to javafx.fxml;
+    exports demos.javaFxDemo4;
 
     opens demos.RibbonDemos to javafx.fxml;
     exports demos.RibbonDemos;
