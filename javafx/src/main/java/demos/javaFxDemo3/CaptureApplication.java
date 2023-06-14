@@ -5,8 +5,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import jfxtras.styles.jmetro.JMetro;
-import jfxtras.styles.jmetro.Style;
 
 import java.io.InputStream;
 import java.util.Objects;
@@ -21,13 +19,15 @@ public class CaptureApplication extends Application {
         Scene scene = new Scene(fxmlLoader.load(), 1000, 562.5);
         stage.setScene(scene);
 
-        new JMetro(scene, Style.LIGHT);
-
         InputStream inputStream = Objects.requireNonNull(getClass().getResourceAsStream("/demos/javaFxDemo3/icons8_windows_snipping_tool_16.png"));
         Image image = new Image(inputStream);
         stage.getIcons().add(image);
         stage.setTitle("snipping tool");
 
         stage.show();
+
+        CaptureController controller = fxmlLoader.getController();
+        //为截图按钮设置快捷键
+        controller.addShotCutKeys();
     }
 }
