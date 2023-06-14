@@ -39,9 +39,9 @@
                                 </ImageView>
                             </graphic>
                         </Button>
-                        <Button onMouseClicked="#onQuickAccessCaptureBtnClicked" >
+                        <Button onMouseClicked="#onQuickAccessCaptureBtnClicked">
                             <graphic>
-                                <ImageView >
+                                <ImageView>
                                     <Image url="@icons8_windows_snipping_tool_16.png" />
                                 </ImageView>
                             </graphic>
@@ -102,7 +102,7 @@
                                 </Button>
                                 <Button fx:id="captureBtn" contentDisplay="TOP" onMouseClicked="#onCaptureBtnClicked" styleClass="big" text="capture" textOverrun="CLIP">
                                     <graphic>
-                                        <ImageView >
+                                        <ImageView>
                                             <Image url="@icons8_windows_snipping_tool_32.png" />
                                         </ImageView>
                                     </graphic>

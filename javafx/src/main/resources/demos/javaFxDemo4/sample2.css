@@ -2,7 +2,7 @@
 /*root类选择器给所有的元素设置样式*/
 .root {
     -fx-font-family: "fa-regular-400", "JetBrains Mono", "微软雅黑";
-    -fx-font-size: 16px;
+    -fx-font-size: 14px;
     -fx-background-color: #96dcdf;
     /* -fx-background-image: url(bg.jpg); */
     -fx-background-size: stretch stretch;
@@ -15,10 +15,24 @@
 }
 
 /*button类型选择器设置所有Button的背景色*/
-.button {
-    -fx-background-color: rgb(31, 24, 63);
-    -fx-border-radius: 16px;
+.button,
+.label {
+    -fx-background-color: rgb(213, 51, 235);
+    -fx-border-radius: 14px;
     -fx-border-width: 300px;
+    -fx-alignment: center-left;
+    -fx-text-alignment: center;
+    -fx-text-overrun: center-word-ellipsis;
+    -fx-wrap-text: true;
+    -fx-font: 12px;
+    -fx-underline: false;
+    /* -fx-graphic */
+    -fx-content-display: center;
+    /* -fx-graphic-text-gap: */
+    -fx-label-padding: 1, 1,1,1;
+    -fx-text-fill: #ffffff;
+    /* -fx-ellipsis-string */
+
 }
 
 /*hover伪类选择器设置鼠标移过Button时的背景色*/
@@ -27,14 +41,23 @@
 }
 
 /* ----------------------类选择器----------------------- */
+.btn-radius-large {
+    -fx-border-radius: 50px;
+    -fx-background-radius: 50px;
+}
 
+/*深色主题*/
+.dark-theme {
+    -fx-background-color: rgb(40, 43, 51);
+    -fx-text-fill: #ffffff;
+}
 
 /* ----------------------ID选择器----------------------- */
 /*id选择器设置Label标题的样式*/
 #lblTitle {
     -fx-font-size: 20px;
     -fx-font-weight: bolder;
-    -fx-text-fill: darkslategray;
+    -fx-text-fill: rgb(60, 189, 189);
 }
 
 @font-face {

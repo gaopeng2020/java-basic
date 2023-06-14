@@ -50,6 +50,7 @@
 /*深色主题*/
 .dark-theme {
    -fx-background-color: rgb(40, 43, 51);
+   -fx-text-fill: #fff;
 }
 
 /*绿色主题*/
