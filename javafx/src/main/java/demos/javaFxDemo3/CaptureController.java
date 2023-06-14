@@ -7,12 +7,10 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
@@ -63,9 +61,121 @@ public class CaptureController implements Initializable {
     @FXML
     private Ribbon ribbon;
 
+    @FXML
+    private ChoiceBox<String> scaleChoiceBox;
+
+    @FXML
+    private Slider scaleSlider;
+
+    @FXML
+    private Button zoomInBtn;
+
+    @FXML
+    private Button zoomOutBtn;
+
+
     private Stage primaryStage;
     private Stage captureStage;
     private int counter;
+
+    Tab selectedTab;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+//        ribbon.setVisible(false);
+//        ribbon.setPrefHeight(0);
+        counter = centerTabPane.getTabs().size();
+
+        centerTabPane.selectionModelProperty().addListener((observable, oldValue, newValue) -> selectedTab = newValue.getSelectedItem());
+
+
+        zoomInBtn.setOnMouseClicked(event -> {
+            int value = (int) scaleSlider.getValue();
+            double newValue = value + 1.0;
+            scaleSlider.adjustValue(newValue);
+        });
+        zoomOutBtn.setOnMouseClicked(event -> {
+            int value = (int) scaleSlider.getValue();
+            double newValue = value - 1.0;
+            scaleSlider.adjustValue(newValue);
+
+        });
+        scaleChoiceBox.getItems().addAll("25%", "50%", "75%", "100%", "200%", "300%", "400%", "500%", "600%", "700%", "800%");
+        scaleChoiceBox.getSelectionModel().select("100%");
+        scaleChoiceBox.valueProperty().addListener((observable, oldValue, newValue) -> {
+            switch (newValue) {
+                case "25%" -> scaleSlider.adjustValue(0);
+                case "50%" -> scaleSlider.adjustValue(1);
+                case "75%" -> scaleSlider.adjustValue(2);
+                case "100%" -> scaleSlider.adjustValue(3);
+                case "200%" -> scaleSlider.adjustValue(4);
+                case "300%" -> scaleSlider.adjustValue(5);
+                case "400%" -> scaleSlider.adjustValue(6);
+                case "500%" -> scaleSlider.adjustValue(7);
+                case "600%" -> scaleSlider.adjustValue(8);
+                case "700%" -> scaleSlider.adjustValue(9);
+                case "800%" -> scaleSlider.adjustValue(10);
+            }
+        });
+        scaleSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+            int value = newValue.intValue();
+            double scale = 1.0;
+            selectedTab = centerTabPane.getSelectionModel().getSelectedItem();
+            AnchorPane anchorPane = (AnchorPane) selectedTab.getContent();
+            ScrollPane scrollPane = (ScrollPane) anchorPane.getChildren().get(0);
+            ImageView imageView = (ImageView) scrollPane.getContent();
+
+            switch (value) {
+                case 0 -> {
+                    scaleChoiceBox.getSelectionModel().select("25%");
+                    scale = 0.25;
+                }
+                case 1 -> {
+                    scaleChoiceBox.getSelectionModel().select("50%");
+                    scale = 0.5;
+                }
+                case 2 -> {
+                    scaleChoiceBox.getSelectionModel().select("75%");
+                    scale = 0.75;
+                }
+                case 3 -> scaleChoiceBox.getSelectionModel().select("100%");
+                case 4 -> {
+                    scaleChoiceBox.getSelectionModel().select("200%");
+                    scale = 2.0;
+                }
+                case 5 -> {
+                    scaleChoiceBox.getSelectionModel().select("300%");
+                    scale = 3.0;
+                }
+                case 6 -> {
+                    scaleChoiceBox.getSelectionModel().select("400%");
+                    scale = 4.0;
+                }
+                case 7 -> {
+                    scaleChoiceBox.getSelectionModel().select("500%");
+                    scale = 5.0;
+                }
+                case 8 -> {
+                    scaleChoiceBox.getSelectionModel().select("600%");
+                    scale = 6.0;
+                }
+                case 9 -> {
+                    scaleChoiceBox.getSelectionModel().select("700%");
+                    scale = 7.0;
+                }
+                case 10 -> {
+                    scaleChoiceBox.getSelectionModel().select("800%");
+                    scale = 8.0;
+                }
+            }
+
+            imageView.setScaleX(scale);
+            imageView.setScaleY(scale);
+            imageView.setX(0);
+            imageView.setY(0);
+        });
+
+    }
 
     @FXML
     void onOpenButtonReleased(MouseEvent event) {
@@ -235,8 +345,17 @@ public class CaptureController implements Initializable {
             Tab tab = new Tab("image" + counter, tabPane);
             centerTabPane.getTabs().add(tab);
             counter++;
+            centerTabPane.getSelectionModel().select(tab);
             primaryStage.setIconified(false);
 
+            //监听缩放
+            scrollPane.addEventFilter(ScrollEvent.SCROLL, event -> {
+                if (event.isControlDown()) {
+                    System.out.println("-------------------------");
+                }
+                System.out.println("event.isDirect() = " + event.isDirect());
+                System.out.println("event.isInertia() = " + event.isInertia());
+            });
         });
 
     }
@@ -244,15 +363,6 @@ public class CaptureController implements Initializable {
     @FXML
     void onQuickAccessCaptureBtnClicked(MouseEvent event) {
         onCaptureBtnClicked(event);
-    }
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-//        System.out.println("location.getPath() = " + location.getPath());
-//        ribbon.setVisible(false);
-//        ribbon.setPrefHeight(0);
-        counter = centerTabPane.getTabs().size();
-
     }
 
     public void addShotCutKeys() {

@@ -16,7 +16,7 @@ public class CaptureApplication extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         FXMLLoader fxmlLoader = new FXMLLoader(CaptureApplication.class.getResource("snapping-tool-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 1000, 562.5);
+        Scene scene = new Scene(fxmlLoader.load(), 1000, 600);
         stage.setScene(scene);
 
         InputStream inputStream = Objects.requireNonNull(getClass().getResourceAsStream("/demos/javaFxDemo3/icons8_windows_snipping_tool_16.png"));

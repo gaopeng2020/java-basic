@@ -5,12 +5,14 @@
 <?import com.pixelduke.control.ribbon.RibbonGroup?>
 <?import com.pixelduke.control.ribbon.RibbonTab?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.ColorPicker?>
+<?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.VBox?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="demos.javaFxDemo3.CaptureController">
     <top>
@@ -119,10 +121,30 @@
     <center>
         <TabPane fx:id="centerTabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER" />
     </center>
-    <bottom>
-        <VBox prefHeight="27.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
+   <bottom>
+      <AnchorPane prefHeight="25.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
          <children>
-            <ColorPicker />
-         </children></VBox>
-    </bottom>
+            <Slider fx:id="scaleSlider" blockIncrement="1.0" layoutX="790.0" layoutY="6.0" majorTickUnit="1.0" max="10.0" minorTickCount="1" prefHeight="14.0" prefWidth="129.0" value="4.0" AnchorPane.rightAnchor="93.0" />
+            <Button fx:id="zoomInBtn" layoutX="758.0" layoutY="2.0" mnemonicParsing="false" prefWidth="25.0" AnchorPane.rightAnchor="220.0">
+               <graphic>
+                  <ImageView>
+                     <image>
+                        <Image url="@icons8_Plus_16.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="zoomOutBtn" layoutX="913.0" layoutY="2.0" mnemonicParsing="false" prefWidth="25.0" AnchorPane.rightAnchor="63.0">
+               <graphic>
+                  <ImageView>
+                     <image>
+                        <Image url="@icons8_minus_16.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <ChoiceBox fx:id="scaleChoiceBox" layoutX="581.0" layoutY="2.0" prefWidth="60.0" AnchorPane.rightAnchor="1.0" />
+         </children>
+      </AnchorPane>
+   </bottom>
 </BorderPane>
