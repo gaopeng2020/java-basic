@@ -33,4 +33,5 @@ module javafxdemos {
 
     opens demos.RibbonDemos to javafx.fxml;
     exports demos.RibbonDemos;
+
 }

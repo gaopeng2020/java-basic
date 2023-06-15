@@ -26,8 +26,8 @@ public class CaptureApplication extends Application {
 
         stage.show();
 
-        CaptureController controller = fxmlLoader.getController();
         //为截图按钮设置快捷键
+        CaptureController controller = fxmlLoader.getController();
         controller.addShotCutKeys();
     }
 }

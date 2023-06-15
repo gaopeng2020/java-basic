@@ -2,9 +2,12 @@ package demos.javaFxDemo3;
 
 import com.pixelduke.control.Ribbon;
 import com.pixelduke.control.ribbon.RibbonTab;
-import javafx.collections.ObservableList;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
@@ -16,6 +19,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Line;
@@ -34,12 +38,18 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicReference;
 
+/**
+ * @author gaopeng
+ */
 public class CaptureController implements Initializable {
-
+    @FXML
+    private BorderPane rootPan;
     @FXML
     public Button colorPaletteBtn;
     @FXML
     public Button captureBtn;
+    @FXML
+    public Button hideToolbar;
     @FXML
     private TabPane centerTabPane;
 
@@ -77,18 +87,79 @@ public class CaptureController implements Initializable {
     private Stage primaryStage;
     private Stage captureStage;
     private int counter;
-
-    Tab selectedTab;
+    private Tab selectedTab;
+    private Scene shapeScene;
+    private Stage shapeStage;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-//        ribbon.setVisible(false);
-//        ribbon.setPrefHeight(0);
         counter = centerTabPane.getTabs().size();
 
-        centerTabPane.selectionModelProperty().addListener((observable, oldValue, newValue) -> selectedTab = newValue.getSelectedItem());
+        //add listener for zoomIn/Out Button、scaleChoiceBox、scaleSlider
+        centerTabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            selectedTab = newValue;
+            AnchorPane anchorPane = (AnchorPane) newValue.getContent();
+            ScrollPane scrollPane = (ScrollPane) anchorPane.getChildren().get(0);
+            ImageView imageView = (ImageView) scrollPane.getContent();
+            zoomInZoomOutBinding(imageView);
 
+            //add listener for ctrl+Middle key of mouse
+            scrollMouseKeyBinding(anchorPane, imageView);
+        });
 
+        //load shapes tool fxml
+        FXMLLoader fxmlLoader = new FXMLLoader(CaptureApplication.class.getResource("tool-shapes_view.fxml"));
+        try {
+            shapeScene = new Scene(fxmlLoader.load());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+//        primaryStage.getScene().setOnMouseClicked(event -> {
+//            System.out.println("000000000000");
+//            if (shapeStage.isShowing()) {
+//                shapeStage.close();
+//            }
+//        });
+//        primaryStage.getScene().setOnMouseMoved(event1 -> {
+//            System.out.println(primaryStage.getScene().getX());
+//        });
+        rootPan.setOnMouseMoved(event -> System.out.println("rootPan.setOnMouseMoved"));
+    }
+
+    @FXML
+    public void onHideToolbarClicked(MouseEvent mouseEvent) {
+        int height = (int) ribbon.getPrefHeight();
+        if (height != 0) {
+            ribbon.setPrefHeight(0.0);
+        } else {
+            ribbon.setPrefHeight(185.0);
+        }
+    }
+
+    private void scrollMouseKeyBinding(AnchorPane anchorPane, ImageView imageView) {
+        anchorPane.addEventFilter(ScrollEvent.SCROLL, event -> {
+            if (event.isControlDown()) {
+                double width = imageView.getImage().getWidth();
+                double height = imageView.getImage().getHeight();
+                double rate;
+                if (event.getDeltaY() > 0) {
+                    rate = 0.1;
+                } else {
+                    rate = -0.1;
+                }
+                double newWidth = imageView.getFitWidth() + width * rate;
+                double newHeight = imageView.getFitHeight() + height * rate;
+                if (newWidth <= width * 0.25 || newWidth >= height * 10) {
+                    return;
+                }
+                imageView.setFitWidth(newWidth);
+                imageView.setFitHeight(newHeight);
+            }
+        });
+    }
+
+    private void zoomInZoomOutBinding(ImageView imageView) {
         zoomInBtn.setOnMouseClicked(event -> {
             int value = (int) scaleSlider.getValue();
             double newValue = value + 1.0;
@@ -117,14 +188,12 @@ public class CaptureController implements Initializable {
                 case "800%" -> scaleSlider.adjustValue(10);
             }
         });
+
         scaleSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
             int value = newValue.intValue();
+            double width = imageView.getImage().getWidth();
+            double height = imageView.getImage().getHeight();
             double scale = 1.0;
-            selectedTab = centerTabPane.getSelectionModel().getSelectedItem();
-            AnchorPane anchorPane = (AnchorPane) selectedTab.getContent();
-            ScrollPane scrollPane = (ScrollPane) anchorPane.getChildren().get(0);
-            ImageView imageView = (ImageView) scrollPane.getContent();
-
             switch (value) {
                 case 0 -> {
                     scaleChoiceBox.getSelectionModel().select("25%");
@@ -168,24 +237,27 @@ public class CaptureController implements Initializable {
                     scale = 8.0;
                 }
             }
-            double fitHeight = imageView.getFitHeight();
-            System.out.println("fitHeight = " + fitHeight);
-            double fitWidth = imageView.getFitWidth();
-            System.out.println("fitWidth = " + fitWidth);
-
-            imageView.setScaleX(scale);
-            imageView.setScaleY(scale);
-//            imageView.setX(0);
-//            imageView.setY(0);
-            imageView.setLayoutX(0.0);
-            imageView.setLayoutY(0.0);
+            double newWidth = width * scale;
+            double newHeight = height * scale;
+            imageView.setFitWidth(newWidth);
+            imageView.setFitHeight(newHeight);
         });
 
     }
 
     @FXML
-    void onOpenButtonReleased(MouseEvent event) {
-
+    void onOpenButtonReleased(MouseEvent event) throws IOException {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Image");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "bmp", "*.gif", "*.tif", "wbm"),
+                new FileChooser.ExtensionFilter("All Files", "*.*"));
+        File file = fileChooser.showOpenDialog(new Stage());
+        if (file != null) {
+            BufferedImage bufferedImage = ImageIO.read(file);
+            WritableImage fxImage = SwingFXUtils.toFXImage(bufferedImage, null);
+            createTabForImageView(centerTabPane, fxImage);
+        }
     }
 
     @FXML
@@ -198,29 +270,29 @@ public class CaptureController implements Initializable {
                     new FileChooser.ExtensionFilter("BMP", "*.bmp"),
                     new FileChooser.ExtensionFilter("JPEG", "*.jpg"),
                     new FileChooser.ExtensionFilter("GIF", "*.gif"),
+                    new FileChooser.ExtensionFilter("TIFF", "*.tif"),
                     new FileChooser.ExtensionFilter("All Files", "*.*"));
 
-            for (Tab tab : centerTabPane.getTabs()) {
-                String text = tab.getText();
-                fileChooser.setInitialFileName(text);
-                if (tab.isSelected()) {
-                    File file = fileChooser.showSaveDialog(new Stage());
-                    AnchorPane anchorPane = (AnchorPane) tab.getContent();
-                    ScrollPane scrollPane = (ScrollPane) anchorPane.getChildren().get(0);
-                    Image image = ((ImageView) scrollPane.getContent()).getImage();
-                    copy2Clipboard(image);
-                    try {
-                        String suffix = file.getName().substring(file.getName().lastIndexOf(".") + 1);
-                        BufferedImage awtImage = null;
-                        if (suffix.equals("jpg")) {
-                            awtImage = new BufferedImage((int) image.getWidth(), (int) image.getHeight(), BufferedImage.TYPE_INT_RGB);
-                        }
-                        BufferedImage bufferedImage = SwingFXUtils.fromFXImage(image, awtImage);
-                        ImageIO.write(bufferedImage, suffix, file);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+            String text = selectedTab.getText();
+            fileChooser.setInitialFileName(text);
+            File file = fileChooser.showSaveDialog(new Stage());
+
+            ScrollPane scrollPane = (ScrollPane) ((AnchorPane) selectedTab.getContent()).getChildren().get(0);
+            ImageView imageView = (ImageView) scrollPane.getContent();
+            Image image = imageView.getImage();
+            imageView.setFitWidth(image.getWidth());
+            imageView.setFitHeight(image.getHeight());
+
+            try {
+                String suffix = file.getName().substring(file.getName().lastIndexOf(".") + 1);
+                BufferedImage awtImage = null;
+                if (suffix.equals("jpg")) {
+                    awtImage = new BufferedImage((int) image.getWidth(), (int) image.getHeight(), BufferedImage.TYPE_INT_RGB);
                 }
+                BufferedImage bufferedImage = SwingFXUtils.fromFXImage(image, awtImage);
+                ImageIO.write(bufferedImage, suffix, file);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -259,20 +331,18 @@ public class CaptureController implements Initializable {
                 if (keyEvent.getCode().equals(KeyCode.ESCAPE)) {
                     captureStage.close();
                     primaryStage.setIconified(false);
+
+                    //shape button
+                    shapeStage.close();
                 }
             });
 
             //监听截屏窗口
-            captureStageListener(anchorPane);
-
-            //右键监听
-
+            captureWindowListener(anchorPane);
         }
     }
 
-    private void captureStageListener(AnchorPane anchorPane) {
-        ObservableList<Screen> screens = Screen.getScreens();
-
+    private void captureWindowListener(AnchorPane anchorPane) {
         Rectangle2D bounds = Screen.getPrimary().getBounds();
         //获取屏幕宽高
         double screenWidth = bounds.getWidth();
@@ -282,7 +352,6 @@ public class CaptureController implements Initializable {
         AtomicReference<Double> startY = new AtomicReference<>((double) 0);
         AtomicReference<Integer> snapWidth = new AtomicReference<>((int) 0);
         AtomicReference<Integer> snapHeight = new AtomicReference<>((int) 0);
-
 
         //监听鼠标移动事件，在屏幕上显示截图参考坐标系
         anchorPane.setOnMouseMoved(mouseEvent -> {
@@ -294,7 +363,13 @@ public class CaptureController implements Initializable {
             startY.set(sceneY);
 
             Line xLine = new Line(sceneX, sceneY, screenWidth, sceneY);
+            xLine.setStroke(Color.RED);
+            xLine.setStrokeWidth(1);
+            xLine.getStrokeDashArray().addAll(5.0, 10.0);
             Line yLine = new Line(sceneX, sceneY, sceneX, screenHeight);
+            yLine.setStroke(Color.RED);
+            yLine.setStrokeWidth(1);
+            yLine.getStrokeDashArray().addAll(5.0, 10.0);
 
             anchorPane.getChildren().addAll(xLine, yLine);
         });
@@ -337,33 +412,32 @@ public class CaptureController implements Initializable {
                 throw new RuntimeException(e);
             }
             WritableImage fxImage = SwingFXUtils.toFXImage(screenCapture, null);
-            ImageView imageView = new ImageView(fxImage);
-
-            AnchorPane tabPane = new AnchorPane();
-            ScrollPane scrollPane = new ScrollPane(imageView);
-            tabPane.getChildren().add(scrollPane);
-            AnchorPane.setLeftAnchor(scrollPane, 0.0);
-            AnchorPane.setTopAnchor(scrollPane, 0.0);
-            AnchorPane.setBottomAnchor(scrollPane, 0.0);
-            AnchorPane.setRightAnchor(scrollPane, 0.0);
-
-
-            Tab tab = new Tab("image" + counter, tabPane);
-            centerTabPane.getTabs().add(tab);
-            counter++;
-            centerTabPane.getSelectionModel().select(tab);
+            createTabForImageView(centerTabPane, fxImage);
             primaryStage.setIconified(false);
 
-            //监听缩放
-            scrollPane.addEventFilter(ScrollEvent.SCROLL, event -> {
-                if (event.isControlDown()) {
-                    System.out.println("-------------------------");
-                }
-                System.out.println("event.isDirect() = " + event.isDirect());
-                System.out.println("event.isInertia() = " + event.isInertia());
-            });
+            //将图片复制到系统的粘贴板
+            copy2Clipboard(fxImage);
         });
 
+    }
+
+    private void createTabForImageView(TabPane tabPane, Image image) {
+        ImageView imageView = new ImageView(image);
+        imageView.setFitHeight(image.getHeight());
+        imageView.setFitWidth(image.getWidth());
+
+        AnchorPane anchorPane = new AnchorPane();
+        ScrollPane scrollPane = new ScrollPane(imageView);
+        anchorPane.getChildren().add(scrollPane);
+        AnchorPane.setLeftAnchor(scrollPane, 0.0);
+        AnchorPane.setTopAnchor(scrollPane, 0.0);
+        AnchorPane.setBottomAnchor(scrollPane, 0.0);
+        AnchorPane.setRightAnchor(scrollPane, 0.0);
+
+        Tab tab = new Tab("image" + counter, anchorPane);
+        tabPane.getTabs().add(tab);
+        tabPane.getSelectionModel().select(tab);
+        counter++;
     }
 
     @FXML
@@ -378,4 +452,21 @@ public class CaptureController implements Initializable {
         captureBtn.getScene().addMnemonic(captureBtnMnemonic);
     }
 
+
+    public void onToolShapesBtnClick(MouseEvent event) {
+            Button button = (Button) event.getSource();
+        if (shapeStage == null) {
+            shapeStage = new Stage();
+            shapeStage.setScene(shapeScene);
+            shapeStage.setAlwaysOnTop(true);
+            shapeStage.initStyle(StageStyle.UNDECORATED);
+        }
+        shapeStage.setX(event.getScreenX() - button.getWidth() / 2);
+        shapeStage.setY(event.getScreenY() + button.getHeight() / 2);
+        if (shapeStage.isShowing()) {
+            shapeStage.close();
+        } else {
+            shapeStage.show();
+        }
+    }
 }

@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="demos.javaFxDemo3.CaptureController">
+<BorderPane fx:id="rootPan" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="demos.javaFxDemo3.CaptureController">
     <top>
         <Ribbon fx:id="ribbon" prefHeight="185.0" prefWidth="1000.0" style="-fx-background-color: #00000050;" BorderPane.alignment="CENTER">
             <quickAccessBar>
@@ -48,7 +48,7 @@
                                 </ImageView>
                             </graphic>
                         </Button>
-                        <Button alignment="CENTER_RIGHT" contentDisplay="TOP" layoutX="100">
+                        <Button fx:id="hideToolbar" onMouseClicked="#onHideToolbarClicked" alignment="CENTER_RIGHT" contentDisplay="TOP" layoutX="100">
                             <graphic>
                                 <ImageView nodeOrientation="RIGHT_TO_LEFT">
                                     <Image url="@icons8_double_up_16.png" />
@@ -93,6 +93,19 @@
                                 </Button>
                             </nodes>
                         </RibbonGroup>
+
+                        <RibbonGroup graphicTextGap="2.0" prefHeight="125.0" prefWidth="80" textOverrun="CLIP" title="Tools">
+                            <nodes>
+                                <Button fx:id="toolShapesBtn" onMouseClicked="#onToolShapesBtnClick" contentDisplay="TOP" styleClass="big" text="Shapes">
+                                    <graphic>
+                                        <ImageView>
+                                            <Image url="@icons8_sharp_tools_32.png" />
+                                        </ImageView>
+                                    </graphic>
+                                </Button>
+                            </nodes>
+                        </RibbonGroup>
+
                         <RibbonGroup graphicTextGap="2.0" prefHeight="125.0" prefWidth="200.0" textOverrun="CLIP" title="palette">
                             <nodes>
                                 <Button fx:id="colorPaletteBtn" contentDisplay="TOP" onMouseReleased="#onPaletteButtonReleased" styleClass="big" text="Palette">
