@@ -95,9 +95,10 @@ public class CaptureController implements Initializable {
         //add listener for zoomIn/Out Button、scaleChoiceBox、scaleSlider
         centerTabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             selectedTab = newValue;
-            AnchorPane anchorPane = (AnchorPane) newValue.getContent();
-            ScrollPane scrollPane = (ScrollPane) anchorPane.getChildren().get(0);
-            ImageView imageView = (ImageView) scrollPane.getContent();
+             ScrollPane scrollPane = (ScrollPane) newValue.getContent();
+            AnchorPane anchorPane = (AnchorPane) scrollPane.getContent();
+            ImageView imageView  = (ImageView) anchorPane.getChildren().stream().filter(node -> node instanceof ImageView).findFirst().orElse(null);
+
             zoomInZoomOutBinding(imageView);
 
             //add listener for ctrl+Middle key of mouse
@@ -108,6 +109,8 @@ public class CaptureController implements Initializable {
         FXMLLoader fxmlLoader = new FXMLLoader(CaptureApplication.class.getResource("tool-shapes_view.fxml"));
         try {
             shapeScene = new Scene(fxmlLoader.load());
+            ToolShapeController controller = fxmlLoader.getController();
+            controller.setParentNode(centerTabPane);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -413,14 +416,15 @@ public class CaptureController implements Initializable {
         imageView.setFitWidth(image.getWidth());
 
         AnchorPane anchorPane = new AnchorPane();
-        ScrollPane scrollPane = new ScrollPane(imageView);
-        anchorPane.getChildren().add(scrollPane);
-        AnchorPane.setLeftAnchor(scrollPane, 0.0);
-        AnchorPane.setTopAnchor(scrollPane, 0.0);
-        AnchorPane.setBottomAnchor(scrollPane, 0.0);
-        AnchorPane.setRightAnchor(scrollPane, 0.0);
+        anchorPane.getChildren().add(imageView);
+        AnchorPane.setLeftAnchor(imageView, 0.0);
+        AnchorPane.setTopAnchor(imageView, 0.0);
+        AnchorPane.setBottomAnchor(imageView, 0.0);
+        AnchorPane.setRightAnchor(imageView, 0.0);
 
-        Tab tab = new Tab("image" + counter, anchorPane);
+        ScrollPane scrollPane = new ScrollPane(anchorPane);
+
+        Tab tab = new Tab("image" + counter, scrollPane);
         tabPane.getTabs().add(tab);
         tabPane.getSelectionModel().select(tab);
         counter++;
@@ -453,7 +457,7 @@ public class CaptureController implements Initializable {
             shapeStage = new Stage();
             shapeStage.setScene(shapeScene);
             shapeStage.setAlwaysOnTop(true);
-            shapeStage.initStyle(StageStyle.UNDECORATED);
+            shapeStage.initStyle(StageStyle.TRANSPARENT);
         }
         shapeStage.setX(event.getScreenX() - button.getWidth() / 2);
         shapeStage.setY(event.getScreenY() + button.getHeight() / 2);

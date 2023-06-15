@@ -6,10 +6,10 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.FlowPane?>
 
-<FlowPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="173.0" prefWidth="151.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<FlowPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="173.0" prefWidth="151.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="demos.javaFxDemo3.ToolShapeController">
    <children>
       <Label prefHeight="26.0" prefWidth="153.0" text="Shapes" />
-      <Button mnemonicParsing="false">
+      <Button mnemonicParsing="false" onMouseClicked="#onRectangleBtnClicked">
          <graphic>
             <ImageView>
                <Image url="@icons8_rectangular_16.png" />
@@ -27,7 +27,7 @@
 
 
       <Label prefHeight="26.0" prefWidth="152.0" text="lines" />
-      <Button mnemonicParsing="false">
+      <Button mnemonicParsing="false" onMouseClicked="#onLineBtnClicked" onMouseExited="#onLineBtnExited">
          <graphic>
             <ImageView>
                <Image url="@icons8_line_16.png" />
