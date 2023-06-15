@@ -2,10 +2,7 @@ package demos.javaFxDemo3;
 
 import com.pixelduke.control.Ribbon;
 import com.pixelduke.control.ribbon.RibbonTab;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingFXUtils;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -114,17 +111,6 @@ public class CaptureController implements Initializable {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-//        primaryStage.getScene().setOnMouseClicked(event -> {
-//            System.out.println("000000000000");
-//            if (shapeStage.isShowing()) {
-//                shapeStage.close();
-//            }
-//        });
-//        primaryStage.getScene().setOnMouseMoved(event1 -> {
-//            System.out.println(primaryStage.getScene().getX());
-//        });
-        rootPan.setOnMouseMoved(event -> System.out.println("rootPan.setOnMouseMoved"));
     }
 
     @FXML
@@ -450,9 +436,17 @@ public class CaptureController implements Initializable {
         //为截图按钮设置快捷键
         Mnemonic captureBtnMnemonic = new Mnemonic(captureBtn, KeyCombination.valueOf("ctrl+alt+p"));
         captureBtn.getScene().addMnemonic(captureBtnMnemonic);
+
+        primaryStageMouseClickEventListener(primaryStage);
     }
-
-
+    private void primaryStageMouseClickEventListener(Stage primaryStage) {
+        Scene primaryScene = primaryStage.getScene();
+        primaryScene.addEventFilter(MouseEvent.MOUSE_CLICKED,event -> {
+            if (shapeStage!=null && shapeStage.isShowing()) {
+                shapeStage.close();
+            }
+        });
+    }
     public void onToolShapesBtnClick(MouseEvent event) {
             Button button = (Button) event.getSource();
         if (shapeStage == null) {
