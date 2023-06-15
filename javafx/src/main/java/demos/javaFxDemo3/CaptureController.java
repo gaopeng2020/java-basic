@@ -168,11 +168,17 @@ public class CaptureController implements Initializable {
                     scale = 8.0;
                 }
             }
+            double fitHeight = imageView.getFitHeight();
+            System.out.println("fitHeight = " + fitHeight);
+            double fitWidth = imageView.getFitWidth();
+            System.out.println("fitWidth = " + fitWidth);
 
             imageView.setScaleX(scale);
             imageView.setScaleY(scale);
-            imageView.setX(0);
-            imageView.setY(0);
+//            imageView.setX(0);
+//            imageView.setY(0);
+            imageView.setLayoutX(0.0);
+            imageView.setLayoutY(0.0);
         });
 
     }
