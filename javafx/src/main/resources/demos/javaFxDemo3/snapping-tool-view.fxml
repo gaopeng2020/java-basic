@@ -48,7 +48,7 @@
                                 </ImageView>
                             </graphic>
                         </Button>
-                        <Button fx:id="hideToolbar" onMouseClicked="#onHideToolbarClicked" alignment="CENTER_RIGHT" contentDisplay="TOP" layoutX="100">
+                        <Button fx:id="hideToolbar" alignment="CENTER_RIGHT" contentDisplay="TOP" layoutX="100" onMouseClicked="#onHideToolbarClicked">
                             <graphic>
                                 <ImageView nodeOrientation="RIGHT_TO_LEFT">
                                     <Image url="@icons8_double_up_16.png" />
@@ -94,16 +94,33 @@
                             </nodes>
                         </RibbonGroup>
 
-                        <RibbonGroup graphicTextGap="2.0" prefHeight="125.0" prefWidth="80" textOverrun="CLIP" title="Tools">
+                        <RibbonGroup graphicTextGap="2.0" prefHeight="132.0" prefWidth="233.0" textOverrun="CLIP" title="Tools">
                             <nodes>
-                                <Button fx:id="toolShapesBtn" onMouseClicked="#onToolShapesBtnClick" contentDisplay="TOP" styleClass="big" text="Shapes">
+                                <Button fx:id="toolShapesBtn" contentDisplay="TOP" onMouseClicked="#onToolShapesBtnClick" styleClass="big" text="Shapes">
                                     <graphic>
                                         <ImageView>
                                             <Image url="@icons8_sharp_tools_32.png" />
                                         </ImageView>
                                     </graphic>
                                 </Button>
-                            </nodes>
+                                <ColorPicker fx:id="backgroundColorPicker" prefHeight="35.0" prefWidth="38.0" promptText="Background color" styleClass="big" />
+                                <Button fx:id="lineWidthBtn" contentDisplay="TOP" onMouseClicked="#onLineWidthBtnClick" styleClass="big" text="Line With">
+                                    <graphic>
+                                        <ImageView>
+                                            <Image url="@icons8_line_width_32.png" />
+                                        </ImageView>
+                                    </graphic>
+                                </Button>
+                                <Button fx:id="lineTypeBtn" contentDisplay="TOP" onMouseClicked="#onLineTypeBtnClick" styleClass="big" text="Line Type">
+                                    <graphic>
+                                        <ImageView>
+                                            <Image url="@icons8_line_style_32.png" />
+                                        </ImageView>
+                                    </graphic>
+                                </Button>
+                                <ColorPicker fx:id="backgroundColorPicker" prefHeight="35.0" prefWidth="38.0" promptText="Background color" styleClass="big" />
+
+                            </nodes>des>
                         </RibbonGroup>
 
                         <RibbonGroup graphicTextGap="2.0" prefHeight="125.0" prefWidth="200.0" textOverrun="CLIP" title="palette">

@@ -2,29 +2,29 @@ package demos.javaFxDemo3;
 
 import com.pixelduke.control.Ribbon;
 import com.pixelduke.control.ribbon.RibbonTab;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.*;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
-import javafx.stage.FileChooser;
-import javafx.stage.Screen;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
+import javafx.stage.*;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -39,6 +39,8 @@ import java.util.concurrent.atomic.AtomicReference;
  * @author gaopeng
  */
 public class CaptureController implements Initializable {
+    public ColorPicker foregroundColorPicker;
+    public ColorPicker backgroundColorPicker;
     @FXML
     private BorderPane rootPan;
     @FXML
@@ -95,9 +97,9 @@ public class CaptureController implements Initializable {
         //add listener for zoomIn/Out Button、scaleChoiceBox、scaleSlider
         centerTabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             selectedTab = newValue;
-             ScrollPane scrollPane = (ScrollPane) newValue.getContent();
+            ScrollPane scrollPane = (ScrollPane) newValue.getContent();
             AnchorPane anchorPane = (AnchorPane) scrollPane.getContent();
-            ImageView imageView  = (ImageView) anchorPane.getChildren().stream().filter(node -> node instanceof ImageView).findFirst().orElse(null);
+            ImageView imageView = (ImageView) anchorPane.getChildren().stream().filter(node -> node instanceof ImageView).findFirst().orElse(null);
 
             zoomInZoomOutBinding(imageView);
 
@@ -114,6 +116,8 @@ public class CaptureController implements Initializable {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        foregroundColorPicker.valueProperty().addListener((observable, oldValue, newValue) -> System.out.println("newValue.toString() = " + newValue.toString()));
     }
 
     @FXML
@@ -443,16 +447,18 @@ public class CaptureController implements Initializable {
 
         primaryStageMouseClickEventListener(primaryStage);
     }
+
     private void primaryStageMouseClickEventListener(Stage primaryStage) {
         Scene primaryScene = primaryStage.getScene();
-        primaryScene.addEventFilter(MouseEvent.MOUSE_CLICKED,event -> {
-            if (shapeStage!=null && shapeStage.isShowing()) {
+        primaryScene.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
+            if (shapeStage != null && shapeStage.isShowing()) {
                 shapeStage.close();
             }
         });
     }
+
     public void onToolShapesBtnClick(MouseEvent event) {
-            Button button = (Button) event.getSource();
+        Button button = (Button) event.getSource();
         if (shapeStage == null) {
             shapeStage = new Stage();
             shapeStage.setScene(shapeScene);
@@ -466,5 +472,38 @@ public class CaptureController implements Initializable {
         } else {
             shapeStage.show();
         }
+    }
+
+    @FXML
+    public void onLineTypeBtnClick(MouseEvent event) {
+    }
+
+    @FXML
+    public void onLineWidthBtnClick(MouseEvent event) {
+        Button button = (Button) event.getSource();
+        Popup popup = new Popup();
+        popup.setX(event.getScreenX() - button.getWidth() / 2);
+        popup.setY(event.getScreenY() + button.getHeight() / 2+10);
+
+        VBox vBox = new VBox(10);
+        popup.getContent().addAll(vBox);
+
+        for (int i = 0; i < 10; i++) {
+            Label label = new Label(i+1+" px");
+            Button btn = new Button();
+            btn.setPrefHeight(12);
+            btn.setStyle("-fx-background-color:#ffffff00; -fx-border-color:#ffffff00");
+            ImageView imageView = new ImageView();
+
+            imageView.setImage(new Image(getClass().getResourceAsStream("line_width_1px.png")));
+            btn.setGraphic(imageView);
+            HBox hBox = new HBox(5);
+            hBox.getChildren().addAll(label, btn);
+            vBox.getChildren().addAll(hBox);
+
+        }
+
+        popup.show(primaryStage);
+
     }
 }
