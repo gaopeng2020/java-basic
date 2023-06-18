@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="350.0" stylesheets="@sample.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="demos.javaFxDemo3.NewImageController">
+   <children>
+      <Button layoutX="184.0" layoutY="156.0" mnemonicParsing="false" onMouseClicked="#onOkBtnClicked" prefWidth="65.0" text="OK" textAlignment="JUSTIFY" />
+      <Button layoutX="271.0" layoutY="156.0" mnemonicParsing="false" onMouseClicked="#onCancelBtnClicked" text="Cancel" />
+      <Label layoutX="269.0" layoutY="58.0" prefHeight="15.0" prefWidth="39.0" text="mm" />
+      <Label layoutX="36.0" layoutY="101.0" text="Height" />
+      <Spinner fx:id="widthSpinner" amountToStepBy="1" editable="true" initialValue="800" layoutX="111.0" layoutY="53.0" max="65535" min="1" prefHeight="29.0" prefWidth="137.0" />
+      <Spinner fx:id="heightSpinner" amountToStepBy="1" editable="true" initialValue="600" layoutX="111.0" layoutY="97.0" max="65535" min="1" prefHeight="29.0" prefWidth="137.0" />
+      <Label layoutX="270.0" layoutY="101.0" prefHeight="21.0" prefWidth="39.0" text="mm" />
+      <Label layoutX="36.0" layoutY="57.0" prefHeight="21.0" prefWidth="48.0" text="Width" />
+   </children>
+</AnchorPane>

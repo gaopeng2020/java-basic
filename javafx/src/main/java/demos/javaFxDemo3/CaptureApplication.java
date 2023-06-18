@@ -4,7 +4,6 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import java.io.InputStream;
@@ -29,6 +28,6 @@ public class CaptureApplication extends Application {
 
         //为截图按钮设置快捷键
         CaptureController controller = fxmlLoader.getController();
-        controller.addShotCutKeys();
+        controller.addShotCutKeys(controller.getCaptureBtn());
     }
 }

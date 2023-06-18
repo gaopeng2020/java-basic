@@ -1,19 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.pixelduke.control.Ribbon?>
-<?import com.pixelduke.control.ribbon.QuickAccessBar?>
-<?import com.pixelduke.control.ribbon.RibbonGroup?>
-<?import com.pixelduke.control.ribbon.RibbonTab?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ChoiceBox?>
-<?import javafx.scene.control.ColorPicker?>
-<?import javafx.scene.control.Slider?>
-<?import javafx.scene.control.TabPane?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-
+<?import com.pixelduke.control.ribbon.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
 <BorderPane fx:id="rootPan" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="demos.javaFxDemo3.CaptureController">
     <top>
         <Ribbon fx:id="ribbon" prefHeight="185.0" prefWidth="1000.0" style="-fx-background-color: #00000050;" BorderPane.alignment="CENTER">
@@ -70,21 +61,21 @@
                                         </ImageView>
                                     </graphic>
                                 </Button>
-                                <Button fx:id="newFileBtn" contentDisplay="TOP" styleClass="big" text="New" wrapText="true">
+                                <Button fx:id="newFileBtn" onMouseClicked="#onNewFileBtnAction" contentDisplay="TOP" styleClass="big" text="New" wrapText="true">
                                     <graphic>
                                         <ImageView>
                                             <Image url="@icons8_File_32px_1.png" />
                                         </ImageView>
                                     </graphic>
                                 </Button>
-                                <Button fx:id="saveFileBtn" contentDisplay="TOP" onMousePressed="#onSaveButtonReleased" styleClass="big" text="Save" wrapText="true">
+                                <Button fx:id="saveImageBtn" contentDisplay="TOP" onMousePressed="#onSaveButtonReleased" styleClass="big" text="Save" wrapText="true">
                                     <graphic>
                                         <ImageView>
                                             <Image url="@icons8_Save_32px.png" />
                                         </ImageView>
                                     </graphic>
                                 </Button>
-                                <Button fx:id="saveAsBtn" contentDisplay="TOP" maxWidth="70.0" minWidth="70.0" prefHeight="100.0" prefWidth="70.0" styleClass="big" text="Save as">
+                                <Button fx:id="saveAllImagesBtn" contentDisplay="TOP" maxWidth="70.0" minWidth="70.0" prefHeight="100.0" prefWidth="70.0" styleClass="big" text="Save All">
                                     <graphic>
                                         <ImageView>
                                             <Image url="@icons8_Save_as_32px.png" />
@@ -103,7 +94,11 @@
                                         </ImageView>
                                     </graphic>
                                 </Button>
-                                <ColorPicker fx:id="backgroundColorPicker" prefHeight="35.0" prefWidth="38.0" promptText="Background color" styleClass="big" />
+                                <ColorPicker fx:id="foregroundColorPicker" prefHeight="35.0" prefWidth="38.0" promptText="Forge ground color" styleClass="big"  >
+                                    <tooltip>
+                                        <Tooltip text="Stroke Color Picker" />
+                                    </tooltip>
+                                </ColorPicker>
                                 <Button fx:id="lineWidthBtn" contentDisplay="TOP" onMouseClicked="#onLineWidthBtnClick" styleClass="big" text="Line With">
                                     <graphic>
                                         <ImageView>
@@ -118,28 +113,30 @@
                                         </ImageView>
                                     </graphic>
                                 </Button>
-                                <ColorPicker fx:id="backgroundColorPicker" prefHeight="35.0" prefWidth="38.0" promptText="Background color" styleClass="big" />
-
+                                <ColorPicker fx:id="backgroundColorPicker" prefHeight="35.0" prefWidth="38.0" promptText="Background color" styleClass="big" >
+                                    <tooltip>
+                                        <Tooltip text="background Color Picker" />
+                                    </tooltip>
+                                </ColorPicker>
                             </nodes>des>
                         </RibbonGroup>
 
                         <RibbonGroup graphicTextGap="2.0" prefHeight="125.0" prefWidth="200.0" textOverrun="CLIP" title="palette">
                             <nodes>
-                                <Button fx:id="colorPaletteBtn" contentDisplay="TOP" onMouseReleased="#onPaletteButtonReleased" styleClass="big" text="Palette">
+                                <Button fx:id="colorPaletteBtn" contentDisplay="TOP" styleClass="big" text="Palette">
                                     <graphic>
                                         <ImageView>
                                             <Image url="@icons8_microsoft_paint_32.png" />
                                         </ImageView>
                                     </graphic>
                                 </Button>
-                                <Button fx:id="captureBtn" contentDisplay="TOP" onMouseClicked="#onCaptureBtnClicked" styleClass="big" text="capture" textOverrun="CLIP">
+                                <Button fx:id="captureBtn" contentDisplay="TOP" onAction="#onCaptureBtnAction" styleClass="big" text="capture" textOverrun="CLIP">
                                     <graphic>
                                         <ImageView>
                                             <Image url="@icons8_windows_snipping_tool_32.png" />
                                         </ImageView>
                                     </graphic>
                                 </Button>
-                                <ColorPicker editable="true" prefHeight="35.0" prefWidth="85.0" />
                             </nodes>
                         </RibbonGroup>
                     </ribbonGroups>

@@ -1,0 +1,79 @@
+/* ----------------------类型选择器----------------------- */
+/*root类选择器给所有的元素设置样式*/
+.root {
+    /* -fx-font-family: "JetBrains Mono", "微软雅黑"; */
+    -fx-font-size: 14px;
+    -fx-background-color: #ffffff;
+    /* -fx-background-image: url(bg.jpg); */
+    -fx-background-size: stretch stretch;
+    -fx-background-position: center center;
+}
+
+.tool-bar {
+    -fx-background-color: rgb(96, 121, 126);
+
+}
+
+/*button类型选择器设置所有Button的背景色*/
+.label {
+    -fx-background-color: rgb(255, 255, 255);
+    -fx-border-radius: 14px;
+    -fx-border-width: 300px;
+    -fx-alignment: center-left;
+    -fx-text-alignment: center;
+    -fx-text-overrun: center-word-ellipsis;
+    -fx-wrap-text: true;
+    /* -fx-font: 12px; */
+    -fx-underline: false;
+    /* -fx-graphic */
+    -fx-content-display: center;
+    /* -fx-graphic-text-gap: */
+    -fx-label-padding: 1, 1, 1, 1;
+    -fx-text-fill: #000000;
+    /* -fx-ellipsis-string */
+
+}
+
+.button {
+    -fx-background-color: rgb(218, 214, 214);
+    -fx-border-radius: 14px;
+    -fx-border-width: 300px;
+    -fx-alignment: center-left;
+    -fx-text-alignment: center;
+    -fx-text-overrun: center-word-ellipsis;
+    -fx-wrap-text: true;
+    /* -fx-font: 12px; */
+    -fx-underline: false;
+    /* -fx-graphic */
+    -fx-content-display: center;
+    /* -fx-graphic-text-gap: */
+    -fx-label-padding: 1, 1, 1, 1;
+    -fx-text-fill: #000000;
+    /* -fx-ellipsis-string */
+
+}
+
+/*hover伪类选择器设置鼠标移过Button时的背景色*/
+.button:hover {
+    -fx-background-color: lightskyblue;
+}
+
+/* ----------------------类选择器----------------------- */
+.btn-radius-large {
+    -fx-border-radius: 50px;
+    -fx-background-radius: 50px;
+}
+
+/*深色主题*/
+.dark-theme {
+    -fx-background-color: rgb(40, 43, 51);
+    -fx-text-fill: #ffffff;
+}
+
+/* ----------------------ID选择器----------------------- */
+/*id选择器设置Label标题的样式*/
+#lblTitle {
+    -fx-font-size: 20px;
+    -fx-font-weight: bolder;
+    -fx-text-fill: rgb(60, 189, 189);
+}
