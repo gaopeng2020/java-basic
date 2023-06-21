@@ -1,4 +1,4 @@
-package gui.sdudy;
+package swing.sdudy;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

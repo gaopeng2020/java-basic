@@ -1,4 +1,4 @@
-package gui.sdudy;
+package swing.sdudy;
 
 import java.io.File;
 

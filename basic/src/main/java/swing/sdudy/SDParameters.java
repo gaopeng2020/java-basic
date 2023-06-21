@@ -1,7 +1,7 @@
 /**
  * 
  */
-package gui.sdudy;
+package swing.sdudy;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;

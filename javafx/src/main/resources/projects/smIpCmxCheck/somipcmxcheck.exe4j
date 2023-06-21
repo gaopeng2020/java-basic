@@ -2,7 +2,7 @@
 <exe4j version="7.0" transformSequenceNumber="3">
   <directoryPresets config="C:/Users/Public/Documents/gitlab/java/javafx/src/main/resources/projects/smIpCmxCheck" />
   <application name="SomIpMatrixCheck" distributionSourceDir="C:/Users/lenovo/Documents/gitlab/java/javafx/target" />
-  <executable name="SomIpMatrixCheck" iconSet="true" iconFile="C:/Users/lenovo/Documents/gitlab/java/javafx/src/main/resources/projects/smIpCmxCheck/logo.ico" redirectStdout="true" executableMode="gui" singleInstance="true" />
+  <executable name="SomIpMatrixCheck" iconSet="true" iconFile="C:/Users/lenovo/Documents/gitlab/java/javafx/src/main/resources/projects/smIpCmxCheck/logo.ico" redirectStdout="true" executableMode="demos" singleInstance="true" />
   <java mainClass="projects.smIpCmxCheck.SomeIpMatrixCheckerApplication" vmParameters="-Dexe.path=${EXE4J_EXEDIR} -Dfile.encoding=GBK" minVersion="17" maxVersion="17">
     <searchSequence>
       <directory location="./jre" />
@@ -11,7 +11,7 @@
       <scanDirectory location="C:/Users/lenovo/Documents/gitlab/java/javafx/target/lib" failOnError="false" />
     </classPath>
     <modulePath>
-      <directory location="C:/Users/Public/Documents/gitlab/preevision/gui/target/gui-1.0-SNAPSHOT.jar" failOnError="false" />
+      <directory location="C:/Users/Public/Documents/gitlab/preevision/demos/target/demos-1.0-SNAPSHOT.jar" failOnError="false" />
       <directory location="../../excelhandler/target/lib" failOnError="false" />
     </modulePath>
   </java>

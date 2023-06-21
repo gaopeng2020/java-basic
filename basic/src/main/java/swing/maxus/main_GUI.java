@@ -1,7 +1,7 @@
 /**
  * 
  */
-package gui.maxus;
+package swing.maxus;
 
 import java.util.ArrayList;
 import java.util.List;

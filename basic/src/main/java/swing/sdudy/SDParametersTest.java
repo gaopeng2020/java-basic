@@ -1,9 +1,7 @@
 /**
  * 
  */
-package gui.sdudy;
-
-import gui.sdudy.SDParameters;
+package swing.sdudy;
 
 /**
  * @author Administrator

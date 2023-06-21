@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <exe4j version="7.0" transformSequenceNumber="3">
   <application name="SomIpMatrixCheck" distributionSourceDir="C:/Users/lenovo/Documents/gitlab/java/javafx/target" />
-  <executable name="SomIpMatrixCheck" wrapperType="embed" iconSet="true" iconFile="C:/Users/lenovo/Documents/gitlab/java/javafx/src/main/resources/projects/smIpCmxCheck/logo.ico" executableDir="." redirectStdout="true" executableMode="gui" singleInstance="true" checkConsoleParameter="true" />
+  <executable name="SomIpMatrixCheck" wrapperType="embed" iconSet="true" iconFile="C:/Users/lenovo/Documents/gitlab/java/javafx/src/main/resources/projects/smIpCmxCheck/logo.ico" executableDir="." redirectStdout="true" executableMode="demos" singleInstance="true" checkConsoleParameter="true" />
   <java mainClass="projects.smIpCmxCheck.SomeIpMatrixCheckerApplication" vmParameters="-Dfile.encoding=GBK" minVersion="17" maxVersion="17">
     <searchSequence>
       <directory location="./jre" />
