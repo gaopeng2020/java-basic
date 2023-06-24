@@ -152,7 +152,7 @@ public class InternalBehaviorController implements Initializable {
     }
 
     /**
-     * @param url            url
+     * @param url            commentImgs
      * @param resourceBundle resourceBundle
      */
     @Override

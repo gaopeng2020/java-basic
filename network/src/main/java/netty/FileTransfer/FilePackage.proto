@@ -1,0 +1,12 @@
+syntax = "proto3";
+option optimize_for = SPEED;
+option java_package = "netty.FileTransfer";
+option java_outer_classname = "ProtoFilePackage"; //外部类名称
+
+message FilePackage{
+  string fileName = 1;
+  int32 nextStartPos = 2;
+  int32 currentEndPos = 3;
+  bytes contents = 4;
+  string md5 = 5;
+}

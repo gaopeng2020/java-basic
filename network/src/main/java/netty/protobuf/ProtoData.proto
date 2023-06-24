@@ -1,0 +1,33 @@
+syntax = "proto3";
+option optimize_for = SPEED;
+option java_package="netty.protobuf";
+option java_outer_classname = "ProtoDataTypes"; //外部类名称
+
+message ProtoDataType{
+  enum DataTypeSelectorEnum{
+    StudentType = 0;
+    WorkerType = 1;
+    FarmerType = 2;
+  }
+
+  DataTypeSelectorEnum selector = 1;
+
+  oneof dataTypes{
+    Student student = 2;
+    Worker worker = 3;
+    Farmer farmer = 4;
+  }
+}
+
+message Student{
+  string name = 1;
+  int32 age = 2;
+}
+message Worker{
+  string name = 1;
+  int32 age = 2;
+}
+message Farmer{
+  string name = 1;
+  int32 age = 2;
+}

@@ -12,7 +12,7 @@
     <!--将父工程下面的子工程聚合到一起-->
     <modules>
         <module>basic</module>
-        <module>netty</module>
+        <module>network</module>
         <module>gof23</module>
         <module>jna</module>
         <module>spring</module>
