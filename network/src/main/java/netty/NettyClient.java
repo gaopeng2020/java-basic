@@ -25,7 +25,7 @@ public class NettyClient {
     }
 
     public static void main(String[] args) {
-        String filePath = "C:\\Users\\gaopeng\\Downloads\\Browser\\1210可复制的领导力.mp4";
+        String filePath = "F:\\Software\\CATIA_P3_V5R21\\Setup_Win32\\64位破解文件\\JS0GROUP.dll";
         File file = new File(filePath);
         new NettyClient("localhost", 8088).launch(file);
     }
@@ -40,7 +40,7 @@ public class NettyClient {
                     @Override
                     protected void initChannel(NioSocketChannel ch) {
                         ChannelPipeline pipeline = ch.pipeline();
-                        pipeline.addLast(new LengthFieldBasedFrameDecoder(65535, 0, 4, 0, 0))
+                        pipeline.addLast(new LengthFieldBasedFrameDecoder(128*1024, 0, 4, 0, 0))
 //                                .addLast(loggingHandler)
                                 .addLast("ProtobufEncoder", new ProtobufEncoder())
                                 .addLast(new FileTransferClientHandler(file))

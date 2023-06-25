@@ -12,21 +12,23 @@ import lombok.extern.slf4j.Slf4j;
 import netty.demos.ByteBufUtil;
 
 import java.io.*;
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
 
 @Slf4j
 public final class FileTransferServerHandler extends ChannelInitializer<NioSocketChannel> {
-    long startTime = 0;
+    private final long startTime;
+
+    public FileTransferServerHandler() {
+        startTime = System.currentTimeMillis();
+    }
 
     @Override
     protected void initChannel(NioSocketChannel ch) {
         LoggingHandler loggingHandler = new LoggingHandler(LogLevel.ERROR);
         ChannelPipeline pipeline = ch.pipeline();
         pipeline.addLast(new LengthFieldBasedFrameDecoder(
-                        65535, 0, 4, 0, 0))
-                .addLast(loggingHandler)
+                        128 * 1024, 0, 4, 0, 0))
+//                .addLast(loggingHandler)
                 .addLast(new ChannelInboundHandlerAdapter() {
                     @Override
                     public void channelActive(ChannelHandlerContext ctx) throws Exception {
@@ -43,8 +45,6 @@ public final class FileTransferServerHandler extends ChannelInitializer<NioSocke
 
                     @Override
                     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-                        startTime = System.currentTimeMillis();
-//                        System.out.println("startTime = " + startTime);
                         ByteBuf buf = (ByteBuf) msg;
                         byte[] bytes = ByteBufUtil.lengthFieldDecode(buf);
                         ProtoFilePackage.FilePackage filePackage = ProtoFilePackage.FilePackage.parseFrom(bytes);
@@ -65,14 +65,19 @@ public final class FileTransferServerHandler extends ChannelInitializer<NioSocke
                         //存储客户端上传的文件到用户的Download目录下
                         File file = fileUploadHandler(filePackage);
 
+                        fileUploadServerEcho(ctx, file, filePackage);
+
                         //文件完整性校验，校验不通过则请求Client重新发送，校验通过通知客户端传输完成
                         boolean hasMoreSegments = filePackage.getHasMoreSegments();
                         if (!hasMoreSegments) {
                             boolean hasVerified = fileMd5Verification(file, filePackage);
                             if (hasVerified) {
                                 ctx.channel().writeAndFlush("传输完成".getBytes(StandardCharsets.UTF_8));
-                                System.out.println("文件传输完成，用时:" + (System.currentTimeMillis() - startTime));
+                                System.out.println("文件传输完成，用时:" + (System.currentTimeMillis() - startTime) / 1000);
                             } else {
+                                if (file.exists()) {
+                                    file.delete();
+                                }
                                 ctx.channel().writeAndFlush("传输失败".getBytes(StandardCharsets.UTF_8));
                             }
 
@@ -93,11 +98,32 @@ public final class FileTransferServerHandler extends ChannelInitializer<NioSocke
         ;
     }
 
+    private void fileUploadServerEcho(@NonNull ChannelHandlerContext ctx, @NonNull File file, @NonNull ProtoFilePackage.FilePackage filePackage) {
+        long fileSize = filePackage.getFileSize();
+        int devisor = 1;
+        String uint = " Byte";
+        if (fileSize > 10 * 1024 * 1024) {
+            devisor = 1024 * 1024;
+            uint = " MB";
+        } else if (fileSize > 10 * 1024) {
+            devisor = 1024;
+            uint = " KB";
+        }
+        long recLen = file.length();
+        if (recLen % 100 == 0) {
+            float percent = (float) recLen / fileSize * 100;
+            long send = recLen / devisor + recLen % devisor;
+            long left = (fileSize - recLen) / devisor + (fileSize - recLen) % devisor;
+            String message = "[" + String.format("%.2f", percent) + "%]" + " 已发送:" + send + uint + ",剩余:" + left + uint;
+            ctx.channel().writeAndFlush(message.getBytes(StandardCharsets.UTF_8));
+        }
+    }
+
     private boolean fileMd5Verification(File file, ProtoFilePackage.FilePackage filePackage) {
         if (filePackage.getFileSize() != file.length()) {
             return false;
         }
-        try(FileInputStream fis = new FileInputStream(file)) {
+        try (FileInputStream fis = new FileInputStream(file)) {
             String md5 = ByteBufUtil.getFileDigest(fis, "MD5");
             System.out.println("Calculated md5 of Received File = " + md5);
             if (filePackage.getMd5().equals(md5)) {
@@ -112,8 +138,9 @@ public final class FileTransferServerHandler extends ChannelInitializer<NioSocke
     private File fileUploadHandler(@NonNull ProtoFilePackage.FilePackage msg) {
         byte[] bytes = msg.getContents().toByteArray();
         File file = getFieByName(msg.getFileName(), msg.getFileSize());
-        try (FileOutputStream fos = new FileOutputStream(file, true)) {
-            fos.write(bytes);
+        try (FileOutputStream fos = new FileOutputStream(file, true);
+             BufferedOutputStream bos = new BufferedOutputStream(fos)) {
+            bos.write(bytes);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

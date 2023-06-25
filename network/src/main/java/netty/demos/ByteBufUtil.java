@@ -3,7 +3,6 @@ package netty.demos;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 
-import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.security.MessageDigest;
 import java.util.Base64;
@@ -42,16 +41,17 @@ public class ByteBufUtil {
     }
 
     public static String getFileDigest(InputStream fis, String algorithm) throws Exception {
-        int len;
-        byte[] buffer = new byte[1024];
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        while ((len = fis.read(buffer)) != -1) {
-            os.write(buffer, 0, len);
-        }
         // 获取消息摘要对象
         MessageDigest messageDigest = MessageDigest.getInstance(algorithm);
+        int len;
+        byte[] buffer = new byte[4096];
+//        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        while ((len = fis.read(buffer)) != -1) {
+            messageDigest.update(buffer,0,len);
+//            os.write(buffer, 0, len);
+        }
         // 获取消息摘要
-        byte[] digest = messageDigest.digest(os.toByteArray());
+        byte[] digest = messageDigest.digest();
 
         return Base64.getEncoder().encodeToString(digest);
     }
