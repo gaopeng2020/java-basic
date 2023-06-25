@@ -22,7 +22,7 @@ public final class FileTransferServerHandler extends ChannelInitializer<NioSocke
 
     @Override
     protected void initChannel(NioSocketChannel ch) {
-        LoggingHandler loggingHandler = new LoggingHandler(LogLevel.INFO);
+        LoggingHandler loggingHandler = new LoggingHandler(LogLevel.ERROR);
         ChannelPipeline pipeline = ch.pipeline();
         pipeline.addLast(new LengthFieldBasedFrameDecoder(
                         65535, 0, 4, 0, 0))
