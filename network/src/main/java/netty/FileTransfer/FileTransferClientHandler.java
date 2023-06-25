@@ -61,7 +61,6 @@ public class FileTransferClientHandler extends ChannelDuplexHandler {
     @Override
     public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
         //add length field for payload
-        System.out.println("____write____");
         if (msg instanceof byte[]) {
             ByteBuf buf = ByteBufUtil.lengthFieldEncode((byte[]) msg);
             super.write(ctx, buf, promise);

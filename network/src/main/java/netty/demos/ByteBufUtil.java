@@ -35,7 +35,7 @@ public class ByteBufUtil {
 
     public static byte[] lengthFieldDecode(ByteBuf buf) {
         int length = buf.readInt();
-        System.out.println("received payload length = " + length);
+//        System.out.println("received payload length = " + length);
         byte[] bytes = new byte[length];
         buf.readBytes(bytes);
         return bytes;

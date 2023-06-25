@@ -25,7 +25,7 @@ public class NettyClient {
     }
 
     public static void main(String[] args) {
-        String filePath = "D:\\Study\\04 AUTOSA\\Classic\\To Learn\\AUTOSAR_TPS_SystemTemplate_R2111.pdf";
+        String filePath = "C:\\Users\\gaopeng\\Downloads\\Browser\\1210可复制的领导力.mp4";
         File file = new File(filePath);
         new NettyClient("localhost", 8088).launch(file);
     }

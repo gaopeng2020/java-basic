@@ -44,7 +44,7 @@ public final class FileTransferServerHandler extends ChannelInitializer<NioSocke
                     @Override
                     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
                         startTime = System.currentTimeMillis();
-                        System.out.println("startTime = " + startTime);
+//                        System.out.println("startTime = " + startTime);
                         ByteBuf buf = (ByteBuf) msg;
                         byte[] bytes = ByteBufUtil.lengthFieldDecode(buf);
                         ProtoFilePackage.FilePackage filePackage = ProtoFilePackage.FilePackage.parseFrom(bytes);
