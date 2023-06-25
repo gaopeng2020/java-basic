@@ -1,6 +1,8 @@
 package netty;
 
 import io.netty.bootstrap.Bootstrap;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -23,8 +25,8 @@ public class NettyClient {
     }
 
     public static void main(String[] args) {
-//        File file = new File("D:/ProgramFiles/DeveloperKits/protoc-23.3-win64.zip");
-        File file = new File("D:/ProgramFiles/DeveloperKits/Qt/network.xml");
+        String filePath = "D:\\Study\\04 AUTOSA\\Classic\\To Learn\\AUTOSAR_TPS_SystemTemplate_R2111.pdf";
+        File file = new File(filePath);
         new NettyClient("localhost", 8088).launch(file);
     }
 
@@ -38,19 +40,18 @@ public class NettyClient {
                     @Override
                     protected void initChannel(NioSocketChannel ch) {
                         ChannelPipeline pipeline = ch.pipeline();
-                        pipeline.addLast(new LengthFieldBasedFrameDecoder(2048, 0, 4, 0, 0))
-                                .addLast(loggingHandler)
+                        pipeline.addLast(new LengthFieldBasedFrameDecoder(65535, 0, 4, 0, 0))
+//                                .addLast(loggingHandler)
                                 .addLast("ProtobufEncoder", new ProtobufEncoder())
                                 .addLast(new FileTransferClientHandler(file))
                         ;
                     }
                 });
         try {
-            bootstrap.connect(inetHost, inetPort).sync();
+            ChannelFuture future = bootstrap.connect(inetHost, inetPort).sync();
+            future.channel().closeFuture().addListener((ChannelFutureListener) channelFuture -> group.shutdownGracefully());
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
-        } finally {
-            group.shutdownGracefully();
         }
     }
 }

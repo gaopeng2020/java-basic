@@ -3,23 +3,28 @@ package netty.FileTransfer;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 
 public class Test {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         File file = getFieByName("test01.txt");
         System.out.println("file.getAbsolutePath() = " + file.getAbsolutePath());
         int start = 0;
-        try (RandomAccessFile randomAccessFile = new RandomAccessFile(file, "rw")) {
-            byte[] bytes = "skdgfejlgn;ehfiylwgfiuhihwioe234inskdflsdfn;dfjhpoertjhklshdfiowyw8f\n".getBytes(StandardCharsets.UTF_8);
-            //移动至start位置开始写入文件
-            start += bytes.length;
-            randomAccessFile.seek(start);
-            randomAccessFile.write(bytes);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+//        try (RandomAccessFile randomAccessFile = new RandomAccessFile(file, "rw")) {
+//            byte[] bytes = "skdgfejlgn;ehfiylwgfiuhihwioe234inskdflsdfn;dfjhpoertjhklshdfiowyw8f\n".getBytes(StandardCharsets.UTF_8);
+//            //移动至start位置开始写入文件
+//            start += bytes.length;
+//            randomAccessFile.seek(start);
+//            randomAccessFile.write(bytes);
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+
     }
 
     private static File getFieByName(String fileName) {

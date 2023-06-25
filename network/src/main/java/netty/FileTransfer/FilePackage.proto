@@ -5,8 +5,8 @@ option java_outer_classname = "ProtoFilePackage"; //外部类名称
 
 message FilePackage{
   string fileName = 1;
-  int32 nextStartPos = 2;
-  int32 currentEndPos = 3;
-  bytes contents = 4;
-  string md5 = 5;
+  uint64 fileSize = 2;
+  bytes contents = 3;
+  string md5 = 4;
+  bool hasMoreSegments = 5;
 }
