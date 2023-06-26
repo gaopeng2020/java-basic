@@ -8,20 +8,11 @@ public enum PayloadTypeEnum {
     /**
      * PayloadType is string
      */
-    STRING_ECHO,
+    TEXT,
     /**
      * PayloadType is file
      */
-    UPLOAD_FILE,
-    /**
-     * PayloadType is file
-     */
-    DOWNLOAD_FILE,
-
-    /**
-     * TEXT_CHAT function
-     */
-    TEXT_CHAT,
+    FILE,
     /**
      * PayloadType is invalid
      */

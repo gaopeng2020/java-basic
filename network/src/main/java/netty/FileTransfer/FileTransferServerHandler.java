@@ -4,9 +4,6 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.*;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
-import io.netty.handler.codec.protobuf.ProtobufDecoder;
-import io.netty.handler.codec.string.StringDecoder;
-import io.netty.handler.codec.string.StringEncoder;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import lombok.NonNull;
@@ -22,9 +19,10 @@ import java.nio.charset.StandardCharsets;
 @Slf4j
 public final class FileTransferServerHandler extends ChannelInitializer<NioSocketChannel> {
     private final long startTime;
-
+    private FileTransferCommonMethods fileTransferUtil;
     public FileTransferServerHandler() {
         startTime = System.currentTimeMillis();
+        fileTransferUtil = new FileTransferCommonMethods();
     }
 
     @Override
@@ -53,21 +51,18 @@ public final class FileTransferServerHandler extends ChannelInitializer<NioSocke
                         ByteBuf buf = (ByteBuf) msg;
 //                        byte[] bytes = ByteBufUtil.lengthFieldDecode(buf);
 
-                        Pair<PayloadTypeEnum, byte[]> pair = ByteBufUtil.payloadTypeDecode(buf);
+                        Pair<PayloadTypeEnum, byte[]> pair = fileTransferUtil.payloadTypeDecode(buf);
                         PayloadTypeEnum payloadTypeEnum = pair.getLeft();
                         byte[] bytes = pair.getRight();
                         switch (payloadTypeEnum) {
-                            case STRING_ECHO -> {
+                            case TEXT -> {
                                 String message = new String(bytes, StandardCharsets.UTF_8);
                                 ctx.channel().writeAndFlush(("[echo]" + message).getBytes(StandardCharsets.UTF_8));
                                 super.channelRead(ctx, message);
                             }
-                            case UPLOAD_FILE -> {
+                            case FILE -> {
                                 ProtoFilePackage.FilePackage filePackage = ProtoFilePackage.FilePackage.parseFrom(bytes);
                                 super.channelRead(ctx, filePackage);
-                            }
-                            case DOWNLOAD_FILE -> {
-
                             }
                         }
 
@@ -112,7 +107,7 @@ public final class FileTransferServerHandler extends ChannelInitializer<NioSocke
                                 }
                                 message = "传输失败";
                             }
-                            ByteBuf buf = ByteBufUtil.payloadTypeEncode(message.getBytes(StandardCharsets.UTF_8), PayloadTypeEnum.STRING_ECHO);
+                            ByteBuf buf = fileTransferUtil.payloadTypeEncode(message.getBytes(StandardCharsets.UTF_8), PayloadTypeEnum.TEXT);
                             ctx.channel().writeAndFlush(buf);
                         }
                     }
@@ -126,7 +121,7 @@ public final class FileTransferServerHandler extends ChannelInitializer<NioSocke
 //                            super.write(ctx, buf, promise);
 //                        } else {
 //                        }
-                            super.write(ctx, msg, promise);
+                        super.write(ctx, msg, promise);
                     }
                 })
         ;
@@ -149,7 +144,7 @@ public final class FileTransferServerHandler extends ChannelInitializer<NioSocke
             long send = recLen / devisor + recLen % devisor;
             long left = (fileSize - recLen) / devisor + (fileSize - recLen) % devisor;
             String message = "[" + String.format("%.2f", percent) + "%]" + " 已发送:" + send + uint + ",剩余:" + left + uint;
-            ByteBuf buf = ByteBufUtil.payloadTypeEncode(message.getBytes(StandardCharsets.UTF_8), PayloadTypeEnum.STRING_ECHO);
+            ByteBuf buf = fileTransferUtil.payloadTypeEncode(message.getBytes(StandardCharsets.UTF_8), PayloadTypeEnum.TEXT);
             ctx.writeAndFlush(buf);
         }
     }
@@ -159,7 +154,7 @@ public final class FileTransferServerHandler extends ChannelInitializer<NioSocke
             return false;
         }
         try (FileInputStream fis = new FileInputStream(file)) {
-            String md5 = ByteBufUtil.getFileDigest(fis, "MD5");
+            String md5 = fileTransferUtil.getFileDigest(fis, "MD5");
             System.out.println("Calculated md5 of Received File = " + md5);
             if (filePackage.getMd5().equals(md5)) {
                 return true;

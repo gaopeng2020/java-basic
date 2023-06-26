@@ -1,22 +1,20 @@
 package netty.FileTransfer;
 
-import com.google.protobuf.ByteString;
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelPromise;
+import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.extern.slf4j.Slf4j;
-import netty.utils.ByteBufUtil;
 import netty.utils.PayloadTypeEnum;
 import org.graalvm.collections.Pair;
 
-import java.io.*;
+import java.io.File;
 import java.nio.charset.StandardCharsets;
 
 @Slf4j
-public class FileTransferClientHandler extends ChannelDuplexHandler {
+public class FileTransferClientHandler extends ChannelInboundHandlerAdapter {
     private File file;
     private long startTime = 0;
+    private FileTransferCommonMethods fileTransferUtil;
 
     public FileTransferClientHandler(File file) {
         if (!file.exists()) {
@@ -25,72 +23,25 @@ public class FileTransferClientHandler extends ChannelDuplexHandler {
         }
         this.file = file;
         startTime = System.currentTimeMillis();
+        fileTransferUtil = new FileTransferCommonMethods();
     }
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        FileInputStream fis = new FileInputStream(file);
-        BufferedInputStream bis = new BufferedInputStream(fis);
-        String md5 = ByteBufUtil.getFileDigest(fis, "MD5");
-        //动态设置缓冲区大小
-        int base = 32;
-        if (file.length() > 1000 * 1024 * 1024) {
-            base = 127;
-        } else if (file.length() > 500 * 1024 * 1024) {
-            base = 96;
-        } else if (file.length() > 100 * 1024 * 1024) {
-            base = 64;
-        }
-
-        //文件只读，不存在不创建，抛出异常
-        RandomAccessFile randomAccessFile = new RandomAccessFile(this.file, "r");
-        //开始位置初始为0
-        randomAccessFile.seek(0);
-
-        byte[] bytes = new byte[base * 1024];
-        int len;
-        while ((len = randomAccessFile.read(bytes)) != -1) {
-//        while ((len = bis.read(bytes)) != -1) {
-            boolean hasMoteSegments = len == bytes.length;
-            ProtoFilePackage.FilePackage build = ProtoFilePackage.FilePackage.newBuilder()
-                    .setFileName(file.getName())
-                    .setFileSize(file.length())
-                    .setContents(ByteString.copyFrom(bytes, 0, len))
-                    .setMd5(md5)
-                    .setHasMoreSegments(hasMoteSegments)
-                    .build();
-            byte[] byteArray = build.toByteArray();
-            ByteBuf buf = ByteBufUtil.payloadTypeEncode(byteArray, PayloadTypeEnum.UPLOAD_FILE);
-            ctx.channel().writeAndFlush(buf);
-            super.channelActive(ctx);
-        }
-        System.out.println("sender md5 = " + md5);
-        System.out.println("sender file.length = " + file.length());
-        fis.close();
-    }
-
-    @Override
-    public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
-        //add length field for payload
-//        if (msg instanceof byte[]) {
-//            ByteBuf buf = ByteBufUtil.lengthFieldEncode((byte[]) msg);
-////            ByteBuf buf = ByteBufUtil.payloadTypeEncode((byte[]) msg, PayloadTypeEnum.UPLOAD_FILE);
-//            super.write(ctx, buf, promise);
-//        } else {
-//        }
-            super.write(ctx, msg, promise);
+        fileTransferUtil.readBytesFromFile(ctx, file);
     }
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-//        byte[] bytes = ByteBufUtil.lengthFieldDecode((ByteBuf) msg);
-        Pair<PayloadTypeEnum, byte[]> pair = ByteBufUtil.payloadTypeDecode((ByteBuf) msg);
+        ByteBuf buf = (ByteBuf) msg;
+        Pair<PayloadTypeEnum, byte[]> pair = fileTransferUtil.payloadTypeDecode(buf);
         PayloadTypeEnum payloadTypeEnum = pair.getLeft();
         byte[] bytes = pair.getRight();
         switch (payloadTypeEnum) {
-            case STRING_ECHO -> {
+            case TEXT -> {
                 String message = new String(bytes, StandardCharsets.UTF_8);
-                if ("传输完成".equals(message)) {                    long time = System.currentTimeMillis() - startTime;
+                if ("传输完成".equals(message)) {
+                    long time = System.currentTimeMillis() - startTime;
                     String unit = " ms";
                     if (time > 1000) {
                         time /= 1000;
@@ -100,12 +51,16 @@ public class FileTransferClientHandler extends ChannelDuplexHandler {
                     ctx.channel().close();
                 } else if ("传输失败".equals(message)) {
                     System.out.println("传输失败，请重新传输该文件！");
+                    ctx.channel().close();
                 } else {
                     System.out.println("message = " + message);
                 }
             }
-        }
+            case FILE -> {
 
-        super.channelRead(ctx, msg);
+            }
+            default -> log.error("Invalid payload type: {}", buf);
+        }
+        super.channelRead(ctx, buf);
     }
 }

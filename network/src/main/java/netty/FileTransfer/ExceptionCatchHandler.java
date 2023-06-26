@@ -32,5 +32,4 @@ public class ExceptionCatchHandler extends ChannelDuplexHandler {
         }));
         super.disconnect(ctx, promise);
     }
-
 }

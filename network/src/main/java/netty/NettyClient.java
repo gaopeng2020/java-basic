@@ -11,6 +11,7 @@ import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.protobuf.ProtobufEncoder;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
+import netty.FileTransfer.ExceptionCatchHandler;
 import netty.FileTransfer.FileTransferClientHandler;
 
 import java.io.File;
@@ -25,7 +26,7 @@ public class NettyClient {
     }
 
     public static void main(String[] args) {
-        String filePath = "D:\\Study\\04 AUTOSA\\Classic\\To Learn\\AUTOSAR_TPS_SystemTemplate.pdf";
+        String filePath = "C:\\Users\\lenovo\\Desktop\\info.log";
         File file = new File(filePath);
         new NettyClient("localhost", 8088).launch(file);
     }
@@ -40,10 +41,12 @@ public class NettyClient {
                     @Override
                     protected void initChannel(NioSocketChannel ch) {
                         ChannelPipeline pipeline = ch.pipeline();
-                        pipeline.addLast(new LengthFieldBasedFrameDecoder(128*1024, 0, 4, 0, 0))
+                        pipeline.addLast(new LengthFieldBasedFrameDecoder(
+                                        128 * 1024, 0, 4, 0, 0))
 //                                .addLast(loggingHandler)
-                                .addLast("ProtobufEncoder", new ProtobufEncoder())
                                 .addLast(new FileTransferClientHandler(file))
+                                .addLast("ProtobufEncoder", new ProtobufEncoder())
+                                .addLast(new ExceptionCatchHandler())
                         ;
                     }
                 });
