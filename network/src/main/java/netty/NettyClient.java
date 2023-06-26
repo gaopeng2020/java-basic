@@ -25,7 +25,7 @@ public class NettyClient {
     }
 
     public static void main(String[] args) {
-        String filePath = "F:\\Software\\CATIA_P3_V5R21\\Setup_Win32\\64位破解文件\\JS0GROUP.dll";
+        String filePath = "D:\\Study\\04 AUTOSA\\Classic\\To Learn\\AUTOSAR_TPS_SystemTemplate.pdf";
         File file = new File(filePath);
         new NettyClient("localhost", 8088).launch(file);
     }

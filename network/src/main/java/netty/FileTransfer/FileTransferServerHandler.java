@@ -5,13 +5,18 @@ import io.netty.channel.*;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.protobuf.ProtobufDecoder;
+import io.netty.handler.codec.string.StringDecoder;
+import io.netty.handler.codec.string.StringEncoder;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
-import netty.demos.ByteBufUtil;
+import netty.utils.ByteBufUtil;
+import netty.utils.PayloadTypeEnum;
+import org.graalvm.collections.Pair;
 
 import java.io.*;
+import java.net.SocketAddress;
 import java.nio.charset.StandardCharsets;
 
 @Slf4j
@@ -46,10 +51,36 @@ public final class FileTransferServerHandler extends ChannelInitializer<NioSocke
                     @Override
                     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
                         ByteBuf buf = (ByteBuf) msg;
-                        byte[] bytes = ByteBufUtil.lengthFieldDecode(buf);
-                        ProtoFilePackage.FilePackage filePackage = ProtoFilePackage.FilePackage.parseFrom(bytes);
-                        super.channelRead(ctx, filePackage);
+//                        byte[] bytes = ByteBufUtil.lengthFieldDecode(buf);
+
+                        Pair<PayloadTypeEnum, byte[]> pair = ByteBufUtil.payloadTypeDecode(buf);
+                        PayloadTypeEnum payloadTypeEnum = pair.getLeft();
+                        byte[] bytes = pair.getRight();
+                        switch (payloadTypeEnum) {
+                            case STRING_ECHO -> {
+                                String message = new String(bytes, StandardCharsets.UTF_8);
+                                ctx.channel().writeAndFlush(("[echo]" + message).getBytes(StandardCharsets.UTF_8));
+                                super.channelRead(ctx, message);
+                            }
+                            case UPLOAD_FILE -> {
+                                ProtoFilePackage.FilePackage filePackage = ProtoFilePackage.FilePackage.parseFrom(bytes);
+                                super.channelRead(ctx, filePackage);
+                            }
+                            case DOWNLOAD_FILE -> {
+
+                            }
+                        }
+
                         buf.release();
+                    }
+
+                    @Override
+                    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+                        SocketAddress socketAddress = ctx.channel().remoteAddress();
+                        System.out.println(socketAddress + "断开了连接！");
+
+                        ctx.channel().close();
+                        super.channelInactive(ctx);
                     }
 
                     @Override
@@ -58,7 +89,7 @@ public final class FileTransferServerHandler extends ChannelInitializer<NioSocke
                         super.exceptionCaught(ctx, cause);
                     }
                 })
-                .addLast("ProtobufDecoder", new ProtobufDecoder(ProtoFilePackage.FilePackage.getDefaultInstance()))
+//                .addLast("ProtobufDecoder", new ProtobufDecoder(ProtoFilePackage.FilePackage.getDefaultInstance()))
                 .addLast(new SimpleChannelInboundHandler<ProtoFilePackage.FilePackage>() {
                     @Override
                     protected void channelRead0(ChannelHandlerContext ctx, ProtoFilePackage.FilePackage filePackage) {
@@ -71,28 +102,31 @@ public final class FileTransferServerHandler extends ChannelInitializer<NioSocke
                         boolean hasMoreSegments = filePackage.getHasMoreSegments();
                         if (!hasMoreSegments) {
                             boolean hasVerified = fileMd5Verification(file, filePackage);
+                            String message;
                             if (hasVerified) {
-                                ctx.channel().writeAndFlush("传输完成".getBytes(StandardCharsets.UTF_8));
+                                message = "传输完成";
                                 System.out.println("文件传输完成，用时:" + (System.currentTimeMillis() - startTime) / 1000);
                             } else {
                                 if (file.exists()) {
                                     file.delete();
                                 }
-                                ctx.channel().writeAndFlush("传输失败".getBytes(StandardCharsets.UTF_8));
+                                message = "传输失败";
                             }
-
+                            ByteBuf buf = ByteBufUtil.payloadTypeEncode(message.getBytes(StandardCharsets.UTF_8), PayloadTypeEnum.STRING_ECHO);
+                            ctx.channel().writeAndFlush(buf);
                         }
                     }
-                }).addLast(new ChannelOutboundHandlerAdapter() {
+                })
+                .addLast(new ChannelOutboundHandlerAdapter() {
                     @Override
                     public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
                         //add length field for payload.
-                        if (msg instanceof byte[]) {
-                            ByteBuf buf = ByteBufUtil.lengthFieldEncode((byte[]) msg);
-                            super.write(ctx, buf, promise);
-                        } else {
+//                        if (msg instanceof byte[]) {
+//                            ByteBuf buf = ByteBufUtil.lengthFieldEncode((byte[]) msg);
+//                            super.write(ctx, buf, promise);
+//                        } else {
+//                        }
                             super.write(ctx, msg, promise);
-                        }
                     }
                 })
         ;
@@ -115,7 +149,8 @@ public final class FileTransferServerHandler extends ChannelInitializer<NioSocke
             long send = recLen / devisor + recLen % devisor;
             long left = (fileSize - recLen) / devisor + (fileSize - recLen) % devisor;
             String message = "[" + String.format("%.2f", percent) + "%]" + " 已发送:" + send + uint + ",剩余:" + left + uint;
-            ctx.channel().writeAndFlush(message.getBytes(StandardCharsets.UTF_8));
+            ByteBuf buf = ByteBufUtil.payloadTypeEncode(message.getBytes(StandardCharsets.UTF_8), PayloadTypeEnum.STRING_ECHO);
+            ctx.writeAndFlush(buf);
         }
     }
 
@@ -148,14 +183,7 @@ public final class FileTransferServerHandler extends ChannelInitializer<NioSocke
     }
 
     private static File getFieByName(String fileName, long fileSize) {
-        File userHome = new File(System.getProperty("user.home"));
-        File[] files = userHome.listFiles(pathname -> pathname.isDirectory() && pathname.getName().equals("Downloads"));
-        File dir;
-        if (files == null) {
-            dir = new File(userHome, "Downloads");
-        } else {
-            dir = files[0];
-        }
+        File dir = getDownloadDir();
         File[] fileNames = dir.listFiles(name -> name.getName().equals(fileName));
         if (fileNames == null || fileNames.length == 0) {
             return new File(dir, fileName);
@@ -169,6 +197,32 @@ public final class FileTransferServerHandler extends ChannelInitializer<NioSocke
                 return existFile;
             }
         }
+    }
+
+    private static String getDownloadFiles() {
+        File dir = getDownloadDir();
+        File[] files = dir.listFiles(File::isFile);
+        if (files == null) {
+            return "There is no file in download director of usr home";
+        }
+        StringBuilder stringBuilder = new StringBuilder();
+        for (File file : files) {
+            stringBuilder.append(file.getName())
+                    .append("\n");
+        }
+        return stringBuilder.toString();
+    }
+
+    private static File getDownloadDir() {
+        File userHome = new File(System.getProperty("user.home"));
+        File[] files = userHome.listFiles(pathname -> pathname.isDirectory() && pathname.getName().equals("Downloads"));
+        File dir;
+        if (files == null) {
+            dir = new File(userHome, "Downloads");
+        } else {
+            dir = files[0];
+        }
+        return dir;
     }
 
 }

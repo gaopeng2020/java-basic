@@ -4,6 +4,10 @@ import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
+import io.netty.handler.logging.LogLevel;
+import io.netty.handler.logging.LoggingHandler;
 import netty.FileTransfer.FileTransferServerHandler;
 
 public class NettyServer {
@@ -19,6 +23,7 @@ public class NettyServer {
     }
 
     public void launch() {
+        LoggingHandler loggingHandler = new LoggingHandler(LogLevel.ERROR);
         NioEventLoopGroup bossGroup = new NioEventLoopGroup();
         NioEventLoopGroup workGroup = new NioEventLoopGroup();
         ServerBootstrap bootstrap = new ServerBootstrap()
@@ -27,7 +32,17 @@ public class NettyServer {
 
         bootstrap.childOption(ChannelOption.SO_KEEPALIVE, true)
                 .childOption(ChannelOption.SO_RCVBUF, 65535)
-                .childHandler(new FileTransferServerHandler());
+//                .childHandler(new FileTransferServerHandler())
+                .childHandler(new ChannelInitializer<NioSocketChannel>() {
+                    @Override
+                    protected void initChannel(NioSocketChannel ch) throws Exception {
+                        ChannelPipeline pipeline = ch.pipeline();
+                        pipeline.addLast(new LengthFieldBasedFrameDecoder(128*1024, 0, 4, 0, 0))
+                                .addLast(loggingHandler)
+                                .addLast(null);
+
+                    }
+                });
 
         try {
             ChannelFuture channelFuture = bootstrap.bind(port).sync();

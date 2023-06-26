@@ -9,7 +9,7 @@ import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
-import netty.demos.ByteBufUtil;
+import netty.utils.ByteBufUtil;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Random;

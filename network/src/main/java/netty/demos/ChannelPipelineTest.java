@@ -2,11 +2,12 @@ package netty.demos;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
-import io.netty.channel.ChannelOutboundHandlerAdapter;
-import io.netty.channel.ChannelPromise;
+import io.netty.channel.*;
 import io.netty.channel.embedded.EmbeddedChannel;
+import io.netty.handler.codec.protobuf.ProtobufEncoder;
+import io.netty.handler.codec.string.StringDecoder;
+import io.netty.handler.codec.string.StringEncoder;
+import netty.utils.ByteBufUtil;
 
 import java.nio.charset.StandardCharsets;
 
@@ -23,7 +24,7 @@ import java.nio.charset.StandardCharsets;
  */
 public class ChannelPipelineTest {
     public static void main(String[] args) {
-        ChannelInboundHandlerAdapter h1 = new ChannelInboundHandlerAdapter() {
+        ChannelInboundHandlerAdapter in1 = new ChannelInboundHandlerAdapter() {
             @Override
             public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
                 ByteBuf buf = (ByteBuf) msg;
@@ -32,7 +33,7 @@ public class ChannelPipelineTest {
             }
         };
 
-        ChannelInboundHandlerAdapter h2 = new ChannelInboundHandlerAdapter() {
+        ChannelInboundHandlerAdapter in2 = new ChannelInboundHandlerAdapter() {
             @Override
             public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
                 ByteBuf buf = (ByteBuf) msg;
@@ -42,7 +43,7 @@ public class ChannelPipelineTest {
             }
         };
 
-        ChannelOutboundHandlerAdapter h3 = new ChannelOutboundHandlerAdapter() {
+        ChannelOutboundHandlerAdapter out1 = new ChannelOutboundHandlerAdapter() {
             @Override
             public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
                 ByteBuf buf = (ByteBuf) msg;
@@ -51,7 +52,7 @@ public class ChannelPipelineTest {
             }
         };
 
-        ChannelOutboundHandlerAdapter h4 = new ChannelOutboundHandlerAdapter() {
+        ChannelOutboundHandlerAdapter out2 = new ChannelOutboundHandlerAdapter() {
             @Override
             public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
                 ByteBuf buf = (ByteBuf) msg;
@@ -62,14 +63,21 @@ public class ChannelPipelineTest {
         };
 
         // 用于测试Handler的Channel
-        EmbeddedChannel channel = new EmbeddedChannel(h1, h2, h3, h4);
+        EmbeddedChannel channel = new EmbeddedChannel();
+        ChannelPipeline pipeline = channel.pipeline();
+        pipeline.addLast("StringDecoder", new StringDecoder(StandardCharsets.UTF_8));
+        pipeline.addLast("ProtobufEncoder",new ProtobufEncoder());
+        pipeline.addLast(in2);
+
+        pipeline.addLast("StringEncoder", new StringEncoder(StandardCharsets.UTF_8));
+        pipeline.addLast(out1);
 
         // 执行Inbound操作
-        channel.writeInbound(ByteBufAllocator.DEFAULT.buffer().
-                writeBytes("writeInbound".getBytes(StandardCharsets.UTF_8)));
+        channel.writeInbound(ByteBufAllocator.DEFAULT.buffer()
+                .writeBytes("writeInbound".getBytes(StandardCharsets.UTF_8)));
 
         // 执行Outbound操作
-        channel.writeOutbound(ByteBufAllocator.DEFAULT.buffer().
-                writeBytes("writeOutbound".getBytes(StandardCharsets.UTF_8)));
+        channel.writeOutbound(ByteBufAllocator.DEFAULT.buffer()
+                .writeBytes("writeOutbound".getBytes(StandardCharsets.UTF_8)));
     }
 }

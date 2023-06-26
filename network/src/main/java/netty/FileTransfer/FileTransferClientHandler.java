@@ -6,7 +6,9 @@ import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
 import lombok.extern.slf4j.Slf4j;
-import netty.demos.ByteBufUtil;
+import netty.utils.ByteBufUtil;
+import netty.utils.PayloadTypeEnum;
+import org.graalvm.collections.Pair;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -58,7 +60,8 @@ public class FileTransferClientHandler extends ChannelDuplexHandler {
                     .setHasMoreSegments(hasMoteSegments)
                     .build();
             byte[] byteArray = build.toByteArray();
-            ctx.channel().writeAndFlush(byteArray);
+            ByteBuf buf = ByteBufUtil.payloadTypeEncode(byteArray, PayloadTypeEnum.UPLOAD_FILE);
+            ctx.channel().writeAndFlush(buf);
             super.channelActive(ctx);
         }
         System.out.println("sender md5 = " + md5);
@@ -69,32 +72,40 @@ public class FileTransferClientHandler extends ChannelDuplexHandler {
     @Override
     public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
         //add length field for payload
-        if (msg instanceof byte[]) {
-            ByteBuf buf = ByteBufUtil.lengthFieldEncode((byte[]) msg);
-            super.write(ctx, buf, promise);
-        } else {
+//        if (msg instanceof byte[]) {
+//            ByteBuf buf = ByteBufUtil.lengthFieldEncode((byte[]) msg);
+////            ByteBuf buf = ByteBufUtil.payloadTypeEncode((byte[]) msg, PayloadTypeEnum.UPLOAD_FILE);
+//            super.write(ctx, buf, promise);
+//        } else {
+//        }
             super.write(ctx, msg, promise);
-        }
     }
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        byte[] bytes = ByteBufUtil.lengthFieldDecode((ByteBuf) msg);
-        String message = new String(bytes, StandardCharsets.UTF_8);
-        if ("传输完成".equals(message)) {
-            long time = System.currentTimeMillis() - startTime;
-            String unit = " ms";
-            if (time > 1000) {
-                time /= 1000;
-                unit = " s";
+//        byte[] bytes = ByteBufUtil.lengthFieldDecode((ByteBuf) msg);
+        Pair<PayloadTypeEnum, byte[]> pair = ByteBufUtil.payloadTypeDecode((ByteBuf) msg);
+        PayloadTypeEnum payloadTypeEnum = pair.getLeft();
+        byte[] bytes = pair.getRight();
+        switch (payloadTypeEnum) {
+            case STRING_ECHO -> {
+                String message = new String(bytes, StandardCharsets.UTF_8);
+                if ("传输完成".equals(message)) {                    long time = System.currentTimeMillis() - startTime;
+                    String unit = " ms";
+                    if (time > 1000) {
+                        time /= 1000;
+                        unit = " s";
+                    }
+                    System.out.println("文件传输完成，用时:" + time + unit);
+                    ctx.channel().close();
+                } else if ("传输失败".equals(message)) {
+                    System.out.println("传输失败，请重新传输该文件！");
+                } else {
+                    System.out.println("message = " + message);
+                }
             }
-            System.out.println("文件传输完成，用时:" + time + unit);
-            ctx.channel().close();
-        } else if ("传输失败".equals(message)) {
-            System.out.println("传输失败，请重新传输该文件！");
-        } else {
-            System.out.println("message = " + message);
         }
+
         super.channelRead(ctx, msg);
     }
 }

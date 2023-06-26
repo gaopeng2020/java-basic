@@ -7,7 +7,7 @@ import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.protobuf.ProtobufDecoder;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
-import netty.demos.ByteBufUtil;
+import netty.utils.ByteBufUtil;
 
 import java.nio.charset.StandardCharsets;
 
