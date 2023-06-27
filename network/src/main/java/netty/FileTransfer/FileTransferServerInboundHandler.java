@@ -1,6 +1,5 @@
 package netty.FileTransfer;
 
-import com.google.protobuf.InvalidProtocolBufferException;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -15,11 +14,13 @@ import java.util.concurrent.Executors;
 
 
 @Slf4j
-public class FileTransferServerHandler2 extends ChannelInboundHandlerAdapter {
+public class FileTransferServerInboundHandler extends ChannelInboundHandlerAdapter {
     private long startTime;
     private final static ExecutorService workerThreadService = Executors.newFixedThreadPool(6);
     private final FileTransferCommonMethods fileTransferUtil;
-    public FileTransferServerHandler2() {
+    private final static String CACHE_PATH = "ServerCache";
+
+    public FileTransferServerInboundHandler() {
         fileTransferUtil = new FileTransferCommonMethods();
     }
 
@@ -31,9 +32,8 @@ public class FileTransferServerHandler2 extends ChannelInboundHandlerAdapter {
                 Response 2 to start file download function.
                 more functions are in developing...
                 """;
-        fileTransferUtil.sendStringMessage(ctx,functions);
+        fileTransferUtil.sendStringMessage(ctx, functions);
         super.channelActive(ctx);
-
     }
 
     @Override
@@ -46,43 +46,52 @@ public class FileTransferServerHandler2 extends ChannelInboundHandlerAdapter {
         switch (payloadTypeEnum) {
             case TEXT -> {
                 String message = ByteBufUtil.stringDecode(bytes);
-                String downloadFileList = fileTransferUtil.getDownloadFiles();
-                if (message.equals("2")) {
-                    message = "Please response file name of bellow: \n" + downloadFileList;
-                } else if (downloadFileList.contains(message)) {
-                    String finalMessage = message;
-                    workerThreadService.submit(() -> {
-                        try {
-                            fileTransferUtil.readBytesFromFile(ctx, fileTransferUtil.getFieByName(finalMessage));
-                        } catch (Exception e) {
-                            throw new RuntimeException(e);
-                        }
-                    });
-                }
-                String echoMessage = "[echo] " + message;
-                ByteBuf byteBuf = fileTransferUtil.payloadTypeEncode(ByteBufUtil.stringEncode(echoMessage), PayloadTypeEnum.TEXT);
-                ctx.writeAndFlush(byteBuf);
+                clientInteractiveHandler(ctx, message);
+
                 super.channelRead(ctx, message);
             }
-            case FILE ->
-                //写入文件非常耗时用，最好在自己的线程池中处理该任务，防止netty io阻塞。
-                    workerThreadService.submit(() -> {
-                        try {
-                            ProtoFilePackage.FilePackage filePackage = ProtoFilePackage.FilePackage.parseFrom(bytes);
-                            fileTransferUtil.writeBytes2File(ctx, filePackage);
-                        } catch (InvalidProtocolBufferException e) {
-                            throw new RuntimeException(e);
-                        }
-                    });
+            case FILE -> {
+                //写入文件非常耗时用，最好在自己的线程池中处理该任务，防止netty io阻塞,经测试使用自定义的任务池会导致文件MD校验不通过，暂不使用。
+                //   workerThreadService.submit(() -> {
+                try {
+                    ProtoFilePackage.FilePackage filePackage = ProtoFilePackage.FilePackage.parseFrom(bytes);
+                    fileTransferUtil.writeBytes2File(ctx, filePackage, CACHE_PATH);
+                    super.channelRead(ctx, filePackage);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+                //  });
+            }
+            default -> log.error("不支持的PayloadType:{}", payloadTypeEnum);
         }
         // buf.release(); buf可以在trail handler中自动释放
         super.channelRead(ctx, buf);
     }
 
+    private void clientInteractiveHandler(ChannelHandlerContext ctx, String message) {
+        String downloadFileList = fileTransferUtil.getDownloadFiles("ServerCache");
+        if (message.equals("2")) {
+            message = "[echo] " + "Please response a file name within bellow list: \n" + downloadFileList;
+            fileTransferUtil.sendStringMessage(ctx, message);
+        } else if (downloadFileList.contains(message)) {
+            String finalMessage = message;
+            workerThreadService.submit(() -> {
+                try {
+                    fileTransferUtil.readBytesFromFile(ctx, fileTransferUtil.getFieByName(finalMessage, CACHE_PATH));
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        } else {
+            String echoMessage = "[echo] " + message;
+            fileTransferUtil.sendStringMessage(ctx, echoMessage);
+        }
+    }
+
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         SocketAddress socketAddress = ctx.channel().remoteAddress();
-        System.out.println(socketAddress + "channelInactive...");
+        System.out.println(socketAddress + " channelInactive...");
         ctx.channel().close();
         super.channelInactive(ctx);
     }
@@ -90,6 +99,7 @@ public class FileTransferServerHandler2 extends ChannelInboundHandlerAdapter {
     @Override
     public void channelUnregistered(ChannelHandlerContext ctx) throws Exception {
         System.out.println("channelUnregistered...");
+        ctx.channel().close();
         super.channelUnregistered(ctx);
     }
 

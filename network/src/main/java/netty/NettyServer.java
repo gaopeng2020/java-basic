@@ -6,12 +6,10 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
-import io.netty.handler.codec.protobuf.ProtobufDecoder;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import netty.FileTransfer.ExceptionCatchHandler;
-import netty.FileTransfer.FileTransferServerHandler2;
-import netty.protobuf.ProtoDataTypes;
+import netty.FileTransfer.FileTransferServerInboundHandler;
 
 public class NettyServer {
     private int port;
@@ -35,16 +33,15 @@ public class NettyServer {
 
         bootstrap.childOption(ChannelOption.SO_KEEPALIVE, true)
                 .childOption(ChannelOption.SO_RCVBUF, 65535)
-//                .childHandler(new FileTransferServerHandler())
                 .childHandler(new ChannelInitializer<NioSocketChannel>() {
                     @Override
                     protected void initChannel(NioSocketChannel ch) throws Exception {
                         ChannelPipeline pipeline = ch.pipeline();
                         pipeline.addLast(new LengthFieldBasedFrameDecoder(
                                         128 * 1024, 0, 4, 0, 0))
-//                                .addLast(loggingHandler)
-                                .addLast(new FileTransferServerHandler2())
-                                .addLast("ProtobufDecoder", new ProtobufDecoder(ProtoDataTypes.ProtoDataType.getDefaultInstance()))
+                                // .addLast(loggingHandler)
+                                .addLast(new FileTransferServerInboundHandler())
+                                //.addLast("ProtobufDecoder", new ProtobufDecoder(ProtoDataTypes.ProtoDataType.getDefaultInstance()))
                                 .addLast(new ExceptionCatchHandler())
                         ;
                     }

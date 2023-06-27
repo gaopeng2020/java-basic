@@ -8,11 +8,10 @@ import io.netty.channel.ChannelPipeline;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
-import io.netty.handler.codec.protobuf.ProtobufEncoder;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import netty.FileTransfer.ExceptionCatchHandler;
-import netty.FileTransfer.FileTransferClientHandler;
+import netty.FileTransfer.FileTransferClientInboundHandler;
 
 import java.io.File;
 
@@ -26,7 +25,8 @@ public class NettyClient {
     }
 
     public static void main(String[] args) {
-        String filePath = "C:\\Users\\lenovo\\Desktop\\info.log";
+        String filePath = "D:\\Study\\04 AUTOSA\\Classic\\To Learn\\AUTOSAR_TPS_SystemTemplate_R2111.pdf";
+//        String filePath = "C:\\Users\\gaopeng\\Downloads\\Browser\\Configuring Watch Dog in AUTOSAR Stack.mp4";
         File file = new File(filePath);
         new NettyClient("localhost", 8088).launch(file);
     }
@@ -44,8 +44,8 @@ public class NettyClient {
                         pipeline.addLast(new LengthFieldBasedFrameDecoder(
                                         128 * 1024, 0, 4, 0, 0))
 //                                .addLast(loggingHandler)
-                                .addLast(new FileTransferClientHandler(file))
-                                .addLast("ProtobufEncoder", new ProtobufEncoder())
+                                .addLast(new FileTransferClientInboundHandler(file))
+                                //.addLast("ProtobufEncoder", new ProtobufEncoder())
                                 .addLast(new ExceptionCatchHandler())
                         ;
                     }

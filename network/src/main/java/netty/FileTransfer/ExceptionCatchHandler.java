@@ -27,9 +27,20 @@ public class ExceptionCatchHandler extends ChannelDuplexHandler {
     public void disconnect(ChannelHandlerContext ctx, ChannelPromise promise) throws Exception {
         ctx.write(promise.addListener((ChannelFutureListener) channelFuture -> {
             if (!channelFuture.isSuccess()) {
+                System.out.println(ctx.channel().remoteAddress()+"---disconnect...");
                 log.error(channelFuture.cause().getMessage());
             }
         }));
         super.disconnect(ctx, promise);
+    }
+
+    @Override
+    public void close(ChannelHandlerContext ctx, ChannelPromise promise) throws Exception {
+        ctx.write(promise.addListener((ChannelFutureListener) channelFuture -> {
+            if (!channelFuture.isSuccess()) {
+                System.out.println(ctx.channel().remoteAddress()+ "---close...");
+                log.error(channelFuture.cause().getMessage());
+            }
+        }));
     }
 }

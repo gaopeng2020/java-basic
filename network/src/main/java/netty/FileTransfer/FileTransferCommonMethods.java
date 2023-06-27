@@ -22,10 +22,10 @@ public class FileTransferCommonMethods {
      * @param ctx         ChannelHandlerContext
      * @param filePackage ProtoFilePackage.FilePackage
      */
-    public void writeBytes2File(ChannelHandlerContext ctx, ProtoFilePackage.FilePackage filePackage) {
+    public void writeBytes2File(ChannelHandlerContext ctx, ProtoFilePackage.FilePackage filePackage, String dirName) {
         //存储客户端上传的文件存储到用户的Download目录下
         long phyFileLen = filePackage.getFileSize();
-        File file = getFieByName(filePackage.getFileName());
+        File file = getFieByName(filePackage.getFileName(), dirName);
 
         //如果文件大小相同且MD5值也一样，则无需传输了
         if (phyFileLen == file.length() && fileMd5Verification(file, filePackage)) {
@@ -114,24 +114,24 @@ public class FileTransferCommonMethods {
      * @param filePackage filePackage
      */
     public void reportFileUploadProcess(@NonNull ChannelHandlerContext ctx, @NonNull File file, @NonNull ProtoFilePackage.FilePackage filePackage) {
-        long fileSize = filePackage.getFileSize();
+        long filePhySize = filePackage.getFileSize();
         int devisor = 1;
         String uint = " Byte";
         int speed = 100;
-        if (fileSize > 500 * 1024 * 1024) {
+        if (filePhySize > 500 * 1024 * 1024) {
             devisor = 1024 * 1024;
             uint = " MB";
             speed = 400;
-        } else if (fileSize > 500 * 1024) {
+        } else if (filePhySize > 500 * 1024) {
             devisor = 1024;
             uint = " KB";
             speed = 200;
         }
         long receivedLen = file.length();
-        if (receivedLen % speed == 0) {
-            float percent = (float) receivedLen / fileSize * 100;
+        if (receivedLen % speed == 0 || receivedLen == filePhySize) {
+            float percent = (float) receivedLen / filePhySize * 100;
             long send = receivedLen / devisor;
-            long left = (fileSize - receivedLen) / devisor;
+            long left = (filePhySize - receivedLen) / devisor;
             String message = "[" + String.format("%.2f", percent) + "%]" + " 已发送:" + send + uint + ",剩余:" + left + uint;
             sendStringMessage(ctx, message);
         }
@@ -141,10 +141,11 @@ public class FileTransferCommonMethods {
      * get Fie By Name
      *
      * @param fileName fileName
+     * @param dirName
      * @return File
      */
-    public File getFieByName(String fileName) {
-        File dir = getDownloadDir();
+    public File getFieByName(String fileName, String dirName) {
+        File dir = getDownloadDir(dirName);
         File[] fileNames = dir.listFiles(name -> name.getName().equals(fileName));
         if (fileNames == null || fileNames.length == 0) {
             return new File(dir, fileName);
@@ -158,8 +159,8 @@ public class FileTransferCommonMethods {
      *
      * @return string: files name
      */
-    public String getDownloadFiles() {
-        File dir = getDownloadDir();
+    public String getDownloadFiles(String dirName) {
+        File dir = getDownloadDir(dirName);
         File[] files = dir.listFiles(File::isFile);
         if (files == null) {
             return "There is no file in download director of usr home";
@@ -177,12 +178,21 @@ public class FileTransferCommonMethods {
      *
      * @return Download director
      */
-    public File getDownloadDir() {
+    public File getDownloadDir(String dirName) {
         File userHome = new File(System.getProperty("user.home"));
-        File[] files = userHome.listFiles(pathname -> pathname.isDirectory() && pathname.getName().equals("Downloads"));
+        File[] downloadFiles = userHome.listFiles(file -> file.isDirectory() && file.getName().equals("Downloads"));
+        File downloadDir;
+        if (downloadFiles == null || downloadFiles.length == 0) {
+            downloadDir = new File(userHome, "Downloads");
+            downloadDir.mkdir();
+        } else {
+            downloadDir = downloadFiles[0];
+        }
+        File[] files = downloadDir.listFiles(file -> file.isDirectory() && file.getName().equals(dirName));
         File dir;
-        if (files == null) {
-            dir = new File(userHome, "Downloads");
+        if (files == null || files.length == 0) {
+            dir = new File(downloadDir, dirName);
+            dir.mkdir();
         } else {
             dir = files[0];
         }
