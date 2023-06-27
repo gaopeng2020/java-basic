@@ -1,5 +1,7 @@
 package socket.tcpdemo;
 
+import tls.KnockKnockProtocol;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;

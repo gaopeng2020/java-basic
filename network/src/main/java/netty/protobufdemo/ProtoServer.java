@@ -1,4 +1,4 @@
-package netty.protobuf;
+package netty.protobufdemo;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;

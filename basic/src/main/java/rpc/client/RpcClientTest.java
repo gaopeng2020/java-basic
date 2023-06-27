@@ -47,7 +47,7 @@ public class RpcClientTest {
             public void run() {
                 HelloService helloService = getServiceProxy(serverAddress, serviceName);
                 assert helloService != null;
-                String str = helloService.sayHello("gao demos");
+                String str = helloService.sayHello("gao simpledemos");
                 System.out.println("str = " + str);
             }
         },10,1000);

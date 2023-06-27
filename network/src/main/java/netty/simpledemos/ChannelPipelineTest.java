@@ -1,4 +1,4 @@
-package netty.demos;
+package netty.simpledemos;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;

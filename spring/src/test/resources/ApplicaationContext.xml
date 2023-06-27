@@ -14,7 +14,7 @@
     <!-- 方式一： 使用spring 实现原生API接口实现新增方法的切入   -->
     <!--    <aop:config>-->
     <!--    切入点pointcut-->
-    <!--        <aop:pointcut id="pointcut" expression="execution(* demos.gao.aopxml.service.UserServiceImpl.*(..))"/>-->
+    <!--        <aop:pointcut id="pointcut" expression="execution(* simpledemos.gao.aopxml.service.UserServiceImpl.*(..))"/>-->
 
     <!--        &lt;!&ndash;   将beforeLog和afterLog通知（advisor）到切入点（pointcut被通知对象）中     &ndash;&gt;-->
     <!--        <aop:advisor advice-ref="beforeLog" pointcut-ref="pointcut"/>-->
@@ -22,11 +22,11 @@
     <!--    </aop:config>-->
 
     <!--方式二： 使用自定义类,通过切面（Aspect）实现新增方法的切入  -->
-    <!--    <bean id="aspectLog" class="demos.gao.aopxml.log.AspectLog"/>-->
+    <!--    <bean id="aspectLog" class="simpledemos.gao.aopxml.log.AspectLog"/>-->
     <!--    <aop:config>-->
     <!--        &lt;!&ndash;        切面aspect&ndash;&gt;-->
     <!--        <aop:aspect ref="aspectLog">-->
-    <!--            <aop:pointcut id="pointcut" expression="execution(* demos.gao.aopxml.service.UserServiceImpl.*(..))"/>-->
+    <!--            <aop:pointcut id="pointcut" expression="execution(* simpledemos.gao.aopxml.service.UserServiceImpl.*(..))"/>-->
     <!--            <aop:before method="beforeLog" pointcut-ref="pointcut"/>-->
     <!--            <aop:after method="afterLog" pointcut-ref="pointcut"/>-->
     <!--        </aop:aspect>-->

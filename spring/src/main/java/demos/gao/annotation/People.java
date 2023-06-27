@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 
 /**
- * 注解 @Component 等价于在IOC容器中的<bean id="cat" class="demos.gao.annotation.People"/>
+ * 注解 @Component 等价于在IOC容器中的<bean id="cat" class="simpledemos.gao.annotation.People"/>
  * 三个子注解：@Repository（DAO）  @Service  @Controller ，作用一样，向IOC容器中注册一个对象
  */
 @Data

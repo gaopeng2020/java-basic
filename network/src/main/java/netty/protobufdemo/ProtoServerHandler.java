@@ -1,4 +1,4 @@
-package netty.protobuf;
+package netty.protobufdemo;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.*;

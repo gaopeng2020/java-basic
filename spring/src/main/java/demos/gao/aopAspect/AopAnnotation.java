@@ -9,17 +9,17 @@ import org.aspectj.lang.annotation.Before;
 @Aspect //标记这个类是个切面
 public class AopAnnotation {
 
-    @Before("execution(* demos.gao.aopxml.service.UserServiceImpl.*(..))")
+    @Before("execution(* simpledemos.gao.aopxml.service.UserServiceImpl.*(..))")
     public void beforeLog() {
         System.out.println("====方法运行之前运行====");
     }
 
-    @After("execution(* demos.gao.aopxml.service.UserServiceImpl.*(..))")
+    @After("execution(* simpledemos.gao.aopxml.service.UserServiceImpl.*(..))")
     public void afterLog() {
         System.out.println("====方法运行之后运行====");
     }
 
-    @Around("execution(* demos.gao.aopxml.service.UserServiceImpl.*(..))")
+    @Around("execution(* simpledemos.gao.aopxml.service.UserServiceImpl.*(..))")
     public void around(ProceedingJoinPoint pjp) throws Throwable {
         System.out.println("====Before Around===="+pjp.getSignature());
 

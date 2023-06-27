@@ -8,18 +8,20 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
+import io.netty.handler.ssl.SslHandler;
 import netty.FileTransfer.ExceptionCatchHandler;
 import netty.FileTransfer.FileTransferServerInboundHandler;
+import tls.SSLContextUtil;
 
-public class NettyServer {
+public class NettyTestServer {
     private int port;
 
     public static void main(String[] args) {
-        NettyServer nettyServer = new NettyServer(8088);
+        NettyTestServer nettyServer = new NettyTestServer(8088);
         nettyServer.launch();
     }
 
-    public NettyServer(int port) {
+    public NettyTestServer(int port) {
         this.port = port;
     }
 
@@ -37,7 +39,8 @@ public class NettyServer {
                     @Override
                     protected void initChannel(NioSocketChannel ch) throws Exception {
                         ChannelPipeline pipeline = ch.pipeline();
-                        pipeline.addLast(new LengthFieldBasedFrameDecoder(
+                        pipeline.addLast("SslHandler", new SslHandler(SSLContextUtil.getServerSSLEngine("TLS")))
+                                .addLast(new LengthFieldBasedFrameDecoder(
                                         128 * 1024, 0, 4, 0, 0))
                                 // .addLast(loggingHandler)
                                 .addLast(new FileTransferServerInboundHandler())

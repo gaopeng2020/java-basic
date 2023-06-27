@@ -10,25 +10,27 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
+import io.netty.handler.ssl.SslHandler;
 import netty.FileTransfer.ExceptionCatchHandler;
 import netty.FileTransfer.FileTransferClientInboundHandler;
+import tls.SSLContextUtil;
 
 import java.io.File;
 
-public class NettyClient {
+public class NettyTestClient {
     private final String inetHost;
     private final int inetPort;
 
-    public NettyClient(String host, int port) {
+    public NettyTestClient(String host, int port) {
         this.inetHost = host;
         this.inetPort = port;
     }
 
     public static void main(String[] args) {
-        String filePath = "D:\\Study\\04 AUTOSA\\Classic\\To Learn\\AUTOSAR_TPS_SystemTemplate_R2111.pdf";
+        String filePath = "F:\\Software\\AutoCAD 2020_x64.7z";
 //        String filePath = "C:\\Users\\gaopeng\\Downloads\\Browser\\Configuring Watch Dog in AUTOSAR Stack.mp4";
         File file = new File(filePath);
-        new NettyClient("localhost", 8088).launch(file);
+        new NettyTestClient("localhost", 8088).launch(file);
     }
 
     private void launch(File file) {
@@ -41,7 +43,8 @@ public class NettyClient {
                     @Override
                     protected void initChannel(NioSocketChannel ch) {
                         ChannelPipeline pipeline = ch.pipeline();
-                        pipeline.addLast(new LengthFieldBasedFrameDecoder(
+                        pipeline.addLast("SslHandler", new SslHandler(SSLContextUtil.getClientSSLEngine("TLS")))
+                                .addLast(new LengthFieldBasedFrameDecoder(
                                         128 * 1024, 0, 4, 0, 0))
 //                                .addLast(loggingHandler)
                                 .addLast(new FileTransferClientInboundHandler(file))

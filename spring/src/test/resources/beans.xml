@@ -7,7 +7,7 @@
     <bean id="cat" class="demos.gao.autowired.Cat" scope="singleton"/>
     <bean id="dog" class="demos.gao.autowired.Dog" scope="prototype"/>
     <!--    手工装配-->
-<!--    <bean id="person" class="demos.gao.autowired.People">-->
+<!--    <bean id="person" class="simpledemos.gao.autowired.People">-->
 <!--        <property name="name" value="haha"/>-->
 <!--        <property name="dog" ref="dog"/>-->
 <!--        <property name="cat" ref="cat"/>-->

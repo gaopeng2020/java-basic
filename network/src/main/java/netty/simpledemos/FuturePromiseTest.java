@@ -1,4 +1,4 @@
-package netty.demos;
+package netty.simpledemos;
 
 import io.netty.channel.EventLoop;
 import io.netty.channel.nio.NioEventLoopGroup;
