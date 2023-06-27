@@ -98,7 +98,7 @@ public class FileTransferCommonMethods {
                     .build();
             byte[] byteArray = build.toByteArray();
             ByteBuf buf = payloadTypeEncode(byteArray, PayloadTypeEnum.FILE);
-            ctx.writeAndFlush(buf);
+            ctx.channel().writeAndFlush(buf);
 //            super.channelActive(ctx);
         }
         System.out.println("sender md5 = " + md5);
@@ -263,6 +263,6 @@ public class FileTransferCommonMethods {
 
     public void sendStringMessage(ChannelHandlerContext ctx, String msg) {
         ByteBuf buf = payloadTypeEncode(msg.getBytes(StandardCharsets.UTF_8), PayloadTypeEnum.TEXT);
-        ctx.writeAndFlush(buf);
+        ctx.channel(). writeAndFlush(buf);
     }
 }
