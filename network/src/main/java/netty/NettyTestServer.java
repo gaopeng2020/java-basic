@@ -26,12 +26,13 @@ public class NettyTestServer {
     }
 
     public void launch() {
-        LoggingHandler loggingHandler = new LoggingHandler(LogLevel.ERROR);
-        NioEventLoopGroup bossGroup = new NioEventLoopGroup();
-        NioEventLoopGroup workGroup = new NioEventLoopGroup();
+        LoggingHandler loggingHandler = new LoggingHandler(LogLevel.DEBUG);
+        NioEventLoopGroup bossGroup = new NioEventLoopGroup(1);
+        NioEventLoopGroup workGroup = new NioEventLoopGroup(16);
         ServerBootstrap bootstrap = new ServerBootstrap()
                 .group(bossGroup, workGroup)
-                .channel(NioServerSocketChannel.class);
+                .channel(NioServerSocketChannel.class)
+                .handler(loggingHandler);
 
         bootstrap.childOption(ChannelOption.SO_KEEPALIVE, true)
                 .childOption(ChannelOption.SO_RCVBUF, 65535)
@@ -39,13 +40,13 @@ public class NettyTestServer {
                     @Override
                     protected void initChannel(NioSocketChannel ch) throws Exception {
                         ChannelPipeline pipeline = ch.pipeline();
-                        pipeline.addLast("SslHandler", new SslHandler(SSLContextUtil.getServerSSLEngine("TLS")))
-                                .addLast(new LengthFieldBasedFrameDecoder(
-                                        128 * 1024, 0, 4, 0, 0))
-                                // .addLast(loggingHandler)
-                                .addLast(new FileTransferServerInboundHandler())
+                        pipeline
+                                .addFirst("SslHandler", new SslHandler(SSLContextUtil.getServerSSLEngine("TLSv1.2"),false))
+//                                .addLast("LengthFieldBasedFrameDecoder", new LengthFieldBasedFrameDecoder(
+//                                        128 * 1024, 0, 4, 0, 0))
+                                .addLast("FileTransferServerInboundHandler", new FileTransferServerInboundHandler())
                                 //.addLast("ProtobufDecoder", new ProtobufDecoder(ProtoDataTypes.ProtoDataType.getDefaultInstance()))
-                                .addLast(new ExceptionCatchHandler())
+                                .addLast("ExceptionCatchHandler", new ExceptionCatchHandler())
                         ;
                     }
                 });

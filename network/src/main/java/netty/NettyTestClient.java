@@ -15,8 +15,12 @@ import netty.FileTransfer.ExceptionCatchHandler;
 import netty.FileTransfer.FileTransferClientInboundHandler;
 import tls.SSLContextUtil;
 
+import javax.net.ssl.SSLContext;
 import java.io.File;
 
+/**
+ * -Djavax.net.debug=ssl,handshake;-Ddeployment.security.TLSv1.2=true
+ */
 public class NettyTestClient {
     private final String inetHost;
     private final int inetPort;
@@ -27,15 +31,15 @@ public class NettyTestClient {
     }
 
     public static void main(String[] args) {
-        String filePath = "F:\\Software\\AutoCAD 2020_x64.7z";
-//        String filePath = "C:\\Users\\gaopeng\\Downloads\\Browser\\Configuring Watch Dog in AUTOSAR Stack.mp4";
+//        String filePath = "F:\\Software\\AutoCAD 2020_x64.7z";
+        String filePath = "C:\\Users\\gaopeng\\Downloads\\Browser\\Configuring Watch Dog in AUTOSAR Stack.mp4";
         File file = new File(filePath);
-        new NettyTestClient("192.168.10.28", 8088).launch(file);
+        new NettyTestClient("localhost", 8088).launch(file);
     }
 
     private void launch(File file) {
-        LoggingHandler loggingHandler = new LoggingHandler(LogLevel.INFO);
-        NioEventLoopGroup group = new NioEventLoopGroup();
+        LoggingHandler loggingHandler = new LoggingHandler(LogLevel.DEBUG);
+        NioEventLoopGroup group = new NioEventLoopGroup(2);
         Bootstrap bootstrap = new Bootstrap();
         bootstrap.group(group)
                 .channel(NioSocketChannel.class)
@@ -43,13 +47,14 @@ public class NettyTestClient {
                     @Override
                     protected void initChannel(NioSocketChannel ch) {
                         ChannelPipeline pipeline = ch.pipeline();
-                        pipeline.addLast("SslHandler", new SslHandler(SSLContextUtil.getClientSSLEngine("TLS")))
-                                .addLast(new LengthFieldBasedFrameDecoder(
-                                        128 * 1024, 0, 4, 0, 0))
-//                                .addLast(loggingHandler)
-                                .addLast(new FileTransferClientInboundHandler(file))
+                        pipeline
+                                .addFirst("SslHandler", new SslHandler(SSLContextUtil.getClientSSLEngine("TLSv1.2"),false))
+//                                .addLast("LengthFieldBasedFrameDecoder",new LengthFieldBasedFrameDecoder(
+//                                        128 * 1024, 0, 4, 0, 0))
+                                .addLast(loggingHandler)
+                                .addLast("FileTransferClientInboundHandler",new FileTransferClientInboundHandler(file))
                                 //.addLast("ProtobufEncoder", new ProtobufEncoder())
-                                .addLast(new ExceptionCatchHandler())
+                                .addLast("ExceptionCatchHandler",new ExceptionCatchHandler())
                         ;
                     }
                 });

@@ -33,6 +33,8 @@ public class FileTransferServerInboundHandler extends ChannelInboundHandlerAdapt
                 more functions are in developing...
                 """;
         fileTransferUtil.sendStringMessage(ctx, functions);
+        /*ByteBuf buf = fileTransferUtil.payloadTypeEncode(ByteBufUtil.stringEncode(functions), PayloadTypeEnum.TEXT);
+        ctx.channel().writeAndFlush(buf);*/
         super.channelActive(ctx);
     }
 
