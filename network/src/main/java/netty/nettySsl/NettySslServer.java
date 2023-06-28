@@ -9,6 +9,8 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.LineBasedFrameDecoder;
+import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.ssl.SslHandler;
@@ -36,9 +38,9 @@ public class NettySslServer {
                         SSLEngine sslEngine = SSLContextUtil.getServerSSLEngine("TLSv1.2");
                         ChannelPipeline pipeline = ch.pipeline();
                         pipeline.addFirst("ssl", new SslHandler(sslEngine));
-//                        pipeline.addLast(new LineBasedFrameDecoder(1024));
-//                        pipeline.addLast(new StringDecoder());
-//                        pipeline.addLast("processMsg", new SslDemoServerSideHandler());
+                        pipeline.addLast(new LineBasedFrameDecoder(1024));
+                        pipeline.addLast(new StringDecoder());
+                        pipeline.addLast("processMsg", new SslDemoServerSideHandler());
                     }
                 });
 

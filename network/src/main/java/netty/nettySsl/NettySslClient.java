@@ -6,10 +6,13 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.LineBasedFrameDecoder;
+import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.ssl.SslHandler;
 import lombok.extern.slf4j.Slf4j;
+import netty.FileTransfer.FileTransferClientInboundHandler;
 import tls.SSLContextUtil;
 
 import javax.net.ssl.SSLEngine;
@@ -37,10 +40,10 @@ public class NettySslClient {
                             ChannelPipeline pipeline = ch.pipeline();
                             pipeline.addFirst("ssl", new SslHandler(sslEngine));
                             pipeline.addLast(new LoggingHandler(LogLevel.INFO));
-//                            pipeline.addLast(new LineBasedFrameDecoder(1024));
-//                            pipeline.addLast(new StringDecoder());
-////                            pipeline.addLast("processMsg", new SslDemoClientSideHandler());
-//                            pipeline.addLast("processMsg", new FileTransferClientInboundHandler());
+                            pipeline.addLast(new LineBasedFrameDecoder(1024));
+                            pipeline.addLast(new StringDecoder());
+                            // ipeline.addLast("processMsg", new SslDemoClientSideHandler());
+                            pipeline.addLast("processMsg", new FileTransferClientInboundHandler());
                         }
                     });
 
