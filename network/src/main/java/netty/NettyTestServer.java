@@ -13,11 +13,13 @@ import netty.FileTransfer.ExceptionCatchHandler;
 import netty.FileTransfer.FileTransferServerInboundHandler;
 import tls.SSLContextUtil;
 
+import javax.net.ssl.SSLEngine;
+
 public class NettyTestServer {
     private int port;
 
     public static void main(String[] args) {
-        NettyTestServer nettyServer = new NettyTestServer(8088);
+        NettyTestServer nettyServer = new NettyTestServer(8888);
         nettyServer.launch();
     }
 
@@ -27,25 +29,27 @@ public class NettyTestServer {
 
     public void launch() {
         LoggingHandler loggingHandler = new LoggingHandler(LogLevel.DEBUG);
-        NioEventLoopGroup bossGroup = new NioEventLoopGroup(1);
-        NioEventLoopGroup workGroup = new NioEventLoopGroup(16);
+        NioEventLoopGroup bossGroup = new NioEventLoopGroup();
+        NioEventLoopGroup workGroup = new NioEventLoopGroup();
+
         ServerBootstrap bootstrap = new ServerBootstrap()
                 .group(bossGroup, workGroup)
+                .option(ChannelOption.SO_BACKLOG, 100)
                 .channel(NioServerSocketChannel.class)
-                .handler(loggingHandler);
-
-        bootstrap.childOption(ChannelOption.SO_KEEPALIVE, true)
+                .handler(loggingHandler)
+                .childOption(ChannelOption.SO_KEEPALIVE, true)
                 .childOption(ChannelOption.SO_RCVBUF, 65535)
                 .childHandler(new ChannelInitializer<NioSocketChannel>() {
                     @Override
                     protected void initChannel(NioSocketChannel ch) throws Exception {
+                        SSLEngine sslEngine = SSLContextUtil.getServerSSLEngine("TLSv1.3");
                         ChannelPipeline pipeline = ch.pipeline();
                         pipeline
-                                .addFirst("SslHandler", new SslHandler(SSLContextUtil.getServerSSLEngine("TLSv1.2"),false))
-//                                .addLast("LengthFieldBasedFrameDecoder", new LengthFieldBasedFrameDecoder(
-//                                        128 * 1024, 0, 4, 0, 0))
+                                .addFirst("ssl", new SslHandler(sslEngine))
+                                .addLast("LengthFieldBasedFrameDecoder", new LengthFieldBasedFrameDecoder(
+                                        128 * 1024, 0, 4, 0, 0))
                                 .addLast("FileTransferServerInboundHandler", new FileTransferServerInboundHandler())
-                                //.addLast("ProtobufDecoder", new ProtobufDecoder(ProtoDataTypes.ProtoDataType.getDefaultInstance()))
+//                                //.addLast("ProtobufDecoder", new ProtobufDecoder(ProtoDataTypes.ProtoDataType.getDefaultInstance()))
                                 .addLast("ExceptionCatchHandler", new ExceptionCatchHandler())
                         ;
                     }

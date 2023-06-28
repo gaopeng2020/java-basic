@@ -17,9 +17,12 @@ import java.util.concurrent.Executors;
 public class FileTransferClientInboundHandler extends ChannelInboundHandlerAdapter {
     private File file;
     private long startTime = 0;
-    private FileTransferCommonMethods fileTransferUtil;
     private final static String CACHE_PATH = "ClientCache";
     private final static ExecutorService workerThreadService = Executors.newFixedThreadPool(6);
+    private final static FileTransferCommonMethods fileTransferUtil = new FileTransferCommonMethods();
+
+    public FileTransferClientInboundHandler() {
+    }
 
     public FileTransferClientInboundHandler(File file) {
         if (!file.exists()) {
@@ -28,7 +31,7 @@ public class FileTransferClientInboundHandler extends ChannelInboundHandlerAdapt
         }
         this.file = file;
         startTime = System.currentTimeMillis();
-        fileTransferUtil = new FileTransferCommonMethods();
+//        this.fileTransferUtil = new FileTransferCommonMethods();
     }
 
     @Override
@@ -39,9 +42,8 @@ public class FileTransferClientInboundHandler extends ChannelInboundHandlerAdapt
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-
         //连接建立后通过键盘发送消息给server
-        workerThreadService.submit(()->{
+        workerThreadService.submit(() -> {
             Scanner scanner = new Scanner(System.in);
             while (scanner.hasNextLine()) {
                 String next = scanner.nextLine();
@@ -73,7 +75,7 @@ public class FileTransferClientInboundHandler extends ChannelInboundHandlerAdapt
             case FILE -> {
                 try {
                     ProtoFilePackage.FilePackage filePackage = ProtoFilePackage.FilePackage.parseFrom(bytes);
-                    fileTransferUtil.writeBytes2File(ctx, filePackage,CACHE_PATH);
+                    fileTransferUtil.writeBytes2File(ctx, filePackage, CACHE_PATH);
                     super.channelRead(ctx, filePackage);
                 } catch (Exception e) {
                     throw new RuntimeException(e);

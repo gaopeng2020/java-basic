@@ -99,9 +99,6 @@ public class FileTransferCommonMethods {
             byte[] byteArray = build.toByteArray();
             ByteBuf buf = payloadTypeEncode(byteArray, PayloadTypeEnum.FILE);
             ctx.writeAndFlush(buf);
-//            buf.retain();
-//            ctx.channel().writeAndFlush(buf);
-//            ctx.channel().write(buf);
 //            super.channelActive(ctx);
         }
         System.out.println("sender md5 = " + md5);

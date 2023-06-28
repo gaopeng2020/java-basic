@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.*;
 import java.security.cert.CertificateException;
-import java.util.Arrays;
 
 public class SSLContextUtil {
     public final static String PASSWORD = "123456";
@@ -16,7 +15,7 @@ public class SSLContextUtil {
         SSLEngine sslEngine = sslContext.createSSLEngine();
         sslEngine.setUseClientMode(false);
         sslEngine.setNeedClientAuth(false);
-        Arrays.stream(sslEngine.getEnabledCipherSuites()).sequential().forEach(System.out::println);
+        // Arrays.stream(sslEngine.getEnabledCipherSuites()).sequential().forEach(System.out::println);
         return sslEngine;
     }
 
@@ -46,7 +45,7 @@ public class SSLContextUtil {
             SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
             //初始化SSLContext,三个参数分别是：可以导入的证书,信任管理器,SecureRandom) 三个参数都可为null
             // client没有证书不需要KeyManagerFactory，设为null
-            sslContext.init(null, getX509TrustManagers(),  null);
+            sslContext.init(null, getX509TrustManagers(), null);
             return sslContext;
         } catch (NoSuchAlgorithmException | KeyManagementException e) {
             throw new RuntimeException(e);
