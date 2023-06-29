@@ -60,7 +60,7 @@ public class NettySslClient {
      * @throws Exception
      */
     public static void main(String[] args) throws Exception {
-        String destIp = "localhost";
+        String destIp = "192.168.10.28";
         int port = 5566;
         new NettySslClient().connect(destIp, port);
     }

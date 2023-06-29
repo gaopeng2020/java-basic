@@ -31,7 +31,7 @@ public class NettyTestClient {
 //        String filePath = "F:\\Software\\AutoCAD 2020_x64.7z";
         String filePath = "C:\\Users\\gaopeng\\Downloads\\Browser\\Configuring Watch Dog in AUTOSAR Stack.mp4";
         File file = new File(filePath);
-        new NettyTestClient("localhost", 8888).launch(file);
+        new NettyTestClient("192.168.10.28", 8888).launch(file);
     }
 
     private void launch(File file) {

@@ -13,6 +13,7 @@
 
     <properties>
         <jdk.version>17</jdk.version>
+        <graalvm.version>23.0.0</graalvm.version>
         <openfx.version>11.0.2</openfx.version>
         <!--        <openfx.version>17.0.7</openfx.version>-->
         <junit.version>5.9.2</junit.version>
@@ -34,6 +35,7 @@
         <!--            mvn exec:exec@image -f pom.xml  -->
         <!--            mvn exec:exec@installer -f pom.xml  -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <native.maven.plugin.version>0.9.23</native.maven.plugin.version>
     </properties>
 
     <dependencies>
@@ -98,7 +100,98 @@
             <artifactId>excelhandler</artifactId>
             <version>2.2.1</version>
         </dependency>
+        <dependency>
+            <groupId>org.graalvm.sdk</groupId>
+            <artifactId>graal-sdk</artifactId>
+            <version>${graalvm.version}</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
+
+    <profiles>
+        <!--  one key to generate the native image. usage:
+        mvn clean package
+        mvn -Pnative -Dagent exec:exec@java-agent
+        mvn -DskipTests=true -Pnative -Dagent package
+ -->
+        <profile>
+            <id>native</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>3.1.0</version>
+                        <executions>
+                            <execution>
+                                <id>java-agent</id>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>java</executable>
+                                    <workingDirectory>${project.build.directory}</workingDirectory>
+                                    <arguments>
+                                        <argument>-classpath</argument>
+                                        <classpath/>
+                                        <argument>${main.class}</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>native</id>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>${project.build.directory}/${app.name}</executable>
+                                    <workingDirectory>${project.build.directory}</workingDirectory>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.graalvm.buildtools</groupId>
+                        <artifactId>native-maven-plugin</artifactId>
+                        <version>${native.maven.plugin.version}</version>
+                        <extensions>true</extensions>
+                        <executions>
+                            <execution>
+                                <id>build-native</id>
+                                <goals>
+                                    <goal>build</goal>
+                                </goals>
+                                <phase>package</phase>
+                            </execution>
+                            <execution>
+                                <id>test-native</id>
+                                <goals>
+                                    <goal>test</goal>
+                                </goals>
+                                <phase>test</phase>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <skip>false</skip>
+                            <agent>
+                                <enabled>true</enabled>
+                            </agent>
+                            <fallback>false</fallback>
+                            <imageName>${app.name}</imageName>
+                            <mainClass>${main.class}</mainClass>
+                            <buildArgs>
+                                <!-- With Enterprise you can use the G1GC -->
+                                <!--buildArg>- -gc=G1</buildArg-->
+                                <buildArg>--no-fallback</buildArg>
+                                <buildArg>--report-unsupported-elements-at-runtime</buildArg>
+                            </buildArgs>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
     <build>
         <plugins>
@@ -141,28 +234,28 @@
                 </executions>
             </plugin>
 
-            <!--            &lt;!&ndash; copy dependency jar to specified location&ndash;&gt;-->
-            <!--            <plugin>-->
-            <!--                <groupId>org.apache.maven.plugins</groupId>-->
-            <!--                <artifactId>maven-dependency-plugin</artifactId>-->
-            <!--                <version>3.2.0</version>-->
-            <!--                <executions>-->
-            <!--                    <execution>-->
-            <!--                        <id>copy-dependencies</id>-->
-            <!--                        <phase>package</phase>-->
-            <!--                        <goals>-->
-            <!--                            <goal>copy-dependencies</goal>-->
-            <!--                        </goals>-->
-            <!--                        <configuration>-->
-            <!--                            <outputDirectory>${project.build.directory}/lib</outputDirectory>-->
-            <!--                            <overWriteReleases>false</overWriteReleases>-->
-            <!--                            <overWriteSnapshots>false</overWriteSnapshots>-->
-            <!--                            <overWriteIfNewer>true</overWriteIfNewer>-->
-            <!--                        </configuration>-->
-            <!--                    </execution>-->
-            <!--                </executions>-->
-            <!--            </plugin>-->
-            <!--这里相当于将第三方jar包一起并入到项目jar包中去了。-->
+            <!--            &lt;!&ndash; copy dependency jar to specified location&ndash;&gt;
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-dependency-plugin</artifactId>
+                            <version>3.2.0</version>
+                            <executions>
+                                <execution>
+                                    <id>copy-dependencies</id>
+                                    <phase>package</phase>
+                                    <goals>
+                                        <goal>copy-dependencies</goal>
+                                    </goals>
+                                    <configuration>
+                                        <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                                        <overWriteReleases>false</overWriteReleases>
+                                        <overWriteSnapshots>false</overWriteSnapshots>
+                                        <overWriteIfNewer>true</overWriteIfNewer>
+                                    </configuration>
+                                </execution>
+                            </executions>
+                        </plugin>-->
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
