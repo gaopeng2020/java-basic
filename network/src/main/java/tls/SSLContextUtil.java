@@ -1,5 +1,7 @@
 package tls;
 
+import lombok.Setter;
+
 import javax.net.ssl.*;
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,8 +9,10 @@ import java.security.*;
 import java.security.cert.CertificateException;
 
 public class SSLContextUtil {
-    public final static String PASSWORD = "123456";
-    public final static String KEYSTORE_PATH = "/server.keystore";
+    @Setter
+    private static String password = "123456";
+    @Setter
+    private static String keystorePath = "/server.keystore";
 
     public static SSLEngine getServerSSLEngine(String tlsVersion) {
         SSLContext sslContext = getServerSSLContext(tlsVersion);
@@ -54,24 +58,14 @@ public class SSLContextUtil {
 
 
     public static KeyManager[] getX509KeyManagers() {
-        try (InputStream storeStream = SSLTestServer.class.getResourceAsStream(KEYSTORE_PATH)) {
+        try (InputStream storeStream = SSLTestServer.class.getResourceAsStream(keystorePath)) {
             //这里 目前一般是PKCS12, 之前默认是jks
             KeyStore keyStore = KeyStore.getInstance("PKCS12");
-            keyStore.load(storeStream, PASSWORD.toCharArray());
+            keyStore.load(storeStream, password.toCharArray());
 
             // KeyManagerFactory ()
             KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance("SunX509", "SunJSSE");
-            keyManagerFactory.init(keyStore, PASSWORD.toCharArray());
-
-            /* for (KeyManager keyManager : keyManagerFactory.getKeyManagers()) {
-                if (keyManager instanceof X509KeyManager) {
-                    x509KeyManager = (X509KeyManager) keyManager;
-                    break;
-                }
-            }
-            if (x509KeyManager == null) {
-                throw new NullPointerException();
-            }*/
+            keyManagerFactory.init(keyStore, password.toCharArray());
             return keyManagerFactory.getKeyManagers();
 
         } catch (KeyStoreException | CertificateException | IOException | NoSuchAlgorithmException |
@@ -81,24 +75,14 @@ public class SSLContextUtil {
     }
 
     public static TrustManager[] getX509TrustManagers() {
-        try (InputStream storeStream = SSLTestServer.class.getResourceAsStream(KEYSTORE_PATH)) {
+        try (InputStream storeStream = SSLTestServer.class.getResourceAsStream(keystorePath)) {
             //这里 目前一般是PKCS12, 之前默认是jks
             KeyStore keyStore = KeyStore.getInstance("PKCS12");
-            keyStore.load(storeStream, PASSWORD.toCharArray());
+            keyStore.load(storeStream, password.toCharArray());
 
             // KeyManagerFactory ()
             TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance("PKIX", "SunJSSE");
             trustManagerFactory.init(keyStore);
-
-            /*for (TrustManager trustManager : trustManagerFactory.getTrustManagers()) {
-                if (trustManager instanceof X509TrustManager) {
-                    x509TrustManager = (X509TrustManager) trustManager;
-                    break;
-                }
-            }
-            if (x509TrustManager == null) {
-                throw new NullPointerException();
-            }*/
             return trustManagerFactory.getTrustManagers();
 
         } catch (KeyStoreException | CertificateException | IOException | NoSuchAlgorithmException |

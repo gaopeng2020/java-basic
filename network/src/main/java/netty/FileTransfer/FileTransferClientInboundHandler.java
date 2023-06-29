@@ -19,9 +19,10 @@ public class FileTransferClientInboundHandler extends ChannelInboundHandlerAdapt
     private long startTime = 0;
     private final static String CACHE_PATH = "ClientCache";
     private final static ExecutorService workerThreadService = Executors.newFixedThreadPool(6);
-    private final static FileTransferCommonMethods fileTransferUtil = new FileTransferCommonMethods();
+    private FileTransferCommonMethods fileTransferUtil;
 
     public FileTransferClientInboundHandler() {
+        this.fileTransferUtil = new FileTransferCommonMethods();
     }
 
     public FileTransferClientInboundHandler(File file) {
@@ -31,7 +32,7 @@ public class FileTransferClientInboundHandler extends ChannelInboundHandlerAdapt
         }
         this.file = file;
         startTime = System.currentTimeMillis();
-//        this.fileTransferUtil = new FileTransferCommonMethods();
+        this.fileTransferUtil = new FileTransferCommonMethods();
     }
 
     @Override
@@ -99,7 +100,7 @@ public class FileTransferClientInboundHandler extends ChannelInboundHandlerAdapt
 //            ctx.channel().close();
         } else if ("传输失败".equals(message)) {
             System.out.println("传输失败，请重新传输该文件！");
-//            ctx.channel().close();
+            ctx.channel().close();
         } else {
             System.out.println("message = " + message);
         }

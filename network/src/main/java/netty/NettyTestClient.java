@@ -28,8 +28,8 @@ public class NettyTestClient {
     }
 
     public static void main(String[] args) {
-        String filePath = "F:\\Software\\AutoCAD 2020_x64.7z";
-//        String filePath = "C:\\Users\\gaopeng\\Downloads\\Browser\\Configuring Watch Dog in AUTOSAR Stack.mp4";
+//        String filePath = "F:\\Software\\AutoCAD 2020_x64.7z";
+        String filePath = "C:\\Users\\gaopeng\\Downloads\\Browser\\Configuring Watch Dog in AUTOSAR Stack.mp4";
         File file = new File(filePath);
         new NettyTestClient("localhost", 8888).launch(file);
     }

@@ -27,7 +27,7 @@ public class FileTransferServerInboundHandler extends ChannelInboundHandlerAdapt
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         String functions = """
-                You can directly start test server string echo function;
+                You can test server string echo function by response any text;
                 Response 1 to start file upload function.
                 Response 2 to start file download function.
                 more functions are in developing...

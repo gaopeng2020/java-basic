@@ -5,6 +5,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.NonNull;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import netty.utils.PayloadTypeEnum;
 import org.graalvm.collections.Pair;
@@ -27,10 +28,12 @@ public class FileTransferCommonMethods {
         long phyFileLen = filePackage.getFileSize();
         File file = getFieByName(filePackage.getFileName(), dirName);
 
-        //如果文件大小相同且MD5值也一样，则无需传输了
-        if (phyFileLen == file.length() && fileMd5Verification(file, filePackage)) {
-            sendStringMessage(ctx, "传输完成");
-            return;
+        //如果文件已存在且大小大于或等于上要上传文件的真实大小，将其删除并重新创建一个新的文件重新接受
+        if (file.length() >= phyFileLen) {
+            boolean delete = file.delete();
+            if (delete) {
+                file = getFieByName(filePackage.getFileName(), dirName);
+            }
         }
 
         byte[] bytes = filePackage.getContents().toByteArray();
@@ -85,6 +88,7 @@ public class FileTransferCommonMethods {
         //开始位置初始为0
         randomAccessFile.seek(0);
 
+        //先确认要上传的文件服务器是否存在
         byte[] bytes = new byte[base * 1024];
         int len;
         while ((len = randomAccessFile.read(bytes)) != -1) {
@@ -105,6 +109,7 @@ public class FileTransferCommonMethods {
         System.out.println("sender file.length = " + file.length());
         fis.close();
     }
+
 
     /**
      * report process of uploaded file
@@ -178,7 +183,7 @@ public class FileTransferCommonMethods {
      *
      * @return Download director
      */
-    public File getDownloadDir(String dirName) {
+    private File getDownloadDir(String dirName) {
         File userHome = new File(System.getProperty("user.home"));
         File[] downloadFiles = userHome.listFiles(file -> file.isDirectory() && file.getName().equals("Downloads"));
         File downloadDir;
@@ -264,6 +269,5 @@ public class FileTransferCommonMethods {
     public void sendStringMessage(ChannelHandlerContext ctx, String msg) {
         ByteBuf buf = payloadTypeEncode(msg.getBytes(StandardCharsets.UTF_8), PayloadTypeEnum.TEXT);
         ctx.writeAndFlush(buf);
-//        ctx.channel().writeAndFlush(buf);
     }
 }
