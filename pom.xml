@@ -17,6 +17,7 @@
         <module>jna</module>
         <module>spring</module>
         <module>javafx</module>
+        <module>graalvm</module>
     </modules>
 
     <properties>

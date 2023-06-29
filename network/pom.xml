@@ -16,20 +16,23 @@
 
     <properties>
         <jdk.version>17</jdk.version>
+        <native.maven.plugin.version>0.9.23</native.maven.plugin.version>
+        <imageName>FileServer</imageName>
+        <mainClass>netty.NettyTestServer</mainClass>
     </properties>
 
     <dependencies>
         <!-- https://mvnrepository.com/artifact/junit/junit -->
-<!--        <dependency>-->
-<!--            <groupId>junit</groupId>-->
-<!--            <artifactId>junit</artifactId>-->
-<!--            <scope>test</scope>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.assertj</groupId>-->
-<!--            <artifactId>assertj-core</artifactId>-->
-<!--            <scope>test</scope>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>junit</groupId>-->
+        <!--            <artifactId>junit</artifactId>-->
+        <!--            <scope>test</scope>-->
+        <!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.assertj</groupId>-->
+        <!--            <artifactId>assertj-core</artifactId>-->
+        <!--            <scope>test</scope>-->
+        <!--        </dependency>-->
 
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -67,45 +70,245 @@
         </dependency>
     </dependencies>
 
+    <profiles>
+        <!--        <profile>
+                    <id>native</id>
+                    <build>
+                        <plugins>
+                            <plugin>
+                                <groupId>org.codehaus.mojo</groupId>
+                                <artifactId>exec-maven-plugin</artifactId>
+                                <version>3.0.0</version>
+                                <executions>
+                                    <execution>
+                                        <id>java-agent</id>
+                                        <goals>
+                                            <goal>exec</goal>
+                                        </goals>
+                                        <configuration>
+                                            <executable>java</executable>
+                                            <workingDirectory>${project.build.directory}</workingDirectory>
+                                            <arguments>
+                                                <argument>-classpath</argument>
+                                                <classpath/>
+                                                <argument>${mainClass}</argument>
+                                            </arguments>
+                                        </configuration>
+                                    </execution>
+                                    <execution>
+                                        <id>native</id>
+                                        <goals>
+                                            <goal>exec</goal>
+                                        </goals>
+                                        <configuration>
+                                            <executable>${project.build.directory}/${imageName}</executable>
+                                            <workingDirectory>${project.build.directory}</workingDirectory>
+                                        </configuration>
+                                    </execution>
+                                </executions>
+                            </plugin>
+
+                            <plugin>
+                                <groupId>org.graalvm.buildtools</groupId>
+                                <artifactId>native-maven-plugin</artifactId>
+                                <version>${native.maven.plugin.version}</version>
+                                <extensions>true</extensions>
+                                <executions>
+                                    <execution>
+                                        <id>build-native</id>
+                                        <goals>
+                                            <goal>build</goal>
+                                        </goals>
+                                        <phase>package</phase>
+                                    </execution>
+                                    <execution>
+                                        <id>test-native</id>
+                                        <goals>
+                                            <goal>test</goal>
+                                        </goals>
+                                        <phase>test</phase>
+                                    </execution>
+                                </executions>
+                                <configuration>
+                                    <skip>false</skip>
+                                    <agent>
+                                        <enabled>true</enabled>
+                                    </agent>
+                                    <fallback>false</fallback>
+                                    <imageName>${imageName}</imageName>
+                                    <mainClass>${mainClass}</mainClass>
+                                    <buildArgs>
+                                        &lt;!&ndash; With Enterprise you can use the G1GC &ndash;&gt;
+                                        &lt;!&ndash;buildArg>- -gc=G1</buildArg&ndash;&gt;
+                                        <buildArg>&#45;&#45;no-fallback</buildArg>
+                                        <buildArg>&#45;&#45;report-unsupported-elements-at-runtime</buildArg>
+                                    </buildArgs>
+                                </configuration>
+                            </plugin>
+
+                        </plugins>
+                    </build>
+                </profile>-->
+
+        <!-- This is the profile for running the JIT version of the app AND RUNNING THE AGENTLIB
+           to profile the app to identify reflection etc. To run:
+
+           To run: mvn clean package exec:exec -PJAVA_AGENT_LIB
+           mvn clean package -PJAVA_AGENT_LIB
+       -->
+        <profile>
+            <id>JAVA_AGENT_LIB</id>
+            <build>
+                <plugins>
+                    <!-- Compiler -->
+                    <plugin>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <version>3.8.0</version>
+                        <configuration>
+                            <source>${jdk.version}</source>
+                            <target>${jdk.version}</target>
+                        </configuration>
+                    </plugin>
+                    <!-- Package -->
+                    <plugin>
+                        <artifactId>maven-assembly-plugin</artifactId>
+                        <version>3.1.0</version>
+                        <configuration>
+                            <descriptorRefs>
+                                <descriptorRef>jar-with-dependencies</descriptorRef>
+                            </descriptorRefs>
+                            <archive>
+                                <manifest>
+                                    <!-- Specify the main class -->
+                                    <mainClass>${mainClass}</mainClass>
+                                </manifest>
+                            </archive>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>make-assembly</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>single</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <!-- Run the app, quick way of testing the Java version -->
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>1.2</version>
+                        <configuration>
+                            <executable>java</executable>
+                            <arguments>
+                                <argument>
+                                    -agentlib:native-image-agent=config-output-dir=./src/main/resources/META-INF/native-image/
+                                </argument>
+                                <argument>-classpath</argument>
+                                <classpath/>
+                                <argument>${mainClass}</argument>
+                            </arguments>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <!-- This is the profile for generating the native image. It must be run
+            after the agent lib has done it's work, or if it doesn't need to do it's
+            work ;)
+            To run: mvn clean package exec:exec -PNATIVE_IMAGE
+            mvn clean package -PNATIVE_IMAGE
+        -->
+        <profile>
+            <id>NATIVE_IMAGE</id>
+            <build>
+                <plugins>
+                    <!-- Native Image -->
+                    <plugin>
+                        <groupId>org.graalvm.buildtools</groupId>
+                        <artifactId>native-maven-plugin</artifactId>
+                        <version>${native.maven.plugin.version}</version>
+                        <extensions>true</extensions>
+                        <executions>
+                            <execution>
+                                <id>build-native</id>
+                                <goals>
+                                    <goal>build</goal>
+                                </goals>
+                                <phase>package</phase>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <!-- Set this to true if you need to switch this off -->
+                            <skip>false</skip>
+                            <!-- The output name for the executable -->
+                            <imageName>${imageName}</imageName>
+                            <mainClass>${mainClass}</mainClass>
+                            <buildArgs>
+                                <!-- With Enterprise you can use the G1GC -->
+                                <!--buildArg>- -gc=G1</buildArg-->
+                                <buildArg>--no-fallback</buildArg>
+                                <buildArg>--report-unsupported-elements-at-runtime</buildArg>
+                            </buildArgs>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+    </profiles>
+
     <build>
         <plugins>
+            <!-- Compiler -->
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.10.1</version>
+                <version>3.8.0</version>
                 <configuration>
                     <source>${jdk.version}</source>
                     <target>${jdk.version}</target>
-                    <encoding>UTF-8</encoding>
-                    <annotationProcessorPaths>
-                        <path>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                            <version>${lombok.version}</version>
-                        </path>
-                    </annotationProcessorPaths>
                 </configuration>
             </plugin>
-            <!-- copy dependency jar to specified location-->
+            <!-- Package -->
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>3.2.0</version>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                    <archive>
+                        <manifest>
+                            <!-- Specify the main class -->
+                            <mainClass>${mainClass}</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
                 <executions>
                     <execution>
-                        <id>copy-dependencies</id>
+                        <id>make-assembly</id>
                         <phase>package</phase>
                         <goals>
-                            <goal>copy-dependencies</goal>
+                            <goal>single</goal>
                         </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
-                            <overWriteReleases>false</overWriteReleases>
-                            <overWriteSnapshots>false</overWriteSnapshots>
-                            <overWriteIfNewer>true</overWriteIfNewer>
-                        </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <!-- Run the app, quick way of testing the Java version -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.2</version>
+                <configuration>
+                    <executable>java</executable>
+                    <arguments>
+                        <argument>-classpath</argument>
+                        <classpath/>
+                        <argument>${mainClass}</argument>
+                    </arguments>
+                </configuration>
             </plugin>
         </plugins>
     </build>
