@@ -14,6 +14,7 @@ import netty.FileTransfer.FileTransferServerInboundHandler;
 import tls.SSLContextUtil;
 
 import javax.net.ssl.SSLEngine;
+import java.util.Scanner;
 
 public class NettyTestServer {
     private int port;
@@ -55,9 +56,17 @@ public class NettyTestServer {
                     }
                 });
 
+
         try {
             ChannelFuture channelFuture = bootstrap.bind(port).sync();
-            channelFuture.channel().closeFuture().addListener((ChannelFutureListener) future -> {
+            Channel channel = channelFuture.channel();
+            new Thread(() -> {
+                Scanner scanner = new Scanner(System.in);
+                if (scanner.nextLine().equalsIgnoreCase("exit")) {
+                    channel.close();
+                }
+            }).start();
+            channel.closeFuture().addListener((ChannelFutureListener) future -> {
                 bossGroup.shutdownGracefully();
                 workGroup.shutdownGracefully();
             });

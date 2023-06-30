@@ -38,7 +38,6 @@ public class SomeIpMatrixCheckerApplication extends Application {
         displaySystemTrayIcon(stage);
 
         stage.show();
-
     }
 
     private void displaySystemTrayIcon(Stage stage) throws MalformedURLException {
@@ -50,7 +49,7 @@ public class SomeIpMatrixCheckerApplication extends Application {
         Platform.setImplicitExit(false);
 
         URL url = getClass().getResource("/projects/smIpCmxCheck/logo.png");
-        System.out.println("commentImgs = " + url);
+//        System.out.println("commentImgs = " + url);
         java.awt.Image image = Toolkit.getDefaultToolkit().getImage(url);
         final TrayIcon trayIcon = new TrayIcon(image);
         trayIcon.setImageAutoSize(true);

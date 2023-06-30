@@ -38,6 +38,19 @@
             <artifactId>log4j</artifactId>
             <version>1.2.17</version>
         </dependency>
+
+        <!-- 自定义jar-->
+        <dependency>
+            <groupId>cn.ept</groupId>
+            <artifactId>eptutils</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <profiles>
@@ -151,6 +164,7 @@
                 mvn clean package
                 mvn -Pnative -Dagent exec:exec@java-agent
                 mvn -DskipTests=true -Pnative -Dagent package
+                mvn -Pnative exec:exec@native
          -->
         <profile>
             <id>native</id>

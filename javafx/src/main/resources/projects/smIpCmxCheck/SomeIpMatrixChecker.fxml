@@ -12,7 +12,7 @@
 
 <AnchorPane fx:id="rootPane" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projects.smIpCmxCheck.SomeIpMatrixCheckerController">
     <children>
-        <Label layoutX="25.0" layoutY="36.0" prefHeight="19.0" prefWidth="141.0" text="SOMEIP服务矩阵路径" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="35.0">
+        <Label layoutX="25.0" layoutY="36.0" prefHeight="19.0" prefWidth="141.0" text="SOME/IP服务矩阵路径" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="35.0">
             <font>
                 <Font size="14.0" />
             </font>
@@ -30,7 +30,7 @@
         </TableView>
         <TextField fx:id="filePath" layoutX="191.0" layoutY="29.0" prefHeight="30.0" prefWidth="686.0" AnchorPane.leftAnchor="195.0" AnchorPane.rightAnchor="125.0" AnchorPane.topAnchor="30.0" />
         <Button layoutX="905.0" layoutY="29.0" mnemonicParsing="false" onAction="#fileChooserAction" prefHeight="32.0" prefWidth="80.0" text="选择矩阵" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="29.0" />
-        <Label layoutX="25.0" layoutY="83.0" prefHeight="19.0" prefWidth="130.0" text="AUTOSA平台类型" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="83.0">
+        <Label layoutX="25.0" layoutY="83.0" prefHeight="19.0" prefWidth="130.0" text="AUTOSAR平台类型" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="83.0">
             <font>
                 <Font size="14.0" />
             </font>
@@ -41,7 +41,7 @@
             </toggleGroup>
         </RadioButton>
         <RadioButton layoutX="359.0" layoutY="85.0" mnemonicParsing="false" text="ADAPTIVE AUTOSAR" toggleGroup="$autosarTypeEnum" AnchorPane.leftAnchor="355.0" AnchorPane.topAnchor="85.0" />
-        <Label layoutX="25.0" layoutY="130.0" prefHeight="19.0" prefWidth="130.0" text="SOMIP矩阵检查结果" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="130.0">
+        <Label layoutX="25.0" layoutY="130.0" prefHeight="19.0" prefWidth="130.0" text="SOME/IP矩阵检查结果" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="130.0">
             <font>
                 <Font size="14.0" />
             </font>

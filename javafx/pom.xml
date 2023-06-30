@@ -12,6 +12,8 @@
     <artifactId>javafx</artifactId>
 
     <properties>
+        <scope>provided</scope>
+<!--        <scope>compile</scope>-->
         <jdk.version>17</jdk.version>
         <graalvm.version>23.0.0</graalvm.version>
         <openfx.version>11.0.2</openfx.version>
@@ -48,19 +50,19 @@
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
             <version>${openfx.version}</version>
-            <!--            <scope>provided</scope>-->
+            <scope>${scope}</scope>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
             <version>${openfx.version}</version>
-            <!--            <scope>provided</scope>-->
+            <scope>${scope}</scope>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-swing</artifactId>
             <version>${openfx.version}</version>
-            <!--            <scope>provided</scope>-->
+            <scope>${scope}</scope>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.pixelduke/fxribbon -->
@@ -68,24 +70,27 @@
             <groupId>com.pixelduke</groupId>
             <artifactId>fxribbon</artifactId>
             <version>1.2.2</version>
+            <scope>${scope}</scope>
         </dependency>
 
         <dependency>
             <groupId>org.jfxtras</groupId>
             <artifactId>jmetro</artifactId>
             <version>11.6.16</version>
+            <scope>${scope}</scope>
         </dependency>
         <dependency>
             <groupId>org.kordamp.bootstrapfx</groupId>
             <artifactId>bootstrapfx-core</artifactId>
             <version>0.4.0</version>
+            <scope>${scope}</scope>
         </dependency>
 
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
             <version>${junit.version}</version>
-            <scope>test</scope>
+            <scope>${scope}</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -100,11 +105,12 @@
             <artifactId>excelhandler</artifactId>
             <version>2.2.1</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j-impl -->
         <dependency>
-            <groupId>org.graalvm.sdk</groupId>
-            <artifactId>graal-sdk</artifactId>
-            <version>${graalvm.version}</version>
-            <scope>provided</scope>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
+            <version>2.20.0</version>
+            <!--            <scope>test</scope>-->
         </dependency>
     </dependencies>
 

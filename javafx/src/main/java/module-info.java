@@ -4,6 +4,7 @@ module javafxdemos {
     requires javafx.fxml;
     requires javafx.swing;
     requires static lombok;
+    requires slf4j.api;
     requires static eptutils;
     requires excelhandler;
     requires java.desktop;
@@ -11,6 +12,7 @@ module javafxdemos {
     requires org.jfxtras.styles.jmetro;
     requires fxribbon;
     requires org.kordamp.bootstrapfx.core;
+    requires org.apache.poi.ooxml;
 
 
     opens projects.internalbehavior to javafx.fxml;

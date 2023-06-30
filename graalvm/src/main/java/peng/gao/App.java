@@ -42,6 +42,8 @@ package peng.gao;
  */
 
 
+import ept.commonapi.EPTUtils;
+
 /**
  * Our App. This will count the number of files within a directory, and sub dirs,
  * and also calculate the total size of all of the files.
@@ -62,6 +64,9 @@ public final class App {
 
         final FileCount count = ListDir.list(root);
         final String size = ListDir.humanReadableByteCountBin(count.getSize());
+        if (!EPTUtils.isStringEmpty(size)) {
+            System.out.println("size = " + size);
+        }
 
         System.out.println("Counting directory: " + root);
         System.out.println("Total: "
