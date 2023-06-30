@@ -12,8 +12,8 @@
     <artifactId>javafx</artifactId>
 
     <properties>
-        <scope>provided</scope>
-<!--        <scope>compile</scope>-->
+<!--        <scope>provided</scope>-->
+        <scope>compile</scope>
         <jdk.version>17</jdk.version>
         <graalvm.version>23.0.0</graalvm.version>
         <openfx.version>11.0.2</openfx.version>
