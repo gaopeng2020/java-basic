@@ -147,6 +147,11 @@
             </build>
         </profile>
 
+        <!--  one key to generate the native image. usage:
+                mvn clean package
+                mvn -Pnative -Dagent exec:exec@java-agent
+                mvn -DskipTests=true -Pnative -Dagent package
+         -->
         <profile>
             <id>native</id>
             <build>
