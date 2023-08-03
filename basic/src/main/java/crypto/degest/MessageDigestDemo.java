@@ -66,8 +66,7 @@ public class MessageDigestDemo {
         String alg = "HmacMD5";
         KeyGenerator kg = KeyGenerator.getInstance(alg);
         kg.init(224);
-         SecretKey key = kg.generateKey();
-
+        SecretKey key = kg.generateKey();
 
         Mac senderMac = Mac.getInstance(algorithm);
         senderMac.init(secretKey);
@@ -79,13 +78,13 @@ public class MessageDigestDemo {
         byte[] bytes2 = receiverMac.doFinal(input);
 
         String receivedMac = Base64.getEncoder().encodeToString(bytes1);
-        String calMac = Base64.getEncoder().encodeToString(bytes2);
+        String calculatedMac = Base64.getEncoder().encodeToString(bytes2);
 
         System.out.println("ReceivedMac: " + receivedMac);
-        if (receivedMac.equals(calMac)) {
+        if (receivedMac.equals(calculatedMac)) {
             System.out.println("消息认证通过！");
         } else {
-            System.err.println("消息认证未通过,计算的MAC= " + calMac);
+            System.err.println("消息认证未通过,计算的MAC= " + calculatedMac);
         }
     }
 

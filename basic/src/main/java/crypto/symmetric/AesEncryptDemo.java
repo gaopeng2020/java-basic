@@ -1,9 +1,13 @@
 package crypto.symmetric;
 
-import javax.crypto.Cipher;
+import javax.crypto.*;
+import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Base64;
 
@@ -22,11 +26,11 @@ public class AesEncryptDemo {
 
         // AES加密算法，密钥的长度可以是128位16个字节、192位（24字节）或者256位(32字节),
         // 密码可以随机生成也可以手动指定，例如String key = "A1B2C3D4E5F6G7H8";
-        byte[] key =  new SecureRandom().generateSeed(32);
+        byte[] key = new SecureRandom().generateSeed(32);
         System.out.println("key = " + Base64.getEncoder().encodeToString(key));
 
         // CBC模式,必须指定初始向量,初始向量中密钥的长度需符合算法标准，DES为8字节，AES为16字节
-         String transformation = "AES/CBC/PKCS5Padding";
+        String transformation = "AES/CBC/PKCS5Padding";
         // 指定获取密钥的算法
         String algorithm = "AES";
 
@@ -35,6 +39,10 @@ public class AesEncryptDemo {
 
         String s = decryptAES(encryptAES, key, transformation, algorithm);
         System.out.println("解密:" + s);
+
+        //ASE-256-GCM TEST
+        AESGCMEncrypt(input,key);
+        AESGCMDecrypt(input,key);
     }
 
     /**
@@ -91,5 +99,37 @@ public class AesEncryptDemo {
 
         //  因为是明文，所以直接返回
         return new String(bytes);
+    }
+
+    //解密
+    public static String AESGCMDecrypt(String content, byte[] key) throws Exception {
+        Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
+        SecretKeySpec sks = new SecretKeySpec(key, "AES");
+        cipher.init(Cipher.ENCRYPT_MODE, sks);
+
+        byte[] message = Base64.getDecoder().decode(content);
+        // 这里的12和16是加密的时候设置的偏移参数及加密长度
+        if (message.length < 12 + 16) throw new IllegalArgumentException();
+        GCMParameterSpec params = new GCMParameterSpec(128, message, 0, 12);
+        cipher.init(Cipher.DECRYPT_MODE, sks, params);
+        byte[] decryptData = cipher.doFinal(message, 12, message.length - 12);
+        return new String(decryptData);
+    }
+
+    //加密
+    public static String AESGCMEncrypt(String content, byte[] key) throws Exception {
+        SecretKeySpec sks = new SecretKeySpec(key, "AES");
+        Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
+        cipher.init(Cipher.ENCRYPT_MODE, sks);
+        byte[] iv = cipher.getIV();
+        assert iv.length == 12;// 偏移参数及长度要在解密的时候保持一致
+        byte[] encryptData = cipher.doFinal(content.getBytes());
+
+        assert encryptData.length == content.getBytes().length + 16;
+        byte[] message = new byte[12 + content.getBytes().length + 16];
+        System.arraycopy(iv, 0, message, 0, 12);
+        System.arraycopy(encryptData, 0, message, 12, encryptData.length);
+        return Base64.getEncoder().encodeToString(message);
+
     }
 }
