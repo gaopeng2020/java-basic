@@ -132,12 +132,8 @@ public class HelloController {
         tableview.getSelectionModel().getSelectedItems();
 
         //监听选择项
-        tableview.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Student>() {
-            @Override
-            public void changed(ObservableValue<? extends Student> observableValue, Student student, Student t1) {
-                System.out.println("t1.toString() = " + t1.toString());
-            }
-        });
+        tableview.getSelectionModel().selectedItemProperty().addListener((observableValue, oldItem, newItem) ->
+                System.out.println("newItem.toString() = " + newItem.toString()));
         ContextMenu tableviewContextMenu = tableview.getContextMenu();
 
     }

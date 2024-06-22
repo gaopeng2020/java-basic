@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ContextMenu?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0"
+            prefWidth="800.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="projects.exportSwDocs.ExportSwDocsController">
+    <children>
+        <Button layoutX="718.0" layoutY="50.0" mnemonicParsing="false" onMousePressed="#onOpenBtnMousePressed"
+                prefHeight="30.0" prefWidth="68.0" text="打开" AnchorPane.rightAnchor="15.0"
+                AnchorPane.topAnchor="35.0"/>
+        <Label layoutX="15.0" layoutY="80.0" prefHeight="30.0" prefWidth="100.0" text="选择文档信息"
+               AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="35.0"/>
+        <TextField fx:id="filePath" layoutX="114.0" layoutY="35.0" prefHeight="30.0" prefWidth="581.0"
+                   AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="35.0"/>
+        <TextField fx:id="exportRange" layoutX="114.0" layoutY="85.0" prefHeight="30.0" prefWidth="581.0"
+                   AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="85.0"/>
+        <Label layoutX="15.0" layoutY="138.0" prefHeight="30.0" prefWidth="100.0" text="输入导出范围"
+               AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="85.0"/>
+        <Button layoutX="718.0" layoutY="100.0" mnemonicParsing="false" onMousePressed="#onExportBtnMousePressed"
+                prefHeight="30.0" prefWidth="68.0" text="导出" AnchorPane.rightAnchor="15.0"
+                AnchorPane.topAnchor="85.0"/>
+        <TableView fx:id="tableView" layoutX="6.0" layoutY="192.0" prefHeight="402.0" prefWidth="788.0"
+                   AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0"
+                   AnchorPane.topAnchor="170.0">
+            <columns>
+                <TableColumn fx:id="docNumCol" maxWidth="80.0" minWidth="20.0" prefWidth="50.0" text="No."/>
+                <TableColumn fx:id="docNameCol" maxWidth="1000.0" minWidth="200.0" prefWidth="250.0" text="Name"/>
+                <TableColumn fx:id="docUuidCol" maxWidth="1000.0" minWidth="200.0" prefWidth="213.0" text="UUID"/>
+                <TableColumn fx:id="docCheckStatus" minWidth="80.0" prefWidth="127.0" text="Check Status"/>
+                <TableColumn fx:id="docExportStatus" prefWidth="119.0" text="Export Status"/>
+            </columns>
+            <contextMenu>
+                <ContextMenu>
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#onNewItemAction" text="New Item"/>
+                        <MenuItem mnemonicParsing="false" onAction="#onCheckAllAction" text="Check All"/>
+                        <MenuItem mnemonicParsing="false" onAction="#onCheckSelectedAction" text="Check Selected"/>
+                        <MenuItem mnemonicParsing="false" onAction="#onUncheckAllAction" text="Uncheck All"/>
+                        <MenuItem mnemonicParsing="false" onAction="#onUncheckSelectedAction" text="Uncheck Selected"/>
+                        <MenuItem mnemonicParsing="false" onAction="#onRevealInExplorerAction" text="Reveal in File Explorer"/>
+                    </items>
+                </ContextMenu>
+            </contextMenu>
+        </TableView>
+        <TextField fx:id="tf_Search" layoutX="5.0" layoutY="170.0" prefHeight="30.0" prefWidth="790.0"
+                   AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="135.0"/>
+    </children>
+</AnchorPane>

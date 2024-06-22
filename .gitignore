@@ -45,5 +45,5 @@ target
 /key.pub
 /temp
 /log
-
-META-INF
+/cmake-3.28.1
+/javafx/app/

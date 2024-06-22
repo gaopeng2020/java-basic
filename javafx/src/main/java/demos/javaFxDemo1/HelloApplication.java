@@ -35,4 +35,7 @@ public class HelloApplication extends Application {
         System.out.println("selectedValue = " + selectedValue);
         stage.show();
     }
+    public static void main(String[] args) {
+        launch();
+    }
 }

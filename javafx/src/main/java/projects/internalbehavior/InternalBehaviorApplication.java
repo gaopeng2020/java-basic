@@ -37,6 +37,7 @@ public class InternalBehaviorApplication extends Application {
 //        stage.initModality(Modality.NONE);
         stage.setOpacity(0.98);
         stage.show();
+
         currentThread = Thread.currentThread();
         stage.setOnCloseRequest(event -> {
             latch.countDown();

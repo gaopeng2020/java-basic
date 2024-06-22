@@ -4,16 +4,15 @@ module javafxdemos {
     requires javafx.fxml;
     requires javafx.swing;
     requires static lombok;
-    requires slf4j.api;
     requires static eptutils;
     requires excelhandler;
     requires java.desktop;
     requires org.apache.poi.poi;
+    requires org.apache.poi.ooxml;
     requires org.jfxtras.styles.jmetro;
     requires fxribbon;
     requires org.kordamp.bootstrapfx.core;
-    requires org.apache.poi.ooxml;
-
+    requires org.apache.logging.log4j.slf4j.impl;
 
     opens projects.internalbehavior to javafx.fxml;
     exports projects.internalbehavior;
@@ -36,4 +35,6 @@ module javafxdemos {
     opens demos.RibbonDemos to javafx.fxml;
     exports demos.RibbonDemos;
 
+    opens projects.exportSwDocs to javafx.fxml;
+    exports projects.exportSwDocs;
 }

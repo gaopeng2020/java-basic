@@ -21,13 +21,11 @@
     </modules>
 
     <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
-        <!--POI version definition-->
-        <poi.version>5.2.0</poi.version>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <poi.version>5.2.5</poi.version>
         <lombok.version>1.18.28</lombok.version>
-        <log4j.version>2.20.0</log4j.version>
-        <eptutil.version>2.0.0</eptutil.version>
+        <eptutil.version>2.0.2</eptutil.version>
     </properties>
 
     <dependencyManagement>
@@ -38,7 +36,7 @@
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
                 <version>${lombok.version}</version>
-<!--                <scope>provided</scope>-->
+                <!--                <scope>provided</scope>-->
             </dependency>
             <!-- https://mvnrepository.com/artifact/junit/junit -->
             <dependency>
@@ -73,17 +71,12 @@
                 <artifactId>poi-ooxml</artifactId>
                 <version>${poi.version}</version>
             </dependency>
-            <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
+            <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j-impl -->
             <dependency>
                 <groupId>org.apache.logging.log4j</groupId>
-                <artifactId>log4j-core</artifactId>
-                <version>${log4j.version}</version>
-            </dependency>
-            <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
-            <dependency>
-                <groupId>org.apache.logging.log4j</groupId>
-                <artifactId>log4j-api</artifactId>
-                <version>${log4j.version}</version>
+                <artifactId>log4j-slf4j-impl</artifactId>
+                <version>2.23.0</version>
+                <!--            <scope>test</scope>-->
             </dependency>
 
             <!-- 自定义jar-->

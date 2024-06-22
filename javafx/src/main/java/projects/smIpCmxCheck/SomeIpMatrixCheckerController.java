@@ -221,8 +221,8 @@ public class SomeIpMatrixCheckerController {
                 SomeIpMatrixReader someIpMatrixReader = new EptCpMatrixReader(workbook);
                 someIpMatrixReader.setAutosarType(autosarTypeEnum);
                 someIpMatrixReader.readInfoFromExcel();
-                policyBuilder.setPolicyExcelCheckContext(someIpMatrixReader);
-                List<ExcelCheckerReturnType> excelCheckerReturnTypeList = policyBuilder.checkPolicies();
+//                policyBuilder.setPolicyExcelCheckContext(someIpMatrixReader);
+                List<ExcelCheckerReturnType> excelCheckerReturnTypeList = policyBuilder.checkPolicies(someIpMatrixReader);
                 checkResult.addAll(excelCheckerReturnTypeList);
             }
         }

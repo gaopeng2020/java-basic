@@ -2,20 +2,15 @@ package demos.javaFxDemo4;
 
 
 import javafx.application.Application;
-        import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
-import javafx.scene.Node;
-        import javafx.scene.Scene;
-        import javafx.scene.control.Button;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Separator;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-        import javafx.stage.Stage;
-        import org.kordamp.bootstrapfx.BootstrapFX;
-        import org.kordamp.bootstrapfx.scene.layout.Panel;
+import javafx.stage.Stage;
+import org.kordamp.bootstrapfx.BootstrapFX;
 
-import java.util.Map;
 import java.util.Objects;
 
 public class CssSampleApplication extends Application {
@@ -58,6 +53,6 @@ public class CssSampleApplication extends Application {
     }
 
     public static void main(String[] args) {
-        launch();
+        launch(args);
     }
 }

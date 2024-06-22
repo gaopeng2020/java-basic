@@ -2,8 +2,7 @@ module basic { //在模块前使用open关键字可开放真个模块的反射�
     requires java.base;
     requires java.desktop;
     requires static lombok;
-    requires org.apache.logging.log4j;
-    requires org.apache.logging.log4j.core;
+    requires org.apache.logging.log4j.slf4j.impl;
     requires transitive com.fasterxml.jackson.databind; //传递依赖，如果模块x依赖当前模块，则模块x不需要再次导入该需求模块即可直接使用
     requires java.sql;
     requires org.dom4j;
@@ -12,6 +11,8 @@ module basic { //在模块前使用open关键字可开放真个模块的反射�
     requires org.apache.commons.codec;
     requires org.apache.commons.io;
     requires eptutils;
+    requires org.apache.poi.poi;
+    requires org.apache.poi.ooxml;
 
     exports basic.collection to javafxdemos; //只把这个包暴露给javafxdemos模块
     exports basic.grammer;

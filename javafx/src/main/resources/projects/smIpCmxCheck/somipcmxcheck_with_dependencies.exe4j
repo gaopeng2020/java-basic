@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <exe4j version="7.0" transformSequenceNumber="3">
-  <application name="SomIpMatrixChecker" distributionSourceDir="C:/Users/Public/Documents/gitlab/java/javafx/target" />
-  <executable name="SomIpMatrixChecker" wrapperType="embed" iconSet="true" iconFile="C:/Users/Public/Documents/gitlab/java/javafx/src/main/resources/projects/smIpCmxCheck/logo.ico" executableDir="." redirectStdout="true" executableMode="gui" singleInstance="true" checkConsoleParameter="true" />
+  <directoryPresets config="C:/Users/lenovo/Documents/gitlab/java/javafx/target" />
+  <application name="SomIpMatrixChecker" distributionSourceDir="C:/Users/lenovo/Documents/gitlab/java/javafx/target" />
+  <executable name="SomIpMatrixChecker" wrapperType="embed" iconSet="true" iconFile="C:/Users/lenovo/Documents/gitlab/java/javafx/src/main/resources/projects/smIpCmxCheck/logo.ico" executableDir="." redirectStdout="true" executableMode="gui" singleInstance="true" checkConsoleParameter="true" />
   <java mainClass="projects.smIpCmxCheck.SomeIpMatrixCheckerApplication" vmParameters="-Dfile.encoding=GBK" minVersion="17" maxVersion="17">
     <searchSequence>
-      <directory location="./jre" />
+      <registry />
     </searchSequence>
     <classPath>
-      <archive location="C:/Users/Public/Documents/gitlab/java/javafx/target/javafx-1.0-SNAPSHOT-jar-with-dependencies.jar" failOnError="false" />
+      <archive location="C:/Users/lenovo/Documents/gitlab/java/javafx/target/javafx-1.0-SNAPSHOT-jar-with-dependencies.jar" failOnError="false" />
     </classPath>
   </java>
 </exe4j>

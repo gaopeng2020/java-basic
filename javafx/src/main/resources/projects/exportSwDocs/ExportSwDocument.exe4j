@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<exe4j version="7.0" transformSequenceNumber="3">
+  <directoryPresets config="./lib" />
+  <application name="ExportSysteamWeaverDocument" distributionSourceDir="C:/Users/lenovo/Documents/gitlab/java/javafx/app" />
+  <executable name="ExportSysteamWeaverDocument" iconSet="true" iconFile="C:/Users/lenovo/Documents/gitlab/java/javafx/src/main/resources/projects/smIpCmxCheck/logo.ico" executableDir="." redirectStdout="true" executableMode="gui" singleInstance="true" checkConsoleParameter="true" />
+  <java mainClass="projects.exportSwDocs.ExportSwDocsApplication" vmParameters="-Dexe.path=${EXE4J_EXEDIR} -Dfile.encoding=GBK" minVersion="17" maxVersion="17">
+    <searchSequence>
+      <directory location="./jre" />
+    </searchSequence>
+    <classPath>
+      <archive location="C:/Users/lenovo/Documents/gitlab/java/javafx/app/javafx-1.0-SNAPSHOT.jar" failOnError="false" />
+      <scanDirectory location="./lib" failOnError="false" />
+    </classPath>
+    <modulePath>
+      <directory location="C:/Users/Public/Documents/gitlab/preevision/demos/target/demos-1.0-SNAPSHOT.jar" failOnError="false" />
+      <directory location="../../excelhandler/target/lib" failOnError="false" />
+    </modulePath>
+  </java>
+</exe4j>

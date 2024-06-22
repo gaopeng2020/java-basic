@@ -42,7 +42,13 @@ public class ThreadPool implements Runnable{
     }
 
     public static void main(String[] args) {
-        ExecutorService executorService = Executors.newFixedThreadPool(5);
+        ExecutorService executorService = new ThreadPoolExecutor(5, 8, 1000,
+                TimeUnit.MILLISECONDS,
+                new ArrayBlockingQueue<Runnable>(5),
+                Executors.defaultThreadFactory(),
+                new ThreadPoolExecutor.CallerRunsPolicy());
+
+//        ExecutorService executorService = Executors.newFixedThreadPool(5);
         ThreadPool thread1 = new ThreadPool(100);
         ThreadPool thread2 = new ThreadPool(200);
         ThreadPool thread3 = new ThreadPool(200);
