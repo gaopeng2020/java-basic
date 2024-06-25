@@ -17,14 +17,13 @@
         <module>jna</module>
         <module>spring</module>
         <module>javafx</module>
-        <module>graalvm</module>
     </modules>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <poi.version>5.2.5</poi.version>
-        <lombok.version>1.18.28</lombok.version>
+        <lombok.version>1.18.30</lombok.version>
         <eptutil.version>2.0.2</eptutil.version>
     </properties>
 

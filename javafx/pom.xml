@@ -18,7 +18,7 @@
 <!--        <openfx.version>17.0.10</openfx.version>-->
         <openfx.version>11.0.2</openfx.version>
         <junit.version>5.10.0</junit.version>
-        <lombok.version>1.18.28</lombok.version>
+        <lombok.version>1.18.30</lombok.version>
 
         <app.name>SomeIpMatrixCheckerApp</app.name>
         <app.version>1.0.0</app.version>

@@ -82,189 +82,189 @@
 
            To run: mvn clean package exec:exec -PJAVA_AGENT_LIB
        -->
-        <profile>
-            <id>JAVA_AGENT_LIB</id>
-            <build>
-                <plugins>
-                    <!-- Compiler -->
-                    <plugin>
-                        <artifactId>maven-compiler-plugin</artifactId>
-                        <version>3.8.0</version>
-                        <configuration>
-                            <source>${jdk.version}</source>
-                            <target>${jdk.version}</target>
-                        </configuration>
-                    </plugin>
-                    <!-- Package -->
-                    <plugin>
-                        <artifactId>maven-assembly-plugin</artifactId>
-                        <version>3.1.0</version>
-                        <configuration>
-                            <descriptorRefs>
-                                <descriptorRef>jar-with-dependencies</descriptorRef>
-                            </descriptorRefs>
-                            <archive>
-                                <manifest>
-                                    <!-- Specify the main class -->
-                                    <mainClass>${mainClass}</mainClass>
-                                </manifest>
-                            </archive>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>make-assembly</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>single</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <!-- Run the app, quick way of testing the Java version -->
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>exec-maven-plugin</artifactId>
-                        <version>1.2</version>
-                        <configuration>
-                            <executable>java</executable>
-                            <arguments>
-                                <argument>
-                                    -agentlib:native-image-agent=config-output-dir=./src/main/resources/META-INF/native-image/
-                                </argument>
-                                <argument>-classpath</argument>
-                                <classpath/>
-                                <argument>${mainClass}</argument>
-                            </arguments>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
+<!--        <profile>-->
+<!--            <id>JAVA_AGENT_LIB</id>-->
+<!--            <build>-->
+<!--                <plugins>-->
+<!--                    &lt;!&ndash; Compiler &ndash;&gt;-->
+<!--                    <plugin>-->
+<!--                        <artifactId>maven-compiler-plugin</artifactId>-->
+<!--                        <version>3.8.0</version>-->
+<!--                        <configuration>-->
+<!--                            <source>${jdk.version}</source>-->
+<!--                            <target>${jdk.version}</target>-->
+<!--                        </configuration>-->
+<!--                    </plugin>-->
+<!--                    &lt;!&ndash; Package &ndash;&gt;-->
+<!--                    <plugin>-->
+<!--                        <artifactId>maven-assembly-plugin</artifactId>-->
+<!--&lt;!&ndash;                        <version>3.1.0</version>&ndash;&gt;-->
+<!--                        <configuration>-->
+<!--                            <descriptorRefs>-->
+<!--                                <descriptorRef>jar-with-dependencies</descriptorRef>-->
+<!--                            </descriptorRefs>-->
+<!--                            <archive>-->
+<!--                                <manifest>-->
+<!--                                    &lt;!&ndash; Specify the main class &ndash;&gt;-->
+<!--                                    <mainClass>${mainClass}</mainClass>-->
+<!--                                </manifest>-->
+<!--                            </archive>-->
+<!--                        </configuration>-->
+<!--                        <executions>-->
+<!--                            <execution>-->
+<!--                                <id>make-assembly</id>-->
+<!--                                <phase>package</phase>-->
+<!--                                <goals>-->
+<!--                                    <goal>single</goal>-->
+<!--                                </goals>-->
+<!--                            </execution>-->
+<!--                        </executions>-->
+<!--                    </plugin>-->
+<!--                    &lt;!&ndash; Run the app, quick way of testing the Java version &ndash;&gt;-->
+<!--                    <plugin>-->
+<!--                        <groupId>org.codehaus.mojo</groupId>-->
+<!--                        <artifactId>exec-maven-plugin</artifactId>-->
+<!--                        <version>1.2</version>-->
+<!--                        <configuration>-->
+<!--                            <executable>java</executable>-->
+<!--                            <arguments>-->
+<!--                                <argument>-->
+<!--                                    -agentlib:native-image-agent=config-output-dir=./src/main/resources/META-INF/native-image/-->
+<!--                                </argument>-->
+<!--                                <argument>-classpath</argument>-->
+<!--                                <classpath/>-->
+<!--                                <argument>${mainClass}</argument>-->
+<!--                            </arguments>-->
+<!--                        </configuration>-->
+<!--                    </plugin>-->
+<!--                </plugins>-->
+<!--            </build>-->
+<!--        </profile>-->
 
         <!-- This is the profile for generating the native image. It must be run
             after the agent lib has done it's work, or if it doesn't need to do it's
             work ;)
             To run: mvn clean package exec:exec -PNATIVE_IMAGE
         -->
-        <profile>
-            <id>NATIVE_IMAGE</id>
-            <build>
-                <plugins>
-                    <!-- Native Image -->
-                    <plugin>
-                        <groupId>org.graalvm.buildtools</groupId>
-                        <artifactId>native-maven-plugin</artifactId>
-                        <version>0.9.23</version>
-                        <extensions>true</extensions>
-                        <executions>
-                            <execution>
-                                <id>build-native</id>
-                                <goals>
-                                    <goal>build</goal>
-                                </goals>
-                                <phase>package</phase>
-                            </execution>
-                        </executions>
-                        <configuration>
-                            <!-- Set this to true if you need to switch this off -->
-                            <skip>false</skip>
-                            <!-- The output name for the executable -->
-                            <imageName>${imageName}</imageName>
-                            <mainClass>${mainClass}</mainClass>
-                            <buildArgs>
-                                <!-- With Enterprise you can use the G1GC -->
-                                <!--buildArg>- -gc=G1</buildArg-->
-                                <buildArg>--no-fallback</buildArg>
-                                <buildArg>--report-unsupported-elements-at-runtime</buildArg>
-                            </buildArgs>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
+<!--        <profile>-->
+<!--            <id>NATIVE_IMAGE</id>-->
+<!--            <build>-->
+<!--                <plugins>-->
+<!--                    &lt;!&ndash; Native Image &ndash;&gt;-->
+<!--                    <plugin>-->
+<!--                        <groupId>org.graalvm.buildtools</groupId>-->
+<!--                        <artifactId>native-maven-plugin</artifactId>-->
+<!--                        <version>0.9.23</version>-->
+<!--                        <extensions>true</extensions>-->
+<!--                        <executions>-->
+<!--                            <execution>-->
+<!--                                <id>build-native</id>-->
+<!--                                <goals>-->
+<!--                                    <goal>build</goal>-->
+<!--                                </goals>-->
+<!--                                <phase>package</phase>-->
+<!--                            </execution>-->
+<!--                        </executions>-->
+<!--                        <configuration>-->
+<!--                            &lt;!&ndash; Set this to true if you need to switch this off &ndash;&gt;-->
+<!--                            <skip>false</skip>-->
+<!--                            &lt;!&ndash; The output name for the executable &ndash;&gt;-->
+<!--                            <imageName>${imageName}</imageName>-->
+<!--                            <mainClass>${mainClass}</mainClass>-->
+<!--                            <buildArgs>-->
+<!--                                &lt;!&ndash; With Enterprise you can use the G1GC &ndash;&gt;-->
+<!--                                &lt;!&ndash;buildArg>- -gc=G1</buildArg&ndash;&gt;-->
+<!--                                <buildArg>&#45;&#45;no-fallback</buildArg>-->
+<!--                                <buildArg>&#45;&#45;report-unsupported-elements-at-runtime</buildArg>-->
+<!--                            </buildArgs>-->
+<!--                        </configuration>-->
+<!--                    </plugin>-->
+<!--                </plugins>-->
+<!--            </build>-->
+<!--        </profile>-->
 
         <!--  one key to generate the native image. usage:
                 mvn clean package
                 mvn -Pnative -Dagent exec:exec@java-agent
                 mvn -DskipTests=true -Pnative -Dagent package
          -->
-        <profile>
-            <id>native</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>exec-maven-plugin</artifactId>
-                        <version>3.1.0</version>
-                        <executions>
-                            <execution>
-                                <id>java-agent</id>
-                                <goals>
-                                    <goal>exec</goal>
-                                </goals>
-                                <configuration>
-                                    <executable>java</executable>
-                                    <workingDirectory>${project.build.directory}</workingDirectory>
-                                    <arguments>
-                                        <argument>-classpath</argument>
-                                        <classpath/>
-                                        <argument>${mainClass}</argument>
-                                    </arguments>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>native</id>
-                                <goals>
-                                    <goal>exec</goal>
-                                </goals>
-                                <configuration>
-                                    <executable>${project.build.directory}/${imageName}</executable>
-                                    <workingDirectory>${project.build.directory}</workingDirectory>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
+<!--        <profile>-->
+<!--            <id>native</id>-->
+<!--            <build>-->
+<!--                <plugins>-->
+<!--                    <plugin>-->
+<!--                        <groupId>org.codehaus.mojo</groupId>-->
+<!--                        <artifactId>exec-maven-plugin</artifactId>-->
+<!--                        <version>3.1.0</version>-->
+<!--                        <executions>-->
+<!--                            <execution>-->
+<!--                                <id>java-agent</id>-->
+<!--                                <goals>-->
+<!--                                    <goal>exec</goal>-->
+<!--                                </goals>-->
+<!--                                <configuration>-->
+<!--                                    <executable>java</executable>-->
+<!--                                    <workingDirectory>${project.build.directory}</workingDirectory>-->
+<!--                                    <arguments>-->
+<!--                                        <argument>-classpath</argument>-->
+<!--                                        <classpath/>-->
+<!--                                        <argument>${mainClass}</argument>-->
+<!--                                    </arguments>-->
+<!--                                </configuration>-->
+<!--                            </execution>-->
+<!--                            <execution>-->
+<!--                                <id>native</id>-->
+<!--                                <goals>-->
+<!--                                    <goal>exec</goal>-->
+<!--                                </goals>-->
+<!--                                <configuration>-->
+<!--                                    <executable>${project.build.directory}/${imageName}</executable>-->
+<!--                                    <workingDirectory>${project.build.directory}</workingDirectory>-->
+<!--                                </configuration>-->
+<!--                            </execution>-->
+<!--                        </executions>-->
+<!--                    </plugin>-->
 
-                    <plugin>
-                        <groupId>org.graalvm.buildtools</groupId>
-                        <artifactId>native-maven-plugin</artifactId>
-                        <version>${native.maven.plugin.version}</version>
-                        <extensions>true</extensions>
-                        <executions>
-                            <execution>
-                                <id>build-native</id>
-                                <goals>
-                                    <goal>compile-no-fork</goal>
-                                </goals>
-                                <phase>package</phase>
-                            </execution>
-                            <execution>
-                                <id>test-native</id>
-                                <goals>
-                                    <goal>test</goal>
-                                </goals>
-                                <phase>test</phase>
-                            </execution>
-                        </executions>
-                        <configuration>
-                            <skip>false</skip>
-                            <agent>
-                                <enabled>true</enabled>
-                            </agent>
-                            <fallback>false</fallback>
-                            <imageName>${imageName}</imageName>
-                            <mainClass>${mainClass}</mainClass>
-                            <buildArgs>
-                                <!-- With Enterprise you can use the G1GC -->
-                                <!--buildArg>- -gc=G1</buildArg-->
-                                <buildArg>--no-fallback</buildArg>
-                                <buildArg>--report-unsupported-elements-at-runtime</buildArg>
-                            </buildArgs>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
+<!--                    <plugin>-->
+<!--                        <groupId>org.graalvm.buildtools</groupId>-->
+<!--                        <artifactId>native-maven-plugin</artifactId>-->
+<!--                        <version>${native.maven.plugin.version}</version>-->
+<!--                        <extensions>true</extensions>-->
+<!--                        <executions>-->
+<!--                            <execution>-->
+<!--                                <id>build-native</id>-->
+<!--                                <goals>-->
+<!--                                    <goal>compile-no-fork</goal>-->
+<!--                                </goals>-->
+<!--                                <phase>package</phase>-->
+<!--                            </execution>-->
+<!--                            <execution>-->
+<!--                                <id>test-native</id>-->
+<!--                                <goals>-->
+<!--                                    <goal>test</goal>-->
+<!--                                </goals>-->
+<!--                                <phase>test</phase>-->
+<!--                            </execution>-->
+<!--                        </executions>-->
+<!--                        <configuration>-->
+<!--                            <skip>false</skip>-->
+<!--                            <agent>-->
+<!--                                <enabled>true</enabled>-->
+<!--                            </agent>-->
+<!--                            <fallback>false</fallback>-->
+<!--                            <imageName>${imageName}</imageName>-->
+<!--                            <mainClass>${mainClass}</mainClass>-->
+<!--                            <buildArgs>-->
+<!--                                &lt;!&ndash; With Enterprise you can use the G1GC &ndash;&gt;-->
+<!--                                &lt;!&ndash;buildArg>- -gc=G1</buildArg&ndash;&gt;-->
+<!--                                <buildArg>&#45;&#45;no-fallback</buildArg>-->
+<!--                                <buildArg>&#45;&#45;report-unsupported-elements-at-runtime</buildArg>-->
+<!--                            </buildArgs>-->
+<!--                        </configuration>-->
+<!--                    </plugin>-->
+<!--                </plugins>-->
+<!--            </build>-->
+<!--        </profile>-->
     </profiles>
 
     <build>
